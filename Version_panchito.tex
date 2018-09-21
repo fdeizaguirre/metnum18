@@ -1,0 +1,587 @@
+%% It is just an empty TeX file.
+%% Write your code here.
+\documentclass{endm}
+\usepackage{endmmacro}
+\usepackage{graphicx}
+
+
+\usepackage{amssymb,amsmath,latexsym}
+\usepackage[varg]{pxfonts}
+%%%%%% ENTER ADDITIONAL PACKAGES
+%\usepackage{graphics}
+\usepackage{pst-all}
+\usepackage{graphicx}
+\usepackage{amsmath,amsfonts}
+\usepackage{amssymb} % ADDED
+\usepackage{times}
+\usepackage{latexsym}
+\usepackage{fancybox}
+\usepackage{algorithm}
+%\usepackage{fontspec}
+%\usepackage{algorithmic}
+\usepackage{algorithmicx}
+\usepackage{algpseudocode}
+\usepackage{setspace}
+\usepackage{courier}
+\usepackage{verbatim}
+\usepackage{hhline}
+\usepackage{etex}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows,automata}
+\usetikzlibrary{matrix,positioning,arrows,decorations.pathmorphing,shapes}
+\usetikzlibrary{shapes,snakes}
+\usepackage{graphicx}
+%-------------------------------------------------------------------------------
+\usepackage{subfigure}
+\usepackage{mathtools}
+\usepackage{booktabs}
+\usepackage{hyperref}
+%% Configuration for algorithmicx
+
+%\setmainfont{Hoefler Text}
+%\newcommand*\DNA{\textsc{dna}}
+%\newcommand*\Let[2]{\State #1 $\gets$ #2}
+%\algrenewcommand\alglinenumber[1]{
+%    {\sf\footnotesize\addfontfeatures{Colour=888888,Numbers=Monospaced}#1}}
+%\algrenewcommand\algorithmicrequire{\textbf{Precondition:}}
+%\algrenewcommand\algorithmicensure{\textbf{Postcondition:}}
+%\usepackage[noend]{algpseudocode}
+%-------------------------------------------------------------------------------
+\tolerance=1
+\emergencystretch=\maxdimen
+\hyphenpenalty=10000
+\hbadness=10000
+
+
+\floatname{algorithm}{Algorithm}
+
+
+\def\lastname{Please list your Lastname here}
+
+\begin{document}
+
+% DO NOT REMOVE: Creates space for Elsevier logo, ScienceDirect logo
+% and ENDM logo
+\begin{verbatim}\end{verbatim}\vspace{2.5cm}
+
+\begin{frontmatter}
+
+\title{Estudio de Geod\'esicas a trav\'es de An\'alisis Num\'erico}
+
+\author{Francisco de Izaguirre (4.425.135-0),}
+\author{Francisco Fernandez (4.596.080-9),}
+\author{Gabriela Mullukian (5.121.434-9),}
+\author{Marco Rol\'on (4.916.721-9)}
+
+\address{Instituto de Matem\'atica y Estad\'istica\\ Facultad de Ingenier\'ia. Universidad de la Rep\'ublica\\ Montevideo, Uruguay}
+
+\thanks[mails]{Emails:\href{} {\texttt{\normalshape
+   \{francisco.de.izaguirre,francisco.fernandez,gabriela.mullukian,marco.rolon\}@fing.edu.uy}}}
+
+%-------------------------------------------------------------------------------
+\begin{abstract}
+%\setlength{\parindent}{12pt}
+El camino m\'as corto entre dos puntos en un plano, es el segmento de recta que los une. Si se quiere analizar qu\'e pasa en superficies curvas el problema deja de ser trivial. Dada una superficie y dos puntos cualesquiera contenidos en ella, se define la curva \textbf{geod\'esica} como la curva de menor longitud, de dicha superficie, que une esos dos puntos.
+    
+En este trabajo se realiza una introducci\'on al problema, una descripci\'on matem\'atica del mismo. Se demuestra que puede ser modelado como un PVI. Luego se utiliza el M\'etodo de Euler Hacia Adelante para su resoluci\'on. 
+Posteriormente se presenta los resultados obtenidos, se realiza un an\'alisis de los errores cometidos. \\ CONCLUSION BREVE
+     
+%\end{}
+\end{abstract}
+%-------------------------------------------------------------------------------
+\begin{keyword}
+Geod\'esicas, M\'etodos Num\'ericos, Euler hacia Adelante.
+\end{keyword}
+
+\end{frontmatter}
+\newpage
+
+%-------------------------------------------------------------------------------
+%Indice
+\tableofcontents
+\clearpage
+%-------------------------------------------------------------------------------
+%
+%-------------------------------------------------------------------------------
+\section{Introducci\'on}\label{intro}
+ Trasladarse desde un punto a otro sobre una superficie recorriendo el camino m\'as corto es un problema tan a\~nejo como vigente. Por mencionar un par de ejemplos reales presentes en la ingenieria actual est\'an la construcci\'on de carreteras, la realizaci\'on de un cableado subterr\'aneo o el movimiento de un brazo rob\'otico. Este problema tambi\'en aparece en la teor\'ia de la relatividad general: las part\'culas materiales se mueven a lo largo de geod\'esicas temporales del espacio-tiempo curvo. \\
+El primer registro matem\'atico vinculado a este problema es de 1697 cuando Johann Bernoulli resolvi\'o  el problema de la distancia m\'as corta entre dos puntos en una superficie convexa, y demostr\'o que el plano osculador de la geod\'esica debe ser perpendicular al plano tangente de la misma. \\
+M\'as tarde Euler, en 1732, obtuvo las ecuaciones impl\'icitas de las geod\'esicas.\\
+Posteriormente Gilbert Bliss obtuvo las l\'ineas geod\'esicas en el anillo de anclaje con forma de toroide. 
+Munchmeyer y Haw aplicaron las curvas geod\'esicas al dise\~no de cascos de embarcaciones.
+Beck et al. resolvieron el problema de dos valores iniciales de la curva geod\'esica, usando el m\'etodo de cuarto orden de Runge-Kutta en un spline bic\'ubico. Patrikalakis y Bardis calcularon los desplazamientos geod\'esicos de curvas en superficies B-spline racionales utilizando la integraci\'on de valores iniciales de geod\'esicas a una curva generatriz  en la superficie.
+Sneyd y Peskin investigaron el c\'alculo de trayectos geod\'esicos en un cilindro generalizado basado en un problema de valor inicial usando un m\'etodo de Runge-Kutta de segundo orden.
+Kimmel et al. present\'o un m\'etodo num\'erico para encontrar el camino m\'as corto en la superficie mediante el c\'alculo de la propagaci\'on de un contorno de igual distancia geod\'esica desde un punto o una regi\'on fuente en la superficie. El algoritmo funciona en una cuadricula rectangular usando aproximaciones de diferencias finitas.
+Maekawa y Robinson y Armstrong calcularon las geod\'esicas discretizando las ecuaciones diferenciales que rigen la curva geod\'esca utilizando una aproximaci\'on de diferencia finita en una malla de puntos, lo que reduce el problema a un conjunto de ecuaciones no lineales. El conjunto de las ecuaciones no lineales se pueden resolver mediante el m\'etodo de Newton.
+
+\\ 
+El documento est\'a organizado de la siguiente manera: La Secci\'on~\ref{Problema} define formalmente el problema de estudio. La Secci\'on~\ref{Metodo} presenta la metodolog\'ia empleada para su resoluci\'on. Se desarrolla un an\'alisis del rendimiento del m\'etodo de Euler hacia adelante en la Secci\'on~\ref{Resultados}. Finalmente, la Secci\'on~\ref{Conclusiones} presenta las principales conclusiones de este trabajo, los elementos aprendidos y posibles l\'ineas de trabajo futuro.
+\clearpage
+%-------------------------------------------------------------------------------
+%
+%-------------------------------------------------------------------------------
+\section{Problema}\label{Problema}
+
+\subsection{Ecuaciones diferenciales que rigen una geod\'esica}
+
+
+En el caso de una superficie plana, hallar la m\'inima distancia, es trivial: es una l\'inea recta desde el punto de partida en direcci\'on al de llegada. En el caso de superficies curvas el an\'alisis pasa a ser y m\'as complejo. En este trabajo se realizr\'a, mediante la geometr\'ia de Riemann. Los espacios de Riemann son aquellos espacios medibles.
+El concepto de geod\'esica es la generalizaci\'on de las rectas en una geometr\'ia plana. 
+
+Aunque las variedades de Riemann son generalmente "curvas", no obstante, puede encontrarse que dados dos puntos diferentes y suficientemente cercanos existe una curva de longitud m\'inima (que no necesariamente es \'unica). Estas l\'ineas de m\'inima longitud, se llaman l\'ineas geod\'esicas y son una generalizaci\'on del concepto "l\'inea recta" o "l\'inea de m\'inima longitud". Son las curvas que localmente conectan sus puntos a lo largo de las trayectorias m\'as cortas. 
+
+En an\'alisis se har\'a bajo superf de Riemann y de las curvas, solamente se requiere que en cada uno de sus puntos, haya una m\'etrica eucl\'idea definida sobre el espacio tangente, que cambie suavemente de punto a punto.
+ Cuando una curva, en una superficie, tenga la propiedad de minimizar la longitudes de las curvas que unen dos puntos determinados, se la llamar\'a geod\'esica minimizante.
+ 
+ 
+Previo al estudio de las curvas geod\'esicas en particular, se definir\'an propiedades de una superficie.
+
+Cuando se quiere cuantificar la curvatura de una superficie S en cierto punto, se considera una curva C de dicha superficie que contenga al punto P en cuesti\'on. Los vectores unitarios t (tangente) y n (normal) a la curva C en P, est\'an relacionados de la siguiente manera:
+
+INSERTAR IMAGEN Fig 3.6 del libro de referencia del curso.
+
+MODIFICAR ESTO:
+\begin{align} 
+ k = \frac{dt}{ds} = k n = k_n + k_g, \label{eq1tangente}
+\end{align}
+
+Donde $k_n$ es el vector normal de curvatura, y $k_g$ es el vector de curvatura geodesica. Este par de vectores, son las componentes del vector de curvatura $k$ de C. De esta forma, el vector normal de curvatura, puede expresarse como:
+
+\begin{align} 
+ k_n = kn N \label{eq2tangente}
+\end{align}
+
+siendo kn el valor de la curvatura de la superficie en P en la direcci\'on de t.
+En otras palabras, kn es la magnitud de la proyecci\'on de k en la siperficie normal a P, con el signo determinado por la orientaci\'on de la superficie normal.
+
+
+Definicion
+Las curvas geodesicas, son aquellas que su curvatura geodesica es 0.
+
+Se observa que el plano osculador a una curva geodesica (aquel formado por los vectores t y n) , contiene la superficie normal. A partir de esto, puede verse con facilidad que la geodesica entre dos puntos de una esfera, es siempre un gran circulo. El probelma ahora pasa a ser que existen dos arcos entre esos puntos y solo uno de ellos proviene de la curva con menor distancia (excepto si los dos puntos est\'an diametralmente opuestos en ese circulo).
+
+    Este caso, indica que es posible que exista m\'as de una curva geodesica, entre dos puntos, en una suerficie.
+
+
+Dada la parametrizaci\'on de una curva de la forma $u=u(t)$, $v=v(t)$ que vive en la superficie $r=r(u,v)$, se definen los coeficientes de la $primera$ $forma$ $fundamental$ como:
+
+\begin{align} 
+E = r_u . r_u  \label{eqE}\\ 
+F = r_u . r_v  \label{eqF} \\ 
+G = r_v . r_v  \label{eqG}
+\end{align}
+    
+
+Dada la parametrizaci\'on de una superficie como r=r(u,v) y  C un arco parametrizado que pase por el punto P tal cual se muestra en la Fig. 3.6 y denotada por
+\begin{align} 
+r(s) = r(u(s), v(s))
+ \label{eqparametrizada}
+\end{align}
+
+Se definen las formas fundamentelaes
+
+Siendo t el vector tangente a C en P, n el vector normal a C
+en P, N el vector unitario normal a S en P y u el vector unitario perpendicular a t en el plano tangente a la suferficie. Definido u = N x t.
+La compontente u en el vector de curvatura k de r(s), es la curvatura geodesica $k_g$ y est\'a dada por la siguiente ecuaci\'on.
+
+\begin{align} 
+k_g = (k.u)u
+ \label{eqcurvatura_k_g}
+\end{align}
+
+La funci\'on escalar
+
+\begin{align} 
+k_g = (k.u)
+ \label{eqcurvatura_kg}
+\end{align}
+es llamada curvatura geod\'esica de C en P.
+O, equivalentemente:
+
+\begin{align} 
+k_g = \frac{dt}{ds} . (N x t)
+ \label{eqcurvatura_kg_vectores}
+\end{align}
+
+El vector tangente unitario, a la curva C puede obtenerse derivando la ecuacion \ref{eqparametrizada} respecto al arco, usando la siguiente relacion:
+
+\begin{align} 
+t = \frac{d r(u(s), v(d))}{ds}&=r_u \frac{d u}{ds} + r_v \frac{d v}{ds}
+ \label{equ_t}
+\end{align}
+
+Por lo que se obtiene:
+
+\begin{align} 
+
+ \frac{d t}{ds} = r_{uu} (\frac{d u}{ds})^2 +
+ 2 r_{uv} \frac{d u}{ds} \frac{d v}{ds}
+ + r_{vv} (\frac{d v}{ds})^2 +
+ r_u \frac{d^2 u}{ds^2} +
+ r_v \frac{d^2 v}{ds^2}
+ \label{equ_dt}
+\end{align}
+
+en este sentido, sustituyendo en \ref{eqcurvatura_kg_vectores} los resultado de \ref{equ_t} y \ref{equ_dt}:
+
+\begin{align} 
+k_g = [ (r_u x r_{uu}) (\frac{d u}{ds})^3 +
+(2 r_u x r_{uv} + r_v + r_{uu} ) (\frac{d u}{ds})^2 \frac{d v}{ds} + (r_u x r_{vv} + 2 r_v + r_{uv})  \frac{d u}{ds} (\frac{d v}{ds})^2 + (r_v x r_{vv}) (\frac{d u}{ds})^3 ] . N + (r_u x r_{v}) . N (\frac{d u}{ds} \frac{d^2 v}{ds^2} - \frac{d^ 2 u}{ds^2 } \frac{d v}{ds})
+\label{curvatura_conR}
+\end{align}
+Paraboloide 
+Se observa que los coeficientes de $(\frac{d u}{ds})^3$, 
+$(\frac{d u}{ds})^2 \frac{d v}{ds}$, $\frac{d u}{ds} (\frac{d v}{ds})^2$,  
+$(\frac{d v}{ds})^3$,
+$(\frac{d u}{ds} \frac{d^2 v}{ds^2} - \frac{d^2 u}{ds^2} \frac{d v}{ds} ) $
+son todos funciones de los coeficientes definidos en \ref{eqE}-\ref{eqG} y de sus derivadas redpecto a u y v. Es interesante notar que la curvatura geodesica depende solamente de la primera forma fundamental.
+
+Usando los s\'imbolos de Christoffel $\Gamma_{jk}^i (i,j,k=1,2)$ definidos de la siguiente forma:
+
+\begin{align} 
+\Gamma_{11}^1 = \frac{GE_u - 2 FF_u + FE_v}{2(EG - F^2)} \label{Gam_11_1}\\
+\Gamma_{11}^2 = \frac{2EF_u - EE_v + FE_u}{2(EG - F^2)}\label{Gam_11_2}\\
+\Gamma_{12}^1 = \frac{GE_v - FG_u}{2(EG - F^2)} \label{Gam_12_1}\\
+\Gamma_{12}^2 = \frac{EG_u - FE_v}{2(EG - F^2)}\label{Gam_12_2}\\
+\Gamma_{22}^1 = \frac{2GF_v - GG_u + FG_v}{2(EG - F^2)} \label{Gam_22_1}\\
+\Gamma_{22}^2 = \frac{EG_u - FE_v}{2(EG - F^2)}\label{Gam_22_2}
+\end{align}
+
+
+la curvatura geod\'esica se reduce a:
+
+\begin{align} 
+k_g = [ \Gamma_{11}^2 (\frac{du}{ds})^3 + (2 \Gamma_{12}^2 -  \Gamma_{11}^1 ) (\frac{du}{ds})^2 \frac{dv}{ds} + (\Gamma_{22}^2 -  2 \Gamma_{12}^1 ) \frac{du}{ds} (\frac{dv}{ds})^2 - \Gamma_{22}^1 (\frac{dv}{ds})^3 + \frac{du}{ds} \frac{d^2v}{ds^2} - \frac{d^2u}{ds^2} \frac{dv}{ds}] \sqrt(EG - F^2)
+\label{eqCurvatura}
+\end{align}
+
+Acorde a la definici\'on, se puede determinar la ecuaci\'on diferencial de calquier geod\'esica de cualquier superficie simplemente exigiendo que el valor $k_g = 0$. Al imponer esto en la ecuaci\'on \ref{eqCurvatura} se obtiene:
+
+\begin{align} 
+\frac{du}{ds} \frac{d^2v}{ds^2} - \frac{d^2u}{ds^2} \frac{dv}{ds} = -  \Gamma_{11}^2 (\frac{du}{ds})^3 - (2 \Gamma_{12}^2 -  \Gamma_{11}^1 ) (\frac{du}{ds})^2 \frac{dv}{ds} + (2 \Gamma_{12}^1 - \Gamma_{22}^2) \frac{du}{ds} (\frac{dv}{ds})^2 + \Gamma_{22}^1 (\frac{dv}{ds})^3
+\label{eqCurvatura}
+\end{align}
+
+Alternativamente, se puede derivar la ecuacion diferencial de la geodesica considerando que la superficie normal N tiene la direccion normal a la curva geodesica $+- n$.
+
+\begin{align} 
+n r_u = 0, n r_v = 0
+\label{equcurvatura_nr}
+\end{align}.
+
+Mientras $kn = \frac{dt}{ds} $, la ecuacion 
+\ref{equcurvatura_nr} 
+puede ser escrita de la forma:
+
+\begin{align} 
+\frac{dt}{ds} r_u &=0,\frac{dt}{ds} r_v &=0
+\label{equdt_ru_rv}
+\end{align}
+
+Si se sustituye en la ecuacion \ref{equdt_ru_rv} en la \ref{equ_dt} se tiene:
+
+\begin{align} 
+(r_{uu} r_u) (\frac{du}{ds})^2 + 2 (r_{uv} r_u) \frac{du}{ds} \frac{dv}{ds} + (r_{vv} r_u) (\frac{dv}{ds})^2 + E \frac{d^2u}{ds^2} + F \frac{d^2v}{ds^2} = 0
+\label{equ_dt_EF}
+\end{align}
+
+
+\begin{align} 
+(r_{uu} r_v) (\frac{du}{ds})^2 + 2 (r_{uv} r_v) \frac{du}{ds} \frac{dv}{ds} + (r_{vv} r_v) (\frac{dv}{ds})^2 + F \frac{d^2u}{ds^2} + G \frac{d^2v}{ds^2} = 0
+\label{equ_dt_FG}
+\end{align}
+
+Al eliminar el t\'ermino $\frac{d^2v}{ds^2}$ de \ref{equ_dt_EF}, usando \ref{equ_dt_FG}, y eliminando en \label{equ_dt_FG} usando \label{equ_dt_EF}, empleando los s\'imbolos de Christoffel, se obtiene:
+
+\begin{align} 
+\frac{du}{ds}&=p, \label{equ1_Geo}\\
+\frac{dv}{ds}&=q, \label{equ2_Geo}
+\end{align}
+
+Las ecuaciones \label{equ1_Geo} y \label{equ2_Geo} est\'am relacionanadas por la primera forma fundamental, $ds^2 = E ds^2+ 2 Fdudv+ G dv^2$. Si se elimina el termino $ds$ de ambas ecuaciones, estas ecuaciones se reducen a la \ref{eqCurvatura}
+
+
+\begin{align} 
+\frac{du}{ds}&=p, \label{eq1Geodesica}\\
+\frac{dv}{ds}&=q, \label{eq2Geodesica}    \\
+\frac{dp}{ds}&= - \Gamma_{11}^1 p^2 -2 \Gamma_{12}^1 pq - \Gamma_{22}^1 q^2, \label{eq3Geodesica}\\ 
+\frac{dp}{ds}&=- \Gamma_{11}^2 p^2 -2 \Gamma_{12}^2 pq - \Gamma_{22}^2 q^2. \label{eq4Geodesica}
+\end{align}
+
+%-------------------------------------------------------------------------------
+\subsection{C\'alculo de las ecuaciones en superficie param\'etrica}
+En pos de reforzar el entendimiento del lector sobre el problema se presentan algunos ejemplos de superficies y sus respectivos sistemas de ecuaciones diferenciales que determinan las curvas geod\'esicas.
+
+% PLANO
+\subsubsection{Plano por el origen}
+Sean $V_1=(x_1,y_1,z_1)$ y $V_2=(x_2,y_2,z_2)$ los vectores que generan el plano.
+La ecuaci\'on param\'etrica \ref{planoEq} representa dicho plano.
+
+\begin{equation} \label{planoEq}
+r(u,v) = (x_1 u + x_2 v, y_1 u + y_2 v, z_1 u + z_2 v)
+\end{equation}
+
+Utilizando las ecuaciones de la geod\'esica \ref{eq1Geodesica}-\ref{eq4Geodesica}, las ecuaciones de la primera forma fundamental \ref{eqE}-\ref{eqG} y la ecuaci\'on parametrica \ref{planoEq} del plano obtenemos E, F y G en \ref{fffPlano}  y en \ref{fffuPlano}-\ref{fffvPlano} sus respectivas derivadas parciales.
+
+\begin{align} \label{fffHipEq}
+E&=x_1^2 + y_1^2 + z_1^2,   & F &=x_1 x_2 + y_1 y_2 + z_1 z_2,   & G&=x_2^2 + y_2^2 + z_2^2, \label{fffPlano} \\
+E_u&=0,     & F_u&=0,   & G_u&=0, \label{fffuPlano}\\
+E_v&=0,    & F_v&=0,   & G_v&=0, \label{fffvPlano}
+\end{align}
+
+Entonces, como todas las derivadas parciales son nulas, usando \ref{Gam_11_1}-\ref{Gam_22_2}, los s\'imbolos de Christoffel valen cero.
+
+Finalmente obtenemos las ecuaciones de la geod\'esica para el plano en \ref{eq:duPlano}-\ref{eq:dqPlano}.
+
+\begin{align}
+\frac{du}{ds}&=p,\label{eq:duPlano} \\
+\frac{dv}{ds}&=q,\label{eq:dvPlano}     \\
+\frac{dp}{ds}&=0, \label{eq:dpPlano}\\ 
+\frac{dq}{ds}&=0 \label{eq:dqPlano}
+\end{align}
+
+% ESFERA
+\subsubsection{Esfera unitaria centrada en el origen}
+
+La ecuaci\'on param\'etrica \ref{esferaEq} representa una esfera unitaria centrada en el origen.
+\begin{equation} \label{esferaEq}
+r(u,v) = (cos (u) sin(v), sin (u) sin (v),cos (v)), \\
+(u,v) \in  [o, 2 \pi] \times [0, \pi]
+\end{equation}
+De forma an\'aloga que el caso anterior, utilizamos las ecuaciones de la geod\'esica \ref{eq1Geodesica}-\ref{eq4Geodesica}, las ecuaciones de la primera forma fundamental \ref{eqE}-\ref{eqG} y la ecuaci\'on parametrica \ref{esferaEq} del plano obtenemos E, F y G en \ref{fffEsfera} las ecuaciones de la primera forma fundamental y en \ref{fffuEsfera}-\ref{fffvEsfera} sus respectivas derivadas parciales.
+
+\begin{align} \label{fffHipEq}
+E&=sin^2 (v),   & F &=0    & G&=1, \label{fffEsfera} \\
+E_u&=0,     & F_u&=0,   & G_u&=0, \label{fffuEsfera}\\
+E_v&=2sin(v)cos(v),    & F_v&=0,   & G_v&=0, \label{fffvEsfera}
+\end{align}
+
+De esta forma, usando \ref{Gam_11_1}-\ref{Gam_22_2}, obtenemos los s\'imbolos de Christoffel en \ref{CS1Esfera}-\ref{CS3Esfera}
+
+\begin{align}
+\Gamma_{12}^2&=\Gamma_{11}^1=\Gamma_{22}^1=\Gamma_{22}^2=0, \label{CS1Esfera} \\
+\Gamma_{12}^1&=\frac{cos(v)}{sen(v)},  \label{CS2Esfera}   \\
+\Gamma_{11}^2&=-sen(v)cos(v) .  \label{CS3Esfera}
+\end{align}
+
+Las ecuaciones de la geod\'esica para la esfera son \ref{eq:duEsfera}-\ref{eq:dqEsfera}.
+
+\begin{align}
+\frac{du}{ds}&=p,\label{eq:duEsfera} \\
+\frac{dv}{ds}&=q,\label{eq:dvEsfera}     \\
+\frac{dp}{ds}&=\frac{-2cos(v)}{sen(v)} pq, \label{eq:dpEsfera}\\ 
+\frac{dq}{ds}&= sen(v)cos(v) p^2. \label{eq:dqEsfera}
+\end{align}
+
+%-------------------------------------------------------------------------------
+%PARABOLOIDE HIPERBOLICO
+\subsubsection{Paraboloide hiperb\'olico}
+
+La ecuaci\'on param\'etrica \ref{parHipEq} representa el paraboloide hiperb\'olico.
+\begin{equation} \label{parHipEq}
+r(u,v) = (u,v,uv)
+\end{equation}
+
+Nuevamente, a partir de las ecuaciones de la geod\'esica \ref{eq1Geodesica}-\ref{eq4Geodesica}, las ecuaciones de la primera forma fundamental \ref{eqE}-\ref{eqG} y la ecuaci\'on parametrica \ref{parHipEq} del plano obtenemos E, F y G en \ref{fffHipEq} las ecuaciones de la primera forma fundamental y en \ref{fffuHipEq}-\ref{fffvHipEq} sus respectivas derivadas parciales.
+
+\begin{align} \label{fffHipEq}
+E&=1+v^2,   & F &=uv    & G&=1+u^2, \label{fffHipEq} \\
+E_u&=0,     & F_u&=v,   & G_u&=2u, \label{fffuHipEq}\\
+E_v&=2v,    & F_v&=u,   & G_v&=0, \label{fffvHipEq}
+\end{align}
+
+A partir de lo anterior se sustituye en \ref{Gam_11_1}-\ref{Gam_22_2} y se obtienen los s\'imbolos de Christoffel en \ref{CS1HipEq}-\ref{CS3HipEq}.
+
+\begin{align}
+\Gamma_{11}^1&=\Gamma_{11}^2=\Gamma_{22}^1=\Gamma_{22}^2=0, \label{CS1HipEq} \\
+\Gamma_{12}^1&=\frac{v}{u^2+v^2+1},  \label{CS2HipEq}   \\
+\Gamma_{12}^2&=\frac{u}{u^2+v^2+1}.  \label{CS3HipEq}
+\end{align}
+
+Las ecuaciones de la geod\'esica para el paraboloide hiperb\'olico son \ref{eq:du}-\ref{eq:dq}.
+
+\begin{align}
+\frac{du}{ds}&=p,\label{eq:du} \\
+\frac{dv}{ds}&=q,\label{eq:dv}     \\
+\frac{dp}{ds}&=\frac{-2v}{u^2+v^2+1} pq, \label{eq:dp}\\ 
+\frac{dq}{ds}&=\frac{-2u}{u^2+v^2+1} pq. \label{eq:dq}
+\end{align}
+
+
+
+\clearpage
+
+%-------------------------------------------------------------------------------
+%
+%-------------------------------------------------------------------------------
+\section{Metodolog\'ia}\label{Metodo}
+El sistema de ecuaciones diferenciales \ref{eq1Geodesica}-\ref{eq4Geodesica} puede resolverse model\'andolo de las siguientes dos formas:
+\begin{itemize}
+    \item Problema de Valor Inicial (PVI).
+    \item Problema con Condiciones de Borde (PCB).
+\end{itemize}
+
+La primera forma consiste en proporcionar el valor inicial para cada una de las cuatro ecuaciones diferenciales del sistema.
+Como la soluci\'on de un PVI es \'unica, al indicar los valores iniciales queda determinada una sola curva. \\
+En el caso del PCB se dan dos puntos del espacio como condiciones de borde por lo que las ecuaciones diferenciales del sistema tienen muchas soluciones o incluso ninguna. \\
+La complejidad el segundo m\'etodo es considerablemente mayor por lo que se opt\'o por el primer m\'etodo para la resoluci\'on. En ~\ref{PVI} se demuestra que es posible modelar las geod\'esicas como un PVI.
+
+Por otro lado el sistema presentado en \ref{eq1Geodesica}-\ref{eq4Geodesica} es un sistema anal\'itico y no puede resolverse computacionalmente por lo que es necesario utilizar un algoritmo num\'erico para para modelar y aproximar el problema. El m\'etodo seleccionado para el estudio del fue el m\'etodo de Euler hacia adelante, que fue elegido debido a su simplicidad en comparaci\'on a otros m\'etodos considerados como el M\'etodo del Trapecio.
+
+
+%-------------------------------------------------------------------------------
+%INICIO SECCION 3.1
+%-------------------------------------------------------------------------------
+\subsection{Problema de Valor Inicial (PVI)}\label{PVI}
+
+
+
+A continuaci\'on vamos a mostrar que las geod\'esicas en el paraboloide hiperb\'olico son un Problema de Valores Iniciales
+
+Primero vamos a dar unas definiciones que nos ayudaran en la muestra:
+
+\begin{itemize}
+    \item Una ecuaci\'on diferencial es una ecuaci\'on que relaciona las derivadas de una o m\'as variables dependientes respecto a una o m\'as variables independientes.
+    \item Una ecuaci\'on diferencial ordinaria (EDO) es una ecuaci\'on diferencial que relaciona una funci\'on desconocida de una \'unica variable independiente con sus derivadas.
+    \item Dada una funci\'on $f: R^2 \rightarrow R $el Problema de Valores Iniciales consiste en hallar la funci\'on $y = y(x)$ tal que:
+    \end{itemize}
+$$(P V I):
+        \left \{
+          \begin{tabular}{c}
+          $y'(x) = f(x,y(x))$ \\
+          $y(x_0) = y(y_0) \in R$\\
+          \end{tabular}$$
+
+    Por ejemplo, si $y' = x^2y+2y \rightarrow f(x,y(x)) = x^2y+2y $
+    
+    
+    Entonces considerando las ecuciones planteadas en  \ref{eq:du} \ref{eq:dv} \ref{eq:dp} \ref{eq:dq}  del paraboloide hiperb\'olico las cuales son:
+
+\begin{align}
+\frac{du}{ds}&=p,\label{eq:du} \\
+\frac{dv}{ds}&=q,\label{eq:dv}     \\
+\frac{dp}{ds}&=\frac{-2v}{u^2+v^2+1} pq, \label{eq:dp}\\ 
+\frac{dq}{ds}&=\frac{-2u}{u^2+v^2+1} pq. \label{eq:dq}
+\end{align}          
+          
+Por lo tanto considerando la siguiente notaci\'on:
+
+\begin{align}
+u'(s)=\frac{du}{ds}&=p &\rightarrow u'(s) = f_1 (s,u(s)) ,\label{eq:du} \\
+v'(s)=\frac{dv}{ds}&=q &\rightarrow v'(s) =f_2 (s,v(s)),\label{eq:dv}     \\
+p'(s)=\frac{dp}{ds}&=\frac{-2v}{u^2+v^2+1} pq &\rightarrow p'(s)=f_3 (s,p(s)), \label{eq:dp}\\ 
+q'(s)=\frac{dq}{ds}&=\frac{-2u}{u^2+v^2+1} pq &\rightarrow q'(s)=f_4 (s,p(s)). \label{eq:dq}
+\end{align}
+
+podemos representar las ecuaciones diferenciales como un PVI de la siguiente manera:
+
+$$(P V I):
+        \left \{
+          \begin{tabular}{c}
+            $y'(s)= \vec{f}(s,u(s),v(s),p(s),q(s))$\\
+            $y(s_0) = (u(s_0),v(s_0),p(s_0),q(s_0)) \in R^4$\\
+          \end{tabular}$$
+
+
+
+%-------------------------------------------------------------------------------
+%FIN SECCION 3.1
+%-------------------------------------------------------------------------------
+
+
+
+
+\subsection{Discretizaci\'on del problema}
+EXPLICAR BREVEMENTE EULER\\ \\
+
+Partiendo de las ecuaciones (\ref{eq:du}-\ref{eq:dq}) y utilizando el M\'etodo de Euler hacia Adelante, se calcula a continuaci\'on las ecuaciones en su forma discreta.
+
+Primero realizamos el c\'alculo para $u$:
+$$\frac{du}{ds}=p \Rightarrow \frac{u_{k+1}-u_k}{h}=p_k \Rightarrow u_{k+1}=u_k+p_k h $$
+Para $v$:
+$$\frac{dv}{ds}=q \Rightarrow \frac{v_{k+1}-v_k}{h}=q_k \Rightarrow v_{k+1}=v_k+q_k h $$
+Para $p$:
+$$\frac{dp}{ds}&=\frac{-2v}{u^2+v^2+1} pq &\Rightarrow \frac{p_{k+1}-p_k}{h}=\frac{-2v_k}{u_k^2+v_k^2+1} p_kq_k \Rightarrow p_{k+1}=\frac{-2v_k }{u_k^2+v_k^2+1} p_kq_k h + p_k $$
+Finalmente, para $q$:
+$$ &\frac{dq}{ds}&=\frac{-2u}{u^2+v^2+1} pq \Rightarrow \frac{q_{k+1}-q_k}{h}=\frac{-2u_k}{u_k^2+v_k^2+1} p_kq_k \Rightarrow q_{k+1}=\frac{-2u_k}{u_k^2+v_k^2+1} p_kq_k h +q_k $$
+
+En resumen:
+\begin{align}
+u_{k+1}&=u_k+p_k h \label{eq:dudis} \\
+v_{k+1}&=v_k+q_k h \label{eq:dvdis} \\
+p_{k+1}&=\frac{-2v_k }{u_k^2+v_k^2+1} p_kq_k h + p_k \label{eq:dpdis} \\
+q_{k+1}&=\frac{-2u_k}{u_k^2+v_k^2+1} p_kq_k h +q_k\label{eq:dqdis}
+\end{align}
+
+El  siguiente pseudoc\'odigo \ref{pscod:euler} expresa una forma de introducir el problema en softwares tales como "Octave", "R", "Python", etc.
+
+\begin{algorithm}
+  \caption{Pseudoc\'odigo para resolver y graficar el PVI mediante el m\'etodo "Euler hacia adelante"}
+    \label{pscod:euler}}
+  \begin{algorithmic}[1]
+    \Require{$x$ and $y$ are packed \DNA{} strings of equal length $n$}
+    \Statex
+    \Function{Distance}{$x, y$}
+      \Let{$z$}{$x \oplus y$} \Comment{$\oplus$: bitwise exclusive-or}
+      \Let{$\delta$}{$0$}
+      \For{$i \gets 1 \textrm{ to } n$}
+        \If{$z_i \neq 0$}
+          \Let{$\delta$}{$\delta + 1$}
+        \EndIf
+      \EndFor
+      \State \Return{$\delta$}
+    \EndFunction
+  \end{algorithmic}
+\end{algorithm}
+
+\clearpage
+
+%-------------------------------------------------------------------------------
+%
+%-------------------------------------------------------------------------------
+\section{Estudio Experimental}\label{Resultados}
+\subsection{Ambiente de trabajo}
+Durante el desarrollo de la experiencia se trabajo con:
+\begin{itemize}
+    \item Lenguaje de programaci\'on: Octave.
+    \item Caracter\'isticas de la computadara utilizada:
+    \begin{itemize}
+        \item HP algo
+        \item Procesador:
+        \item Memoria RAM:
+    \end{itemize}
+\end{itemize}
+
+\subsection{Resultados Obtenidos}
+
+
+
+
+
+
+
+
+\clearpage
+
+%-------------------------------------------------------------------------------
+%
+%-------------------------------------------------------------------------------
+\section{Conclusiones}\label{Conclusiones}
+
+\clearpage
+
+%-------------------------------------------------------------------------------
+%
+%-------------------------------------------------------------------------------
+
+%\section*{Acknowledgment}
+%This work is partially supported by Project CSIC I+D 395 entitled \emph{Sistemas Binarios
+%Estoc\'asticos Din\'amicos}.
+
+
+\bibliographystyle{plain}
+
+%\bibliographystyle{endm.bst}
+\bibliography{biblio}
+
+\end{document}

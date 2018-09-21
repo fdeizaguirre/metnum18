@@ -1,0 +1,974 @@
+Estudio de Geodésicas a través de Análisis
+Numérico
+Francisco de Izaguirre (4.425.135-0),
+Francisco Fernandez (4.596.080-9),
+Gabriela Mullukian (5.121.434-9), Marco Rolón (4.916.721-9)
+Instituto de Matemática y Estadı́stica
+Facultad de Ingenierı́a. Universidad de la República
+Montevideo, Uruguay
+
+Abstract
+El camino más corto entre dos puntos en un plano, es el segmento de recta que los une. Si
+se quiere analizar qué pasa en superficies curvas el problema deja de ser trivial. Dada una
+superficie y dos puntos cualesquiera contenidos en ella, se define la curva geodésica como
+la curva de menor longitud, de dicha superficie, que une esos dos puntos.
+En este trabajo se realiza una introducción al problema, una descripción matemática del
+mismo. Se demuestra que puede ser modelado como un PVI. Luego se utiliza el Método
+de Euler Hacia Adelante para su resolución. Posteriormente se presenta los resultados
+obtenidos, se realiza un análisis de los errores cometidos.
+CONCLUSION BREVE
+Keywords: Geodésicas, Métodos Numéricos, Euler hacia Adelante.
+
+1
+
+Emails:{francisco.de.izaguirre,francisco.fernandez,
+maria.mullukian,marco.rolon}@fing.edu.uy
+
+Contents
+1 Introducción
+2 Problema
+2.1 Ecuaciones diferenciales que rigen una geodésica
+2.2 Cálculo de las ecuaciones en superficie paramétrica
+3 Metodologı́a
+3.1 Problema de Valor Inicial (PVI)
+3.2 Discretización del problema
+4 Estudio Experimental
+4.1 Ambiente de trabajo
+4.2 Resultados Obtenidos
+5 Conclusiones
+References
+
+3
+5
+5
+10
+14
+14
+15
+17
+17
+17
+19
+20
+
+1
+
+Introducción
+
+Trasladarse desde un punto a otro sobre una superficie recorriendo el camino más
+corto es un problema tan añejo como vigente. Por mencionar un par de ejemplos
+reales presentes en la ingenieria actual están la construcción de carreteras, la
+realización de un cableado subterráneo o el movimiento de un brazo robótico.
+Este problema también aparece en la teorı́a de la relatividad general: las partćulas
+materiales se mueven a lo largo de geodésicas temporales del espacio-tiempo
+curvo.
+El primer registro matemático vinculado a este problema es de 1697 cuando
+Johann Bernoulli resolvió el problema de la distancia más corta entre dos puntos
+en una superficie convexa, y demostró que el plano osculador de la geodésica debe
+ser perpendicular al plano tangente de la misma.
+Más tarde Euler, en 1732, obtuvo las ecuaciones implı́citas de las geodésicas.
+Posteriormente Gilbert Bliss obtuvo las lı́neas geodésicas en el anillo de anclaje
+con forma de toroide. Munchmeyer y Haw aplicaron las curvas geodésicas al
+diseño de cascos de embarcaciones.Beck et al. resolvieron el problema de dos
+valores iniciales de la curva geodésica, usando el método de cuarto orden de
+Runge-Kutta en un spline bicúbico. Patrikalakis y Bardis calcularon los
+desplazamientos geodésicos de curvas en superficies B-spline racionales
+utilizando la integración de valores iniciales de geodésicas a una curva generatriz
+en la superficie.
+Sneyd y Peskin investigaron el cálculo de trayectos geodésicos en un cilindro
+generalizado basado en un problema de valor inicial usando un método de
+Runge-Kutta de segundo orden.Kimmel et al. presentó un método numérico para
+encontrar el camino más corto en la superficie mediante el cálculo de la
+propagación de un contorno de igual distancia geodésica desde un punto o una
+región fuente en la superficie. El algoritmo funciona en una cuadricula rectangular
+usando aproximaciones de diferencias finitas.
+Maekawa y Robinson y Armstrong calcularon las geodésicas discretizando las
+ecuaciones diferenciales que rigen la curva geodésca utilizando una aproximación
+de diferencia finita en una malla de puntos, lo que reduce el problema a un
+conjunto de ecuaciones no lineales. El conjunto de las ecuaciones no lineales se
+pueden resolver mediante el método de Newton.
+
+El documento está organizado de la siguiente manera:
+•
+
+La Sección 2 define formalmente el problema de estudio.
+
+•
+
+La Sección 3 presenta la metodologı́a empleada para su resolución.
+
+•
+
+La Sección 4 desarrolla un análisis del rendimiento del método de Euler hacia
+adelante.
+
+•
+
+La Sección 5, finalmente, se presenta las principales conclusiones de este trabajo,
+los elementos aprendidos y posibles lı́neas de trabajo futuro.
+
+2
+
+2.1
+
+Problema
+
+Ecuaciones diferenciales que rigen una geodésica
+
+En el caso de una superficie plana, hallar la mı́nima distancia, es trivial: es una
+lı́nea recta desde el punto de partida en dirección al de llegada. En el caso de
+superficies curvas el análisis pasa a ser y más complejo. En este trabajo se
+realizrá, mediante la geometrı́a de Riemann. Los espacios de Riemann son
+aquellos espacios medibles.
+El concepto de geodésica es la generalización de las rectas en una geometrı́a
+plana.
+Aunque las variedades de Riemann son generalmente ”curvas”, no obstante,
+puede encontrarse que dados dos puntos diferentes y suficientemente cercanos
+existe una curva de longitud mı́nima (que no necesariamente es única). Estas
+lı́neas de mı́nima longitud, se llaman lı́neas geodésicas y son una generalización
+del concepto ”lı́nea recta” o ”lı́nea de mı́nima longitud”. Son las curvas que
+localmente conectan sus puntos a lo largo de las trayectorias más cortas.
+El análisis se hará bajo superficies de Riemann y de las curvas, solamente se
+requiere que en cada uno de sus puntos, haya una métrica euclı́dea definida sobre
+el espacio tangente, que cambie suavemente de punto a punto. Cuando una curva,
+en una superficie, tenga la propiedad de minimizar la longitudes de las curvas que
+unen dos puntos determinados, se la llamará geodésica minimizante.
+Previo al estudio de las curvas geodésicas en particular, se definirán
+propiedades de una superficie.
+Cuando se quiere cuantificar la curvatura de una superficie S en cierto punto,
+se considera una curva C de dicha superficie que contenga al punto P en cuestión.
+Los vectores unitarios t (tangente) y n (normal) a la curva C en P, están
+relacionados en la figura 1.
+
+Fig. 1. Definición del Vector Normal a una Curva
+
+MODIFICAR ESTO:
+k=
+
+dt
+= κn = kn + k1 ,
+ds
+
+(1)
+
+Donde kn es el vector normal de curvatura, y k1 es el vector de curvatura
+geodesica. Este par de vectores, son las componentes del vector de curvatura k de
+C. De esta forma, el vector normal de curvatura, puede expresarse como:
+kn = κn N
+
+(2)
+
+siendo κn el valor de la curvatura de la superficie en P en la dirección de t. En
+otras palabras, κn es la magnitud de la proyección de k en la superficie normal a P,
+con el signo determinado por la orientación de la superficie normal a P.
+Siguiendo la definicion del libro sugerido [1] en este trabajo se a definen a las
+curvas geodesicas, como aquellas que su curvatura geodesica es 0.
+Se observa que el plano osculador a una curva geodesica (aquel formado por
+los vectores t y n) contiene la superficie normal. A partir de esto, puede verse con
+facilidad que la geodesica entre dos puntos de una esfera, es siempre un gran
+circulo. El probelma ahora pasa a ser que existen dos arcos entre esos puntos y
+solo uno de ellos proviene de la curva con menor distancia (excepto si los dos
+puntos están diametralmente opuestos en ese circulo).Este caso, indica que es
+posible que existan más de una curva geodesica entre dos puntos en una suerficie.
+Dada la parametrización de una superficie como r = r(u, v) y C un arco
+
+parametrizado que pase por el punto P tal cual se muestra en la figura 1 y denotada
+por:
+r(s) = r(u(s), v(s))
+
+(3)
+
+Entonces las primeras formas fundamentales se definen como:
+
+I = ds2 = dr.dr = Edu2 + 2Fdudv + Gdv2
+
+Donde los coeficientes de la primera f orma f undamental son:
+E = ru .ru
+F = ru .rv
+G = rv .rv
+
+(4)
+(5)
+(6)
+
+Siendo t el vector tangente a C en P, n el vector normal a C en P, N el vector
+unitario normal a S en P y u el vector unitario perpendicular a t en el plano tangente
+a la suferficie. Definido u = N x t.La compontente u en el vector de curvatura k de
+r(s), es la curvatura geodesica k1 y está dada por la siguiente ecuación.
+k1 = (k.u)u
+
+(7)
+
+k1 = (k.u)
+
+(8)
+
+La función escalar
+
+es llamada curvatura geodésica de C en P. O, equivalentemente:
+
+k1 =
+
+dt
+.(Nxt)
+ds
+
+(9)
+
+El vector tangente unitario, a la curva C puede obtenerse derivando la ecuacion
+3 respecto al arco, usando la siguiente relacion:
+
+t=
+
+dr(u(s), v(d))
+du
+dv
+= ru
++ rv
+ds
+ds
+ds
+
+(10)
+
+Por lo que se obtiene:
+dt
+du
+du dv
+dv
+d2 u
+d2 v
+= ruu ( )2 + 2ruv
++ rvv ( )2 + ru 2 + rv 2
+ds
+ds
+ds ds
+ds
+ds
+ds
+
+(11)
+
+en este sentido, sustituyendo en 9 los resultado de 10 y 11:
+du 3
+du dv
+) + (2ru xruv + rv + ruu )( )2 +
+ds
+ds ds
+du dv 2
+du 3
+(ru xrvv + 2rv + ruv ) ( ) + (rv xrvv )( ) ].N+
+ds ds
+ds
+du d2 v d2 u dv
+(ru xrv ).N(
+−
+)
+ds ds2 ds2 ds
+
+k1 = [(ru xruu )(
+
+(12)
+
+2
+
+d v
+Paraboloide Se observa que los coeficientes de ( du
+)3 , ( du
+)2 dv
+, du ( dv )2 , ( dv
+)3 , ( du
+−
+ds
+ds
+ds ds ds
+ds
+ds ds2
+d2 u dv
+) son todos funciones de los coeficientes definidos en 4-6 y de sus derivadas
+ds2 ds
+redpecto a u y v. Es interesante notar que la curvatura geodesica depende solamente
+de la primera forma fundamental.
+Usando los sı́mbolos de Christoffel Γijk (i, j, k = 1, 2) definidos de la siguiente
+forma:
+
+GEu − 2FFu + FEv
+2(EG − F2 )
+2EFu − EEv + FEu
+Γ211 =
+2(EG − F2 )
+GEv − FGu
+Γ112 =
+2(EG − F2 )
+EGu − FEv
+Γ212 =
+2(EG − F2 )
+2GFv − GGu + FGv
+Γ122 =
+2(EG − F2 )
+EGu − FEv
+Γ222 =
+2(EG − F2 )
+Γ111 =
+
+(13)
+(14)
+(15)
+(16)
+(17)
+(18)
+
+la curvatura geodésica se reduce a:
+du 3
+du dv
+) + (2Γ212 − Γ111 )( )2 +
+ds
+ds ds
+dv
+du
+dv
+(Γ222 − 2Γ112 ) ( )2 − Γ122 ( )3 +
+ds ds
+ds
+du d2 v d2 u dv p
+−
+] (EG − F2 )
+ds ds2 ds2 ds
+
+k1 = [Γ211 (
+
+(19)
+
+Acorde a la definición, se puede determinar la ecuación diferencial de calquier
+geodésica de cualquier superficie simplemente exigiendo que el valor k1 = 0. Al
+imponer esto en la ecuación 20 se obtiene:
+du 2 dv
+du d2 v d2 u dv
+2 du 3
+2
+1
+1
+2 du dv 2
+1 dv 3
+=
+−Γ
+(
+)
+−
+(2Γ
+−
+Γ
+)(
+)
++
+(2Γ
+−
+Γ
+)
+(
+)
++
+Γ
+)
+−
+22
+22 (
+11
+12
+11
+12
+ds ds2 ds2 ds
+ds
+ds ds
+ds ds
+ds
+(20)
+Alternativamente, se puede derivar la ecuacion diferencial de la geodesica
+considerando que la superficie normal N tiene la direccion normal a la curva
+geodesica + − n.
+nru = 0, nrv = 0
+
+(21)
+
+.
+Mientras kn =
+
+dt
+,
+ds
+
+la ecuacion 21 puede ser escrita de la forma:
+dt
+dt
+ru = 0, rv
+ds
+ds
+
+=0
+
+(22)
+
+Si se sustituye en la ecuacion 22 en la 11 se tiene:
+du 2
+d2 v
+du dv
+dv 2
+d2 u
+(ruu ru )( ) + 2(ruv ru )
++ (rvv ru )( ) + E 2 + F 2 = 0
+ds
+ds ds
+ds
+ds
+ds
+
+(23)
+
+du 2
+du dv
+dv
+d2 u
+d2 v
+) + 2(ruv rv )
++ (rvv rv )( )2 + F 2 + G 2 = 0
+ds
+ds ds
+ds
+ds
+ds
+
+(24)
+
+(ruu rv )(
+
+2
+
+Al eliminar el término ddsv2 de 2.1, usando 2.1, y eliminando en usando ,
+empleando los sı́mbolos de Christoffel, se obtiene:
+du
+= p,
+ds
+dv
+= q,
+ds
+
+(25)
+(26)
+
+Las ecuaciones y estám relacionanadas por la primera forma fundamental, ds2 =
+Eds2 + 2Fdudv + Gdv2 . Si se elimina el termino ds de ambas ecuaciones, estas
+ecuaciones se reducen a la 20
+du
+ds
+dv
+ds
+dp
+ds
+dp
+ds
+
+2.2
+
+= p,
+
+(27)
+
+= q,
+
+(28)
+
+= −Γ111 p2 − 2Γ112 pq − Γ122 q2 ,
+
+(29)
+
+= −Γ211 p2 − 2Γ212 pq − Γ222 q2 .
+
+(30)
+
+Cálculo de las ecuaciones en superficie paramétrica
+
+En pos de reforzar el entendimiento del lector sobre el problema se presentan
+algunos ejemplos de superficies y sus respectivos sistemas de ecuaciones
+diferenciales que determinan las curvas geodésicas.
+
+2.2.1 Plano por el origen
+Sean V1 = (x1 , y1 , z1 ) y V2 = (x2 , y2 , z2 ) los vectores que generan el plano. La
+ecuación paramétrica 31 representa dicho plano.
+r(u, v) = (x1 u + x2 v, y1 u + y2 v, z1 u + z2 v)
+
+(31)
+
+Utilizando las ecuaciones de la geodésica 27-30, las ecuaciones de la primera
+forma fundamental 4-6 y la ecuación parametrica 31 del plano obtenemos E, F y G
+en 32 y en 33-34 sus respectivas derivadas parciales.
+
+E = x21 + y21 + z21 ,
+Eu = 0,
+Ev = 0,
+
+F = x1 x2 + y1 y2 + z1 z2 ,
+Fu = 0,
+Fv = 0,
+
+G = x22 + y22 + z22 ,
+Gu = 0,
+Gv = 0,
+
+(32)
+(33)
+(34)
+
+Entonces, como todas las derivadas parciales son nulas, usando 13-18, los
+sı́mbolos de Christoffel valen cero.
+Finalmente obtenemos las ecuaciones de la geodésica para el plano en 35-38.
+du
+ds
+dv
+ds
+dp
+ds
+dq
+ds
+
+= p,
+
+(35)
+
+= q,
+
+(36)
+
+= 0,
+
+(37)
+
+=0
+
+(38)
+
+2.2.2 Esfera unitaria centrada en el origen
+La ecuación paramétrica 39 representa una esfera unitaria centrada en el origen.
+r(u, v) = (cos(u)sin(v), sin(u)sin(v), cos(v)), (u, v) ∈ [o, 2π] × [0, π]
+
+(39)
+
+De forma análoga que el caso anterior, utilizamos las ecuaciones de la geodésica
+27-30, las ecuaciones de la primera forma fundamental 4-6 y la ecuación
+parametrica 39 del plano obtenemos E, F y G en 40 las ecuaciones de la primera
+forma fundamental y en 41-42 sus respectivas derivadas parciales.
+E = sin2 (v),
+Eu = 0,
+Ev = 2sin(v)cos(v),
+
+F=0
+Fu = 0,
+Fv = 0,
+
+G = 1,
+Gu = 0,
+Gv = 0,
+
+(40)
+(41)
+(42)
+
+De esta forma, usando 13-18, obtenemos los sı́mbolos de Christoffel en 43-45
+
+Γ212 = Γ111 = Γ122 = Γ222 = 0,
+cos(v)
+,
+Γ112 =
+sen(v)
+Γ211 = −sen(v)cos(v).
+
+(43)
+(44)
+(45)
+
+Las ecuaciones de la geodésica para la esfera son 46-49.
+du
+ds
+dv
+ds
+dp
+ds
+dq
+ds
+
+= p,
+
+(46)
+
+= q,
+
+(47)
+
+−2cos(v)
+pq,
+sen(v)
+
+(48)
+
+= sen(v)cos(v)p2 .
+
+(49)
+
+=
+
+2.2.3 Paraboloide hiperbólico
+La ecuación paramétrica 50 representa el paraboloide hiperbólico.
+r(u, v) = (u, v, uv)
+
+(50)
+
+Nuevamente, a partir de las ecuaciones de la geodésica 27-30, las ecuaciones
+de la primera forma fundamental 4-6 y la ecuación parametrica 50 del plano
+obtenemos E, F y G en 51 las ecuaciones de la primera forma fundamental y en
+52-53 sus respectivas derivadas parciales.
+E = 1 + v2 ,
+Eu = 0,
+Ev = 2v,
+
+F = uv
+Fu = v,
+Fv = u,
+
+G = 1 + u2 ,
+Gu = 2u,
+Gv = 0,
+
+(51)
+(52)
+(53)
+
+A partir de lo anterior se sustituye en 13-18 y se obtienen los sı́mbolos de
+Christoffel en 54-56.
+
+Γ111 = Γ211 = Γ122 = Γ222 = 0,
+v
+,
+Γ112 = 2
+u + v2 + 1
+u
+Γ212 = 2
+.
+u + v2 + 1
+
+(54)
+(55)
+(56)
+
+Las ecuaciones de la geodésica para el paraboloide hiperbólico son 57-60.
+du
+ds
+dv
+ds
+dp
+ds
+dq
+ds
+
+= p,
+
+(57)
+
+= q,
+
+(58)
+
+−2v
+pq,
++ v2 + 1
+−2u
+= 2
+pq.
+u + v2 + 1
+=
+
+u2
+
+(59)
+(60)
+
+3
+
+Metodologı́a
+
+El sistema de ecuaciones diferenciales 27-30 puede resolverse modelándolo de las
+siguientes dos formas:
+•
+
+Problema de Valor Inicial (PVI).
+
+•
+
+Problema con Condiciones de Borde (PCB).
+
+La primera forma consiste en proporcionar el valor inicial para cada una de las
+cuatro ecuaciones diferenciales del sistema. Como la solución de un PVI es única,
+al indicar los valores iniciales queda determinada una sola curva.
+En el caso del PCB se dan dos puntos del espacio como condiciones de borde por
+lo que las ecuaciones diferenciales del sistema tienen muchas soluciones o incluso
+ninguna.
+Generalmente problema a resolver se asemeja más a un PCB que a un PVI, por
+lo que la forma más natural de resolverlo serı́a a partir del segundo. Debido a que
+la complejidad computacional que implica el PCB es considerablemente mayor
+que el PVI se optó por el primer método para la resolución. En 3.1 se demuestra
+que es posible modelar las geodésicas como un PVI.
+Por otro lado el sistema presentado en 27-30 es un sistema analı́tico y no
+puede resolverse computacionalmente por lo que es necesario utilizar un
+algoritmo numérico para para modelar y aproximar el problema. El método
+seleccionado para el estudio del fue el método de Euler hacia adelante, que fue
+elegido debido a su simplicidad en comparación a otros métodos considerados
+como el Método del Trapecio.
+3.1
+
+Problema de Valor Inicial (PVI)
+
+El Problema de Valor Inicial, también conocido como problema de Cauchy, es
+básicamente un sistema de ecuaciones compuesto de una EDO y una condición
+inicial de la misma.
+A continuación se explica en más detalle y demuestra que las ecuaciones que
+rigen las geodésicas se pueden considerar un PVI.
+Previamente, las siguientes definiciones REFCURSO nos ayudaran en la
+muestra:
+•
+
+Una ecuación diferencial es una ecuación que relaciona las derivadas de una o
+
+más variables dependientes respecto a una o más variables independientes.
+•
+
+Una ecuación diferencial ordinaria (EDO) es una ecuación diferencial que
+relaciona una función desconocida de una única variable independiente con sus
+derivadas.
+
+•
+
+Dada una función f : R2 → R el Problema de Valores Iniciales consiste en hallar
+la función y = y(x) tal que:
+
+
+0
+
+
+ y (x) = f (x, y(x))
+(PVI) : 
+
+
+ y(x0 ) = y(y0 ) ∈ R
+
+Entonces utilizando las ecuaciones planteadas en 27 - 30 y considerando la
+siguiente notación:
+du
+ds
+dv
+v0 (s) =
+ds
+dp
+p0 (s) =
+ds
+dq
+q0 (s) =
+ds
+
+u0 (s) =
+
+=p
+
+→ u0 (s) = f1 (s, u(s)),
+
+(61)
+
+=q
+
+→ v0 (s) = f2 (s, v(s)),
+
+(62)
+
+= −Γ111 p2 − 2Γ112 pq − Γ122 q2
+
+→ p0 (s) = f3 (s, p(s)),
+
+(63)
+
+= −Γ211 p2 − 2Γ212 pq − Γ222 q2 .
+
+→ q0 (s) = f4 (s, p(s)).
+
+(64)
+
+se puede representar las ecuaciones diferenciales como un PVI de la siguiente
+manera:
+
+
+
+
+y0 (s) = f (s, u(s), v(s), p(s), q(s))
+
+(PVI) : 
+
+
+ y(s ) = (u(s ), v(s ), p(s ), q(s )) ∈ R4
+0
+
+0
+
+0
+
+0
+
+0
+
+Como los ejemplos de la sección 2.2 son casos particulares de las ecuaciones 27-30
+también son PVI, en particular el paraboloide hiperbólico.
+3.2
+
+Discretización del problema
+
+El método de Euler, denominado ası́ en honor a su autor Leonhard Euler, es un
+algoritmo matemático empleado para la resolución del Problema de Valor Inicial.
+Por su simplicidad este método se utiliza como base para métodos ms complejos y
+de mayor presición.
+Es un mtodo de primer orden, lo cual implica que el error local es proporcional al
+cuadrado del paso, y el error global es proporcional al paso. Tiene dos variantes:
+
+Euler hacia Adelante y Euler hacia Atrás.
+En este caso limitamos nuestro análisis al paraboloide hiperbólico, pero el
+razonamiento es análogo en las otras superficies.
+Partiendo de las ecuaciones (57-60) y utilizando Euler hacia Adelante, se calcula a
+continuación las ecuaciones en su forma discreta.
+Para u:
+uk+1 − uk
+du
+=p⇒
+= pk ⇒ uk+1 = uk + pk h
+ds
+h
+Para v:
+vk+1 − vk
+dv
+=q⇒
+= qk ⇒ vk+1 = vk + qk h
+ds
+h
+Para p:
+dp
+pk+1 − pk
+−2v
+−2vk
+−2vk
+= 2
+pq ⇒
+= 2
+pk qk ⇒ pk+1 = 2
+pk qk h+pk
+2
+2
+ds u + v + 1
+h
+uk + vk + 1
+uk + v2k + 1
+Finalmente, para q:
+dq
+qk+1 − qk
+−2uk
+−2u
+−2uk
+p
+q
+⇒
+q
+=
+pk qk h+qk
+= 2
+pq
+⇒
+=
+k
+k
+k+1
+ds u + v2 + 1
+h
+u2k + v2k + 1
+u2k + v2k + 1
+En resumen:
+uk+1 = uk + pk h
+vk+1 = vk + qk h
+−2vk
+pk+1 = 2
+pk q k h + pk
+uk + v2k + 1
+−2uk
+pk qk h + qk
+qk+1 = 2
+uk + v2k + 1
+
+(65)
+(66)
+(67)
+(68)
+
+El siguiente pseudocódigo 1 expresa una forma de introducir el problema en
+softwares tales como ”Octave”, ”R”, ”Python”, etc.
+
+Algorithm 1 Pseudocódigo para resolver el PVI mediante el método ”Euler hacia
+adelante”
+Require: y(0) = y0 ; x(0) = 0; i = 1; h; f
+1: while x(i) < x f do
+2:
+y(i + 1) ← y(i) + h ∗ f (x(i), y(i))
+3:
+x(i + 1) ← x(i) + h
+4:
+i←i+1
+5: end while
+
+4
+
+Estudio Experimental
+
+4.1
+
+Ambiente de trabajo
+
+Durante el desarrollo de la experiencia se trabajo con:
+•
+
+Lenguaje de programación: Octave.
+
+•
+
+Caracterı́sticas de la computadora utilizada:
+· HP Pavilion 15 Notebook
+· Procesador:AMD A10-7300 Radeon R6, 10 Compute Cores 4C+6G
+· Memoria RAM: 8 GB
+· Sistema Operativo: Manjaro 17.1.12 x64 (Deepin desktop)
+· Versión de Octave: 4.4.1
+
+4.2
+
+Resultados Obtenidos
+
+En las condiciones del ambiente de trabajo descrito en 4.1 se realizó la ejecución
+de los scripts creados.
+En las figuras 2 - 4 se puede apreciar el resultado obtenido
+Fig. 2. Euler
+
+Fig. 3. Euler
+
+Fig. 4. Euler
+
+5
+
+Conclusiones
+
+References
+[1] I. Horváth. “shape interrogation for computer aided design and manufacturing“,
+by nicholas m. patrikalakis and takashi maekawa, springer-verlag, berlin, heidelberg,
+new york, 2002, isbn 3-540-42454-7, 408 pages. Structural and Multidisciplinary
+Optimization, 24(6):467–468, Dec 2002.
+
+Octave:Función Tic() https://octave.sourceforge.io/octave/function/tic.html
+
+
