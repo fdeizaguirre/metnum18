@@ -8,6 +8,7 @@
 %%%%%% ENTER ADDITIONAL PACKAGES
 %\usepackage{graphics}
 \usepackage{pst-all}
+\usepackage{tabto}
 \usepackage{graphicx}
 \usepackage{amsmath,amsfonts}
 \usepackage{amssymb} % ADDED
@@ -15,6 +16,7 @@
 \usepackage{latexsym}
 \usepackage{fancybox}
 \usepackage{algorithm}
+%\usepackage{fontspec}
 %\usepackage{algorithmic}
 \usepackage{algorithmicx}
 \usepackage{algpseudocode}
@@ -28,12 +30,22 @@
 \usetikzlibrary{matrix,positioning,arrows,decorations.pathmorphing,shapes}
 \usetikzlibrary{shapes,snakes}
 \usepackage{graphicx}
-%---------------hola
+%-------------------------------------------------------------------------------
 \usepackage{subfigure}
 \usepackage{mathtools}
 \usepackage{booktabs}
 \usepackage{hyperref}
+%% Configuration for algorithmicx
 
+%\setmainfont{Hoefler Text}
+%\newcommand*\DNA{\textsc{dna}}
+%\newcommand*\Let[2]{\State #1 $\gets$ #2}
+%\algrenewcommand\alglinenumber[1]{
+%    {\sf\footnotesize\addfontfeatures{Colour=888888,Numbers=Monospaced}#1}}
+%\algrenewcommand\algorithmicrequire{\textbf{Precondition:}}
+%\algrenewcommand\algorithmicensure{\textbf{Postcondition:}}
+%\usepackage[noend]{algpseudocode}
+%-------------------------------------------------------------------------------
 \tolerance=1
 \emergencystretch=\maxdimen
 \hyphenpenalty=10000
@@ -53,290 +65,555 @@
 
 \begin{frontmatter}
 
-\title{An Approximation Algorithm for the Two-Node-Connected Star Problem with Steiner Nodes}
+\title{Estudio de Geod\'esicas a trav\'es de An\'alisis Num\'erico}
 
-\author{Graciela Ferreira Leites Mundell (1551496-1),}
-\author{Franco Rafael Robledo Amoza (3645500-3),}
-\author{Pablo Gabriel Romero Rodr\'iguez (3702465-5)}
+\author{Francisco de Izaguirre (4.425.135-0),}
+\author{Francisco Fernandez (4.596.080-9),}
+\author{Gabriela Mullukian (5.121.434-9),}
+\author{Marco Rol\'on (4.916.721-9)}
 
 \address{Instituto de Matem\'atica y Estad\'istica\\ Facultad de Ingenier\'ia. Universidad de la Rep\'ublica\\ Montevideo, Uruguay}
-\thanks[mails]{Emails:\href{mailto:gferreira@fing.edu.uy} {\texttt{\normalshape
-   \{gferreira,frobledo,promero\}@fing.edu.uy}}}
 
+\thanks[mails]{Emails:\href{} {\texttt{\normalshape
+   \{francisco.de.izaguirre,francisco.fernandez,gabriela.mullukian,marco.rolon\}@fing.edu.uy}}}
+
+%-------------------------------------------------------------------------------
 \begin{abstract}
-\setlength{\parindent}{12pt}
-The goal in topological network design is to build a minimum-cost topology meeting specific real-life constraints.
-There is a cost-robustness trade-off under single and multiple failures.
+%\setlength{\parindent}{12pt}
+\tab El camino m\'as corto entre dos puntos en un plano, es el segmento de recta que los une. Si se quiere analizar qu\'e pasa en superficies curvas, el problema deja de ser trivial. Dada una superficie y dos puntos cualesquiera contenidos en ella, se define la curva \textbf{geod\'esica} como la curva de menor longitud, de dicha superficie, que une esos dos puntos.
+    
+En este trabajo se realiza una introducci\'on al problema y una descripci\'on matem\'atica del mismo. Se demuestra que puede ser modelado como un Problema de Valores Iniciales (PVI). Luego se utiliza el M\'etodo de Euler Hacia Adelante para su resoluci\'on.
 
-Previous works in the field suggest that a backbone composed by a two-node-connected toplogy provides savings with respect to elementary cycles.
-Consequently, we introduce the Two-Node Connected Star Problem with Steiner Nodes (2NCSP-SN). The goal is to design a minimum-cost topology,
-where the backbone is two-node connected, the access network is connected in a \emph{star} topology or by direct links to the backbone,
-and optional nodes (called Steiner nodes) could be included in the solution. The 2NCSP-SN belongs to the class of $\mathcal{NP}$-Hard problems.
-This promotes the development of heuristics and approximation algorithms.
 
-An approximation algorithm of factor $4\alpha$ for the 2NCSP-SN is introduced, being $\alpha \geq 1/2$ the cost-ratio between backbone and access links.
-This is a generalization of the well-known factor 2 for the design of minimum-cost two-connected spanning networks (if we fix $\alpha=1/2$).
-Finally, an exact Integer Linear Programming (ILP) formulation is proposed in order to highlight the effectiveness of the approximation algorithm.
-The results confirm a small gap between the globally optimum solution and the topology offered by our approximation algorithm when the ratio $\alpha$ is close to $1/2$.
+Posteriormente se presenta los resultados obtenidos al utilizar , se realiza un an\'alisis de los errores cometidos. \\ CONCLUSION BREVE
+     
+%\end{}
 \end{abstract}
-
+%-------------------------------------------------------------------------------
 \begin{keyword}
-Network Optimization, Approximation Algorithm, Integer Linear Programming
+Geod\'esicas, M\'etodos Num\'ericos, PVI, Euler hacia Adelante.
 \end{keyword}
 
 \end{frontmatter}
+\newpage
 
+%-------------------------------------------------------------------------------
+%Indice
+\tableofcontents
+\clearpage
+%-------------------------------------------------------------------------------
+%
+%-------------------------------------------------------------------------------
+\section{Introducci\'on}\label{intro}
+\tab Minimizar distancias entre dos puntos, es un problema tan añejo como vigente. Pueden listarse varias situaciones en las que la ingenier\'ia busca resolver este problema: construcci\'on de carreteras; realizaci\'on de cableados subterr\'aneos; diseñar el movimiento de un brazo rob\'otico o al estudiar la teor\'ia de la relatividad general, donde se ve que las part\'iculas materiales se mueven a lo largo de geod\'esicas temporales del espacio-tiempo curvo. \\
 
-\section{Introduction}\label{intro}
-The minimum-cost toplogy meeting simple connectivity is the Minimum Spanning Tree, or MST. In this basic setting, Greedy algorithm efficiently finds the MST~\cite{Kruskal}.
-However, the design of communication systems is more challenging, since the cost-redundancy trade-off should be tackled.
-In the physical layer, this means that the network must be robust under single failures of any component, or two-node connected.
+El primer registro matem\'atico vinculado a este problema es de 1697 cuando Johann Bernoulli resolvi\'o  el problema de la distancia m\'as corta entre dos puntos en una superficie convexa, y demostr\'o que el plano osculador de la geod\'esica debe ser perpendicular al plano tangente de la misma. \\
 
-A natural way to connect terminal nodes in order to fulfill two-connectivity is to consider an elementary cycle. The design of a minimum-cost
-elementary cycle is a celebrated problem, known as the Travelling Salesman Problem or TSP. Supported by the concept of reducitibility
-and Karp list, it is well-known that the TSP belongs to the class of $\mathcal{NP}$-Hard problems~\cite{Karp72}.
-Indeed, a natural reduction to Hamiltonian tour is obtained using $0$-$1$ costs in their links.
+Euler, en 1732, obtuvo las ecuaciones impl\'icitas de las geod\'esicas. 
+A lo largo del tiempo, m\'as autores como Bliss, Munchmeyer y Haw obtuvieron geod\'esicas de curvas particulares. Beck et al. resolvieron el problema de dos valores iniciales de la curva geod\'esica, usando el m\'etodo de cuarto orden de Runge-Kutta en un spline bic\'ubico. Patrikalakis y Bardis calcularon los desplazamientos geod\'esicos de curvas en superficies B-spline racionales utilizando la integraci\'on de valores iniciales de geod\'esicas a una curva generatriz  en la superficie.\\
 
-A foundational work credited by Clyde Monma et. al. confirms that elementary cycles are sub-optimal for the design of
-minimum-weight 2-node-connected spanning network problem or MW2CSNP~\cite{monma1990minimum}.
-However, the authors show that cost of the cheapest Hamiltonian tour, $C_{\mathcal{H}}$, always respects the inequality
-$C_{\mathcal{H}} \leq 4/3 OPT$, being $OPT$ the cost of the globally optimum solution.
-Furthermore, the bound is tight, since they build an asymptotic family of graphs such that the cost-ratio tends to $4/3$. The authors find structural properties of the globally optimum
-solution for the MW2CSNP and, they remark that the optimum 2-edge connected is also
-2-node connected. The MW2CSNP is at least as hard as the TSP (using $0$-$1$ costs, $OPT$ is not greater than the number of nodes
-iff the graph is Hamiltonian). Therefore, several authors address the MW2CSNP using heuristics and approximation algorithms.
-Christofides provides a $3/2$-factor for metric TSP which, together with the $4/3$ factor credited by
-Monma et. al. results in an approximation algorithm with factor $2$ for the MW2CSNP~\cite{christofides}. This factor-$2$ can be extended to
-several topological network design problems such as Steiner Networks, using either combinatorial analysis or strong duality
-theorem from linear programming~\cite{vazirani2003approximation,GW}.
+Se sigui\'o investigando, y se encontraron formas de aproximarlo a problemas con soluciones conocidas.\\ 
 
-The physical implementation of fiber-optics communication imposed a new challenge, \emph{geographical diversity}. As a consequence,
-real-life communication networks are hierarchically structured in a backbone and access network, where customers in the last-mile
-have elementary connectivity requirements~\cite{robledo2005grasp}. Martine Labb\'e et. al. introduced
-a hierarquically organized network, called Ring Star Problem, where the backbone is a ring and the access network is a \emph{star},
-this is, direct links connected to the ring~\cite{labbe2004ring}. A natural topological extension called Two-Node Connected Star Problem (2NCSP)
-has been introduced by Recoba et. al.~\cite{recoba2016two}.
-The ring is replaced by an arbitrary two-node connected topology, and
-the authors confirm savings with respect to optimal solutions for the RSP (which are in turn feasible for the 2NCSP). Here, an extension of the 2NCSP is proposed, by the introduction of optional Steiner nodes in feasible solutions. 
-
-\textbf{\emph{Complexity}}: Being RSP and 2NCSP $\mathcal{NP}$-Hard problems, 2NCSP-SN is $\mathcal{NP}$-Hard too.
-
-
-The contributions of this article are the following:
+Este documento, que busca resolver el problema como un Problema de Valores Iniciales,  est\'a organizado de la siguiente manera:
 \begin{itemize}
-\item The Two-Node-Connected Star Problem with Steiner Nodes (2NCSP-SN) is here introduced.
-\item A generalization of the factor-2 result is offered. Specifically, an approximation algorithm with factor $4\alpha$ is
-introduced for the 2NCSP, being $\alpha \geq 1/2$ the relation between the link-costs from the backbone/access network.
-\item An exact Integer Linear Programming (ILP) formulation for the 2NCSP-SN is presented.
-\item A sensibility analysis is carried out in order to understand the effectiveness of
-our approximation algorithm.
-%The reason is to determine whether the algorithm returns near-optimal or feasible solutions close to the factor $4 \beta$.
+\item La Secci\'on~\ref{Problema} define formalmente el problema de estudio.
+\item La Secci\'on~\ref{Metodo} presenta la metodolog\'ia empleada para su resoluci\'on.
+\item La Secci\'on~\ref{Resultados} desarrolla un an\'alisis del rendimiento del m\'etodo de Euler hacia adelante.
+\item La Secci\'on~\ref{Conclusiones}, finalmente, se presenta las principales conclusiones de este trabajo, los elementos aprendidos y posibles l\'ineas de trabajo futuro.
 \end{itemize}
 
-The paper is organized as follows. Section~\ref{Problem} formally presents the 2NCSP-SN using an ILP formulation.
-An approximation algorithm with factor $4\alpha$ is introduced in Section~\ref{AA}.
-A fair comparison between the globally optimum solution and the approximation algorithm is performed in Section~\ref{Comparison}.
-Finally, Section~\ref{Conclusions} presents concluding remarks and trends for future work.
 
-\section{Problem}\label{Problem}
-We are given a simple graph $G = (V,E)$, internal link-costs $IC = \{c_{e}\}_{e\in E}$, external link-costs $EC = \{d_{e}\}_{e\in E}$, and $V=S\cup T$, being $T$ the terminal-set and
-$S$ Steiner nodes with costs $\{a(s)\}_{s\in S}$. The goal in 2NCSP-SN is to build a minimum-cost spanning subgraph $H = (V_H,E_H)$, where $T \subseteq V_H$ and $V_H = I \cup L$, being $L$ the set of leaf-nodes (in the access network), such that $deg_{H}(v) = 1, \forall v\in L$, and
-the induced subgraph $H(I)$ is two-node-connected.
 
-%The objective function
-%is the constribution of internal/external connections and Steiner nodes:
-%$c(H)=\sum_{e\in E_H(I)}c(e)+\sum_{e\in E_H(L)}d(e)+\sum_{s\in S\cap V_H}c(s)$.
+\clearpage
+%-------------------------------------------------------------------------------
+%
+%-------------------------------------------------------------------------------
+\section{Problema}\label{Problema}
 
-%Let $Q=\{q=(i,j),\forall i,j \in T\}$ be the set of all pairs of nodes in $T \subseteq V$. For each $q \in Q$ we define $G^{q}=(V^{q},E)$, where $V^{q}=T(q)\cup S(q)$ with $T(q)=\{o(q),d(q)\}$  and $S(q)=S\cup (T \setminus T(q))$.  In order to model survivability conditions on the network core, we introduce a minimal cost flow problem,over each network $G^{q}$ with capacity constraints. If both terminal nodes $q$ are in the backbone then  two node connectivity are required between them, in other case only a simple path is required.% additional integer variables are need. As we introduce a flow conditions we need work with directed graphs. Let $Gd^{q}=(V^{q},Ed)$ be the directed graph built from $G^{q}=(V^{q},E)$.%,such that for each link $e=(i,j)\in E, \forall e\in E, \forall i,j \in V^{q}$ two arcs are added in $Gd^{q}$ one from node $i$ to node $j$ and other from $j$ to $i$.
+\subsection{Ecuaciones diferenciales que rigen una geod\'esica}
 
-Let us develop an ILP for the problem under study. The key idea is to consider connectivity requirement $r_q=2$ for every pair of terminals $q$ from the backbone, while $r_q=1$ otherwise.
-Let $Q=\{q=(i,j),\forall i\neq j, i,j \in T\subseteq V\}$. Consider the following set of binary variables:
-\begin{itemize}
-\item  $z_{ij}=1$ iff $(i,j)\in E$ is in the backbone;
-\item $y_{ij}=1$ iff $(i,j)\in E$ is in the access network;
-\item $x_{ij}^{q}$ is the $i-j$ flow for every pair of terminals $q$;
-\item $p_{i}=1$ iff the $i$ is included in the access network.
-\end{itemize}
 
-An ILP formulation for the 2NCSP-SN can be expressed as follows:
+Como se coment\'o, conocer la curva de longitud m\'inima entre dos puntos en el caso de superficies curvas el an\'alisis pasa a ser y m\'as complejo. En este trabajo se realizr\'a, mediante la geometr\'ia de Riemann. Los espacios de Riemann son aquellos espacios medibles.\\
 
-%TODO PASAR A FORMATO ALIGN; ACOMODAR EN UNA SOLA RESTRICCION LA QUE APARECE CON LLAVES
-\setcounter{equation}{0}
-\begin{align}
-\small
-\mbox{min}_{H \subseteq G} &c(H)= \sum _{ij\in E} c_{ij}.z_{ij}+ \sum _{s\in S} a_{s}.p_{s}+ \sum _{ij\in E} d_{ij}.y_{ij}\label{ecu0} \\
-\mbox{s.t.} &\sum _{j:(j,i)\in E} x_{ji}^{q}-\sum _{j:(i,j)\in Ed^{q}} x_{ij}^{q} =  I(i).r_{i}\: \forall i \in V,\:\forall q=(q_{o},q_{d})\in Q \label{ecu1}\\
-& I(i)=1 \:\forall i \in V \backslash \{q_{o}\},\:I(q_{o})=-1 \label{ecu2}\\
-& r_{i}= 0 \:\forall i \in V \backslash \{q_{o},q_{d}\} \label{ecu3}\\
-& \max(1,p_{q_{o}}+p_{q_{d}}) \leq r_{i}\leq 1+ \min(p_{q_{o}},p_{q_{d}}),\:\forall  i \in \{q_{o},q_{d}\},\:\forall q\in Q\label{ecu4}\\
-& x_{ij}^{q}+x_{ji}^{q} \leq z_{ij}+y_{ij},  \:\forall ij\in E,\:\forall q \in Q \label{ecu5}\\
-& \sum_{j \in \delta (i)} y_{ij} \leq  1+ M p_{i}, \:\forall  i\in T \label{ecu6}\\
-&\sum _{j\in \delta (i)} (z_{ij}+y_{ij}) \leq  M p_{i}, \:\forall  i\in S \label{ecu7}\\
-& y_{ij} \leq 2-p_{i}-p_{j}, \: \forall ij\in E, i,j \in V\label{ecu8}\\
-& z_{ij} \leq \min(p_{i},p_{j}), \: \forall ij\in E, i,j \in V\label{ecu9}\\
-& z_{ij}+y_{ij} \leq 1 \: \forall ij\in E, i,j \label{ecu10}\\
-& 2p_{i} \leq \sum_{j\in \delta (i)}z_{ij}\leq Mp_{i}, \: \forall i \in V\label{ecu11}
+El concepto de geod\'esica es la generalizaci\'on de las rectas en una geometr\'ia plana.\\
+
+Aunque las variedades de Riemann son generalmente "curvas", no obstante, puede encontrarse que dados dos puntos diferentes y suficientemente cercanos existe una curva de longitud m\'inima (que no necesariamente es \'unica). Estas l\'ineas de m\'inima longitud, se llaman l\'ineas geod\'esicas y son una generalizaci\'on del concepto "l\'inea recta" o "l\'inea de m\'inima longitud". Son las curvas que localmente conectan sus puntos a lo largo de las trayectorias m\'as cortas.\\
+
+El an\'alisis se har\'a bajo superficies de Riemann y de las curvas, solamente se requiere que en cada uno de sus puntos, haya una m\'etrica eucl\'idea definida sobre el espacio tangente, que cambie suavemente de punto a punto. Cuando una curva, en una superficie, tenga la propiedad de minimizar la longitudes de las curvas que unen dos puntos determinados, se la llamar\'a geod\'esica minimizante.\\
+
+Previo al estudio de las curvas geod\'esicas en particular, se definir\'an propiedades de una superficie.\\
+
+Cuando se quiere cuantificar la curvatura de una superficie S en cierto punto, se considera una curva C de dicha superficie que contenga al punto P en cuesti\'on.\\
+
+Los vectores unitarios t (tangente) y n (normal) a la curva C en P, est\'an relacionados de la siguiente manera:\\
+
+INSERTAR IMAGEN Fig 3.6 del libro de referencia del curso.\\
+
+
+MODIFICAR ESTO:
+\begin{align} 
+ k = \frac{dt}{ds} = k n = k_n + k_g, \label{eq1tangente}
 \end{align}
 
-Where $\delta (i)$ is neighbor-set for node $i$, and $M$ is an arbitrarily large integer.
-The objective function~\eqref{ecu0} is the contribution of internal/external connections and Steiner nodes. Constraints~\eqref{ecu1}-\eqref{ecu4} ensure connectivity using Kirchhoff equations.
-%When the pair of terminals $q$ belongs to the backbone, $r_{i}=2, i\in \{q_{o},q_{d}\}$;
-%otherwise $r_{i}=1$.
-Constraints~\eqref{ecu5}~and~\eqref{ecu6} force one-way flow.
-By Constraint~\eqref{ecu7}, optional Steiner nodes belong to the backbone, if needed.
-The definitions of binary variables $y_{ij}$ and $z_{ij}$ are captured by Constraints~\eqref{ecu8}
-and~\eqref{ecu9}. Constraints~\eqref{ecu10} state that either $y_{ij}$  or $z_{ij}$ can be set to $1$, but not both. 
-Constraints~\eqref{ecu11} state that a terminal from the backbone could have multilinks, but nodes from the access network have one link.
+Donde $k_n$ es el vector normal de curvatura, y $k_g$ es el vector de curvatura geodesica. Este par de vectores, son las componentes del vector de curvatura $k$ de C. De esta forma, el vector normal de curvatura, puede expresarse como:
 
-\section{Methodology}\label{AA}
-From now on, we assume that the internal/external costs are positive and internal costs satisfy the triangle inequality. Without loss of generality, a complete graph $G=(V,E)$ is considered. Let $\alpha_{e}=\frac{c_e}{d_e}, \forall e \in E$ be the primary/secondary cost ratio for each arc.
-In this section we build an approximation algorithm for the the 2NCSP-SN of factor $4\alpha$,
-being $\alpha$:
-\begin{equation}
-\alpha = \max_{e\in E} \left\{\alpha_{e} \right\}
+\begin{align} 
+ k_n = kn N \label{eq2tangente}
+\end{align}
+
+siendo kn el valor de la curvatura de la superficie en P en la direcci\'on de t.En otras palabras, kn es la magnitud de la proyecci\'on de k en la siperficie normal a P, con el signo determinado por la orientaci\'on de la superficie normal.\\
+
+Definicion: Las curvas geodesicas, son aquellas que su curvatura geodesica es 0.\\
+
+Se observa que el plano osculador a una curva geodesica (aquel formado por los vectores t y n) , contiene la superficie normal. A partir de esto, puede verse con facilidad que la geodesica entre dos puntos de una esfera, es siempre un gran circulo. El probelma ahora pasa a ser que existen dos arcos entre esos puntos y solo uno de ellos proviene de la curva con menor distancia (excepto si los dos puntos est\'an diametralmente opuestos en ese circulo).\\
+
+Este caso, indica que es posible que exista m\'as de una curva geodesica, entre dos puntos, en una suerficie.
+Dada la parametrizaci\'on de una curva de la forma $u=u(t)$, $v=v(t)$ que vive en la superficie $r=r(u,v)$, se definen los coeficientes de la $primera$ $forma$ $fundamental$ como:
+
+\begin{align} 
+E = r_u . r_u  \label{eqE}\\ 
+F = r_u . r_v  \label{eqF} \\ 
+G = r_v . r_v  \label{eqG}
+\end{align}
+    
+
+Dada la parametrizaci\'on de una superficie como $r=r(u,v)$ y  C un arco parametrizado que pase por el punto P tal cual se muestra en la Fig. 3.6 y denotada por
+\begin{align} 
+r(s) = r(u(s), v(s))
+ \label{eqparametrizada}
+\end{align}
+
+Se definen las formas fundamentales\\
+
+Siendo t el vector tangente a C en P, n el vector normal a C en P, N el vector unitario normal a S en P y u el vector unitario perpendicular a t en el plano tangente a la suferficie. Definido u = N x t.La compontente u en el vector de curvatura k de r(s), es la curvatura geodesica $k_g$ y est\'a dada por la siguiente ecuaci\'on.
+
+\begin{align} 
+k_g = (k.u)u
+ \label{eqcurvatura_k_g}
+\end{align}
+
+La funci\'on escalar
+
+\begin{align} 
+k_g = (k.u)
+ \label{eqcurvatura_kg}
+\end{align}
+es llamada curvatura geod\'esica de C en P.
+O, equivalentemente:
+
+\begin{align} 
+k_g = \frac{dt}{ds} . (N x t)
+ \label{eqcurvatura_kg_vectores}
+\end{align}
+
+El vector tangente unitario, a la curva C puede obtenerse derivando la ecuacion \ref{eqparametrizada} respecto al arco, usando la siguiente relacion:
+
+\begin{align} 
+t = \frac{d r(u(s), v(d))}{ds}&=r_u \frac{d u}{ds} + r_v \frac{d v}{ds}
+ \label{equ_t}
+\end{align}
+
+Por lo que se obtiene:
+
+\begin{align} 
+ \frac{d t}{ds} = r_{uu} (\frac{d u}{ds})^2 +
+ 2 r_{uv} \frac{d u}{ds} \frac{d v}{ds}
+ + r_{vv} (\frac{d v}{ds})^2 +
+ r_u \frac{d^2 u}{ds^2} +
+ r_v \frac{d^2 v}{ds^2}
+ \label{equ_dt}
+\end{align}
+
+en este sentido, sustituyendo en \ref{eqcurvatura_kg_vectores} los resultado de \ref{equ_t} y \ref{equ_dt}:
+
+\begin{align} 
+\begin{split}
+k_g = [ 
+(r_u x r_{uu}) (\frac{d u}{ds})^3 + 
+(2 r_u x r_{uv} + r_v + r_{uu} ) (\frac{d u}{ds})^2 \frac{dv}{ds} + \\
+(r_u x r_{vv} + 2 r_v + r_{uv})  \frac{d u}{ds} (\frac{d v}{ds})^2 + 
+(r_v x r_{vv}) (\frac{d u}{ds})^3
+] . N + \\
+(r_u x r_{v}) . N (\frac{d u}{ds} \frac{d^2 v}{ds^2} - \frac{d^ 2 u}{ds^2 } \frac{d v}{ds})
+\label{curvatura_conR}
+\end{split}
+\end{align}
+Paraboloide 
+Se observa que los coeficientes de $(\frac{d u}{ds})^3$, 
+$(\frac{d u}{ds})^2 \frac{d v}{ds}$, $\frac{d u}{ds} (\frac{d v}{ds})^2$,  
+$(\frac{d v}{ds})^3$,
+$(\frac{d u}{ds} \frac{d^2 v}{ds^2} - \frac{d^2 u}{ds^2} \frac{d v}{ds} ) $
+son todos funciones de los coeficientes definidos en \ref{eqE}-\ref{eqG} y de sus derivadas redpecto a u y v. Es interesante notar que la curvatura geodesica depende solamente de la primera forma fundamental.
+
+Usando los s\'imbolos de Christoffel $\Gamma_{jk}^i (i,j,k=1,2)$ definidos de la siguiente forma:
+
+\begin{align} 
+\Gamma_{11}^1 = \frac{GE_u - 2 FF_u + FE_v}{2(EG - F^2)} \label{Gam_11_1}\\
+\Gamma_{11}^2 = \frac{2EF_u - EE_v + FE_u}{2(EG - F^2)}\label{Gam_11_2}\\
+\Gamma_{12}^1 = \frac{GE_v - FG_u}{2(EG - F^2)} \label{Gam_12_1}\\
+\Gamma_{12}^2 = \frac{EG_u - FE_v}{2(EG - F^2)}\label{Gam_12_2}\\
+\Gamma_{22}^1 = \frac{2GF_v - GG_u + FG_v}{2(EG - F^2)} \label{Gam_22_1}\\
+\Gamma_{22}^2 = \frac{EG_u - FE_v}{2(EG - F^2)}\label{Gam_22_2}
+\end{align}
+
+
+la curvatura geod\'esica se reduce a:
+
+\begin{align} 
+\begin{split}
+k_g = [ \Gamma_{11}^2 (\frac{du}{ds})^3 + (2 \Gamma_{12}^2 -  \Gamma_{11}^1 ) (\frac{du}{ds})^2 \frac{dv}{ds} +\\ (\Gamma_{22}^2 -  2 \Gamma_{12}^1 ) \frac{du}{ds} (\frac{dv}{ds})^2 - \Gamma_{22}^1 (\frac{dv}{ds})^3 +\\ \frac{du}{ds} \frac{d^2v}{ds^2} - \frac{d^2u}{ds^2} \frac{dv}{ds}] \sqrt(EG - F^2)
+\label{eqCurvatura}
+\end{split}
+\end{align}
+
+Acorde a la definici\'on, se puede determinar la ecuaci\'on diferencial de calquier geod\'esica de cualquier superficie simplemente exigiendo que el valor $k_g = 0$. Al imponer esto en la ecuaci\'on \ref{eqCurvatura} se obtiene:
+
+\begin{align} 
+\frac{du}{ds} \frac{d^2v}{ds^2} - \frac{d^2u}{ds^2} \frac{dv}{ds} = -  \Gamma_{11}^2 (\frac{du}{ds})^3 - (2 \Gamma_{12}^2 -  \Gamma_{11}^1 ) (\frac{du}{ds})^2 \frac{dv}{ds} + (2 \Gamma_{12}^1 - \Gamma_{22}^2) \frac{du}{ds} (\frac{dv}{ds})^2 + \Gamma_{22}^1 (\frac{dv}{ds})^3
+\label{eqCurvatura}
+\end{align}
+
+Alternativamente, se puede derivar la ecuacion diferencial de la geodesica considerando que la superficie normal N tiene la direccion normal a la curva geodesica $+- n$.
+
+\begin{align} 
+n r_u = 0, n r_v = 0
+\label{equcurvatura_nr}
+\end{align}.
+
+Mientras $kn = \frac{dt}{ds} $, la ecuacion 
+\ref{equcurvatura_nr} 
+puede ser escrita de la forma:
+
+\begin{align} 
+\frac{dt}{ds} r_u &=0,\frac{dt}{ds} r_v &=0
+\label{equdt_ru_rv}
+\end{align}
+
+Si se sustituye en la ecuacion \ref{equdt_ru_rv} en la \ref{equ_dt} se tiene:
+
+\begin{align} 
+(r_{uu} r_u) (\frac{du}{ds})^2 + 2 (r_{uv} r_u) \frac{du}{ds} \frac{dv}{ds} + (r_{vv} r_u) (\frac{dv}{ds})^2 + E \frac{d^2u}{ds^2} + F \frac{d^2v}{ds^2} = 0
+\label{equ_dt_EF}
+\end{align}
+
+
+\begin{align} 
+(r_{uu} r_v) (\frac{du}{ds})^2 + 2 (r_{uv} r_v) \frac{du}{ds} \frac{dv}{ds} + (r_{vv} r_v) (\frac{dv}{ds})^2 + F \frac{d^2u}{ds^2} + G \frac{d^2v}{ds^2} = 0
+\label{equ_dt_FG}
+\end{align}
+
+Al eliminar el t\'ermino $\frac{d^2v}{ds^2}$ de \ref{equ_dt_EF}, usando \ref{equ_dt_FG}, y eliminando en \label{equ_dt_FG} usando \label{equ_dt_EF}, empleando los s\'imbolos de Christoffel, se obtiene:
+
+\begin{align} 
+\frac{du}{ds}&=p, \label{equ1_Geo}\\
+\frac{dv}{ds}&=q, \label{equ2_Geo}
+\end{align}
+
+Las ecuaciones \label{equ1_Geo} y \label{equ2_Geo} est\'am relacionanadas por la primera forma fundamental, $ds^2 = E ds^2+ 2 Fdudv+ G dv^2$. Si se elimina el termino $ds$ de ambas ecuaciones, estas ecuaciones se reducen a la \ref{eqCurvatura}
+
+
+\begin{align} 
+\frac{du}{ds}&=p, \label{eq1Geodesica}\\
+\frac{dv}{ds}&=q, \label{eq2Geodesica}    \\
+\frac{dp}{ds}&= - \Gamma_{11}^1 p^2 -2 \Gamma_{12}^1 pq - \Gamma_{22}^1 q^2, \label{eq3Geodesica}\\ 
+\frac{dp}{ds}&=- \Gamma_{11}^2 p^2 -2 \Gamma_{12}^2 pq - \Gamma_{22}^2 q^2. \label{eq4Geodesica}
+\end{align}
+
+%-------------------------------------------------------------------------------
+\subsection{C\'alculo de las ecuaciones en superficie param\'etrica}
+En pos de reforzar el entendimiento del lector sobre el problema se presentan algunos ejemplos de superficies y sus respectivos sistemas de ecuaciones diferenciales que determinan las curvas geod\'esicas.
+
+% PLANO
+\subsubsection{Plano por el origen}
+Sean $V_1=(x_1,y_1,z_1)$ y $V_2=(x_2,y_2,z_2)$ los vectores que generan el plano.
+La ecuaci\'on param\'etrica \ref{planoEq} representa dicho plano.
+
+\begin{equation} \label{planoEq}
+r(u,v) = (x_1 u + x_2 v, y_1 u + y_2 v, z_1 u + z_2 v)
 \end{equation}
 
-Recall that Christofides's algorithm is a 3/2-factor for the metric TSP.
-The key concept of our approximation algorithm is Christofides in order to span the terminal-set
-with an elementary cycle. Greedy augmentations of the solution including Steiner nodes also takes place, whenever the cost is reduced.
+Utilizando las ecuaciones de la geod\'esica \ref{eq1Geodesica}-\ref{eq4Geodesica}, las ecuaciones de la primera forma fundamental \ref{eqE}-\ref{eqG} y la ecuaci\'on parametrica \ref{planoEq} del plano obtenemos E, F y G en \ref{fffPlano}  y en \ref{fffuPlano}-\ref{fffvPlano} sus respectivas derivadas parciales.
 
-In Line~1, $Christofides$ is called in order to build an elementary cycle $\mathcal{C}$
-that spans the terminal-set $T$. The corresponding solution is updated in Lines 2-3,
-where the backbone is $\mathcal{C}$ and the access network is empty yet.
-In the while-loop (Lines 4-11),
-Steiner nodes are greedily included in the backbone, whenever the cost is reduced (Line 5).
-If this happens, some terminal node $v$ is included in the access network, and the
-evidence $s \in S$ is added to the backbone (Lines 6-7). Observe that candidate terminals
-$t \in T$ are iteratively checked (Line 9), and the condition $|J|\geq 3$ forces to have
-a cycle in the backbone. The corresponding feasible solution $F$ is finally returned (Line 12).
+\begin{align} 
+E&=x_1^2 + y_1^2 + z_1^2,   & F &=x_1 x_2 + y_1 y_2 + z_1 z_2,   & G&=x_2^2 + y_2^2 + z_2^2, \label{fffPlano} \\
+E_u&=0,     & F_u&=0,   & G_u&=0, \label{fffuPlano}\\
+E_v&=0,    & F_v&=0,   & G_v&=0, \label{fffvPlano}
+\end{align}
 
-\begin{algorithm}[H]
-\small
-\centering
-\begin{algorithmic}[1]
-\Require $G=(T\cup S,E)$,$c(e),d(e) \forall e \in E$,
-\State {$\mathcal{C} \leftarrow Christofides(G,c)$ }
-\State {$L \leftarrow \emptyset$, $I \leftarrow T$, $E^{\prime} \leftarrow E(\mathcal{C})$, $J \leftarrow T$}
-\State {$F \leftarrow (L\cup I,E^{\prime})$}
-%\Comment {Introduce Steiner nodes to the Backbone if the cost is reduced:}
-\While{$|J| \geq 3$}
-    \If {there are  $s \in S$, $(t,v),(v,w)\in F$: $c(t,v)+c(v,w)>d(v,s)+c(t,s)+c(s,w)$}
-            \State {$L \leftarrow L\cup \{v\}$, $I \leftarrow I \cup \{s\}\:  \backslash\: \{v\}$, $J \leftarrow J \backslash \{t,v\}$ }
-            \State {$E^{\prime} \leftarrow E^{\prime} \cup \{(t,s),(s,v),(s,w)\}\:\backslash\: \{(t,v),(v,w)\} $ }
-         \Else
-           \State {$J \leftarrow J \:\backslash\: \{t\}$}
-    \EndIf
-\EndWhile \\
-\Return $F=(I\cup L,E^{\prime})$
-\end{algorithmic}
+Entonces, como todas las derivadas parciales son nulas, usando \ref{Gam_11_1}-\ref{Gam_22_2}, los s\'imbolos de Christoffel valen cero.
+
+Finalmente obtenemos las ecuaciones de la geod\'esica para el plano en \ref{eq:duPlano}-\ref{eq:dqPlano}.
+
+\begin{align}
+\frac{du}{ds}&=p,\label{eq:duPlano} \\
+\frac{dv}{ds}&=q,\label{eq:dvPlano}     \\
+\frac{dp}{ds}&=0, \label{eq:dpPlano}\\ 
+\frac{dq}{ds}&=0 \label{eq:dqPlano}
+\end{align}
+
+% ESFERA
+\subsubsection{Esfera unitaria centrada en el origen}
+
+La ecuaci\'on param\'etrica \ref{esferaEq} representa una esfera unitaria centrada en el origen.
+\begin{equation} \label{esferaEq}
+r(u,v) = (cos (u) sin(v), sin (u) sin (v),cos (v)), \\
+(u,v) \in  [o, 2 \pi] \times [0, \pi]
+\end{equation}
+De forma an\'aloga que el caso anterior, utilizamos las ecuaciones de la geod\'esica \ref{eq1Geodesica}-\ref{eq4Geodesica}, las ecuaciones de la primera forma fundamental \ref{eqE}-\ref{eqG} y la ecuaci\'on parametrica \ref{esferaEq} del plano obtenemos E, F y G en \ref{fffEsfera} las ecuaciones de la primera forma fundamental y en \ref{fffuEsfera}-\ref{fffvEsfera} sus respectivas derivadas parciales.
+
+\begin{align}
+E&=sin^2 (v),   & F &=0    & G&=1, \label{fffEsfera} \\
+E_u&=0,     & F_u&=0,   & G_u&=0, \label{fffuEsfera}\\
+E_v&=2sin(v)cos(v),    & F_v&=0,   & G_v&=0, \label{fffvEsfera}
+\end{align}
+
+De esta forma, usando \ref{Gam_11_1}-\ref{Gam_22_2}, obtenemos los s\'imbolos de Christoffel en \ref{CS1Esfera}-\ref{CS3Esfera}
+
+\begin{align}
+\Gamma_{12}^2&=\Gamma_{11}^1=\Gamma_{22}^1=\Gamma_{22}^2=0, \label{CS1Esfera} \\
+\Gamma_{12}^1&=\frac{cos(v)}{sen(v)},  \label{CS2Esfera}   \\
+\Gamma_{11}^2&=-sen(v)cos(v) .  \label{CS3Esfera}
+\end{align}
+
+Las ecuaciones de la geod\'esica para la esfera son \ref{eq:duEsfera}-\ref{eq:dqEsfera}.
+
+\begin{align}
+\frac{du}{ds}&=p,\label{eq:duEsfera} \\
+\frac{dv}{ds}&=q,\label{eq:dvEsfera}     \\
+\frac{dp}{ds}&=\frac{-2cos(v)}{sen(v)} pq, \label{eq:dpEsfera}\\ 
+\frac{dq}{ds}&= sen(v)cos(v) p^2. \label{eq:dqEsfera}
+\end{align}
+
+%-------------------------------------------------------------------------------
+%PARABOLOIDE HIPERBOLICO
+\subsubsection{Paraboloide hiperb\'olico}
+
+La ecuaci\'on param\'etrica \ref{parHipEq} representa el paraboloide hiperb\'olico.
+\begin{equation} \label{parHipEq}
+r(u,v) = (u,v,uv)
+\end{equation}
+
+Nuevamente, a partir de las ecuaciones de la geod\'esica \ref{eq1Geodesica}-\ref{eq4Geodesica}, las ecuaciones de la primera forma fundamental \ref{eqE}-\ref{eqG} y la ecuaci\'on parametrica \ref{parHipEq} del plano obtenemos E, F y G en \ref{fffHipEq} las ecuaciones de la primera forma fundamental y en \ref{fffuHipEq}-\ref{fffvHipEq} sus respectivas derivadas parciales.
+
+\begin{align}
+E&=1+v^2,   & F &=uv    & G&=1+u^2, \label{fffHipEq} \\
+E_u&=0,     & F_u&=v,   & G_u&=2u, \label{fffuHipEq}\\
+E_v&=2v,    & F_v&=u,   & G_v&=0, \label{fffvHipEq}
+\end{align}
+
+A partir de lo anterior se sustituye en \ref{Gam_11_1}-\ref{Gam_22_2} y se obtienen los s\'imbolos de Christoffel en \ref{CS1HipEq}-\ref{CS3HipEq}.
+
+\begin{align}
+\Gamma_{11}^1&=\Gamma_{11}^2=\Gamma_{22}^1=\Gamma_{22}^2=0, \label{CS1HipEq} \\
+\Gamma_{12}^1&=\frac{v}{u^2+v^2+1},  \label{CS2HipEq}   \\
+\Gamma_{12}^2&=\frac{u}{u^2+v^2+1}.  \label{CS3HipEq}
+\end{align}
+
+Las ecuaciones de la geod\'esica para el paraboloide hiperb\'olico son \ref{eq:du}-\ref{eq:dq}.
+
+\begin{align}
+\frac{du}{ds}&=p,\label{eq:du} \\
+\frac{dv}{ds}&=q,\label{eq:dv}     \\
+\frac{dp}{ds}&=\frac{-2v}{u^2+v^2+1} pq, \label{eq:dp}\\ 
+\frac{dq}{ds}&=\frac{-2u}{u^2+v^2+1} pq. \label{eq:dq}
+\end{align}
+
+
+
+\clearpage
+
+%-------------------------------------------------------------------------------
+%
+%-------------------------------------------------------------------------------
+\section{Metodolog\'ia}\label{Metodo}
+El sistema de ecuaciones diferenciales \ref{eq1Geodesica}-\ref{eq4Geodesica} puede resolverse model\'andolo de las siguientes dos formas:
+\begin{itemize}
+    \item Problema de Valor Inicial (PVI).
+    \item Problema con Condiciones de Borde (PCB).
+\end{itemize}
+\\
+La primera forma consiste en proporcionar el valor inicial para cada una de las cuatro ecuaciones diferenciales del sistema.
+Como la soluci\'on de un PVI es \'unica, al indicar los valores iniciales queda determinada una sola curva. \\
+En el caso del PCB se dan dos puntos del espacio como condiciones de borde por lo que las ecuaciones diferenciales del sistema tienen muchas soluciones o incluso ninguna. \\
+
+Generalmente problema a resolver se asemeja a un PCB que a un PVI, por lo que la forma m\'as natural de resolverlo ser\'ia a partir del segundo. Debido a que la complejidad computacional que implica el PCB es considerablemente mayor que el PVI se opt\'o por el primer m\'etodo para la resoluci\'on. En ~\ref{PVI} se demuestra que es posible modelar las geod\'esicas como un PVI. \\
+
+Por otro lado el sistema presentado en \ref{eq1Geodesica}-\ref{eq4Geodesica} es un sistema anal\'itico y no puede resolverse computacionalmente por lo que es necesario utilizar un algoritmo num\'erico para para modelar y aproximar el problema. El m\'etodo seleccionado para el estudio del fue el m\'etodo de Euler hacia adelante, que fue elegido debido a su simplicidad en comparaci\'on a otros m\'etodos considerados como el M\'etodo del Trapecio.
+
+
+%-------------------------------------------------------------------------------
+%INICIO SECCION 3.1
+%-------------------------------------------------------------------------------
+\subsection{Problema de Valor Inicial (PVI)}\label{PVI}
+
+El Problema de Valor Inicial, tambi\'en conocido como problema de Cauchy, es b\'asicamente un sistema de ecuaciones compuesto de una EDO y una condici\'on inicial de la misma. \\
+
+A continuaci\'on se explica en m\'as detalle y demuestra que las geod\'esicas en el paraboloide hiperb\'olico es un PVI. \\
+
+Previamente, se extraen de  REFLIBROCURSO las siguientes definiciones que nos ayudaran en la muestra:
+
+\begin{itemize}
+    \item Una ecuaci\'on diferencial es una ecuaci\'on que relaciona las derivadas de una o m\'as variables dependientes respecto a una o m\'as variables independientes.
+    \item Una ecuaci\'on diferencial ordinaria (EDO) es una ecuaci\'on diferencial que relaciona una funci\'on desconocida de una \'unica variable independiente con sus derivadas.
+    \item Dada una funci\'on $f: R^2 \rightarrow R $el Problema de Valores Iniciales consiste en hallar la funci\'on $y = y(x)$ tal que:
+    \end{itemize}
+$$(P V I):
+        \left \{
+          \begin{tabular}{c}
+          $y'(x) = f(x,y(x))$ \\
+          $y(x_0) = y(y_0) \in R$\\
+          \end{tabular}
+        \right$$
+    % No es necesario
+    %Por ejemplo, si $y' = x^2y+2y \rightarrow f(x,y(x)) = x^2y+2y $
+    
+    
+ %   Entonces considerando las ecuciones planteadas en  \ref{eq:du} - \ref{eq:dq}  del paraboloide hiperb\'olico.
+    
+% No va, basta con referenciar las originales
+%\begin{align}
+%\frac{du}{ds}&=p,\label{eq:du} \\
+%\frac{dv}{ds}&=q,\label{eq:dv}     \\
+%\frac{dp}{ds}&=\frac{-2v}{u^2+v^2+1} pq, \label{eq:dp}\\ 
+%\frac{dq}{ds}&=\frac{-2u}{u^2+v^2+1} pq. \label{eq:dq}
+%\end{align}          
+ 
+Entonces utilizando las ecuaciones planteadas en  \ref{eq:dupvi} - \ref{eq:dqpvi}  del paraboloide hiperb\'olico y considerando la siguiente notaci\'on:
+
+\begin{align}
+u'(s)=\frac{du}{ds}&=p &\rightarrow u'(s) = f_1 (s,u(s)) ,\label{eq:dupvi} \\
+v'(s)=\frac{dv}{ds}&=q &\rightarrow v'(s) =f_2 (s,v(s)),\label{eq:dvpvi}     \\
+p'(s)=\frac{dp}{ds}&=\frac{-2v}{u^2+v^2+1} pq &\rightarrow p'(s)=f_3 (s,p(s)), \label{eq:dppvi}\\ 
+q'(s)=\frac{dq}{ds}&=\frac{-2u}{u^2+v^2+1} pq &\rightarrow q'(s)=f_4 (s,p(s)). \label{eq:dqpvi}
+\end{align}
+
+se puede representar las ecuaciones diferenciales como un PVI de la siguiente manera:
+
+$$(P V I):
+        \left \{
+          \begin{tabular}{c}
+            $y'(s)= \vec{f}(s,u(s),v(s),p(s),q(s))$\\
+            $y(s_0) = (u(s_0),v(s_0),p(s_0),q(s_0)) \in R^4$\\
+          \end{tabular}
+        \right$$
+
+
+
+%-------------------------------------------------------------------------------
+%FIN SECCION 3.1
+%-------------------------------------------------------------------------------
+
+
+
+
+\subsection{Discretizaci\'on del problema}\label{sec:disc}
+EXPLICAR BREVEMENTE EULER\\ \\
+
+Partiendo de las ecuaciones (\ref{eq:du}-\ref{eq:dq}) y utilizando el M\'etodo de Euler hacia Adelante, se calcula a continuaci\'on las ecuaciones en su forma discreta.
+
+Primero realizamos el c\'alculo para $u$:\\
+$$\frac{du}{ds}=p \Rightarrow \frac{u_{k+1}-u_k}{h}=p_k \Rightarrow u_{k+1}=u_k+p_k h $$\\
+Para $v$:\\
+$$\frac{dv}{ds}=q \Rightarrow \frac{v_{k+1}-v_k}{h}=q_k \Rightarrow v_{k+1}=v_k+q_k h $$\\
+Para $p$:\\
+$$\frac{dp}{ds}=\frac{-2v}{u^2+v^2+1} pq \Rightarrow \frac{p_{k+1}-p_k}{h}=\frac{-2v_k}{u_k^2+v_k^2+1} p_kq_k \Rightarrow p_{k+1}=\frac{-2v_k }{u_k^2+v_k^2+1} p_kq_k h + p_k $$\\
+Finalmente, para $q$:\\
+$$ \frac{dq}{ds}=\frac{-2u}{u^2+v^2+1} pq \Rightarrow \frac{q_{k+1}-q_k}{h}=\frac{-2u_k}{u_k^2+v_k^2+1} p_kq_k \Rightarrow q_{k+1}=\frac{-2u_k}{u_k^2+v_k^2+1} p_kq_k h +q_k $$\\
+
+
+En resumen:
+\begin{align}
+u_{k+1}&=u_k+p_k h \label{eq:dudis} \\
+v_{k+1}&=v_k+q_k h \label{eq:dvdis} \\
+p_{k+1}&=\frac{-2v_k }{u_k^2+v_k^2+1} p_kq_k h + p_k \label{eq:dpdis} \\
+q_{k+1}&=\frac{-2u_k}{u_k^2+v_k^2+1} p_kq_k h +q_k\label{eq:dqdis}
+\end{align}
+
+El  siguiente pseudoc\'odigo \ref{pscod:euler} expresa una forma de introducir el problema en softwares tales como "Octave", "R", "Python", etc.
+
+\begin{algorithm}
+  \caption{Pseudoc\'odigo para resolver y graficar el PVI mediante el m\'etodo "Euler hacia adelante"}
+    \label{pscod:euler}}
+  \begin{algorithmic}[1]
+    \Require{$x$ and $y$ are packed  strings of equal length $n$}
+    \Statex
+    \Function{Distance}{$x, y$}
+      \Let{$z$}{$x \oplus y$} \Comment{$\oplus$: bitwise exclusive-or}
+      \Let{$\delta$}{$0$}
+      \For{$i \gets 1 \textrm{ to } n$}
+        \If{$z_i \neq 0$}
+          \Let{$\delta$}{$\delta + 1$}
+        \EndIf
+      \EndFor
+      \State \Return{$\delta$}
+    \EndFunction
+  \end{algorithmic}
 \end{algorithm}
 
 \clearpage
 
-\begin{lem}\label{lema}
-If $L(F) \neq \emptyset$ then $\alpha>1/2$
-\end{lem}
-\begin{proof}
-By the triangle inequality, $c_{(t,v)}\leq c_{(t,s)}+c_{(s,v)}$ and
-$c_{(v,w)}\leq c_{(v,s)}+c_{(s,w)}$, so
-$c_{(t,v)}+c_{(v,w)} \leq c_{(t,s)}+2.c_{(s,v)}+ c_{(s,w)}$. If $L \neq \emptyset$, there exists $v \in L$, $s \in S \cap I, t,w \in I$ such that
-$c_{(t,v)}+c_{(v,w)}>d_{(v,s)}+c_{(t,s)}+c_{(s,w)}$,\\ %\, d_{(v,s)}= c_{(v,s)}/\alpha$.\\
-Therefore $d_{(v,s)} = c_{(v,s)}/\alpha_{v,s }< 2.c_{(s,v)}$, so there exists $e=(v,s)$ such that $\alpha_{e} > 1/2$, that is $\alpha > 1/2$ with $\alpha = \max_{e\in E} \left\{\alpha_{e} \right\}$.
+%-------------------------------------------------------------------------------
+%
+%-------------------------------------------------------------------------------
+\section{Estudio Experimental}\label{Resultados}
+\subsection{Ambiente de trabajo}
+Durante el desarrollo de la experiencia se trabajo con:
+\begin{itemize}
+    \item Lenguaje de programaci\'on: Octave.
+    \item Caracter\'isticas de la computadara utilizada:
+    \begin{itemize}
+        \item HP algo
+        \item Procesador:
+        \item Memoria RAM:
+        \item Epsilon de m\'aquina: 2.2204e-16
+    \end{itemize}
+\end{itemize}
 
-\end{proof}
-%According to Lemma~\ref{lema}, if $\alpha \geq 2$ then $F$ is an elementary cycle without Steiner nodes.
-\begin{thm}
-$c(F) \leq \max\{2,4 \alpha\}\times  OPT$.
-\end{thm}
 
-\begin{proof}
-Let $G^*=(S^* \cup T,E^*)$ be the optimal solution, $H$ the cheapest Hamilton tour spanning $T$  and $H^S$ the cheapest Hamilton tour spanning $T\cup S^*$.
-Analogously, let us denote $TNC$ ($TEC$) to the optimal 2-node (resp. 2-edge) connected spanning subgraph for $T\cup S^{*}$. Recall that $F$ is the output and $\mathcal{C}$ the cycle obtained
-using Christofides algorithm. Combining Monma and Christofides theorems:
-\begin{equation}\label{1}
-c(G^{*}) \leq c(F) \leq c(\mathcal{C})\leq \frac{3}{2}c(H)
-                   \leq \left(\frac{3}{2}\right) \left(\frac{4}{3}\right) c(TNC) = 2 c(TNC)
-\end{equation}
-Let $G^{*}=B \cup L$, being $B$ its backbone. Consider an augmentation $F^{\prime}$ for $G^{*}$, doubling edges from $L$
-with cost $c_{r,j}=\alpha_{r,j} d_{r,j}$ and adding them. $F^{\prime}$ is 2-edge connected and
-\begin{equation}\label{2}
-c(F^{\prime}) = c(B)+2\sum_{r\in L}c_{r,j} \leq c(B)+2\alpha \sum_{r\in L}d_{r,j} =2 \alpha c(G^{*})+(1- 2 \alpha)c(B),
-\end{equation}
-\indent If $1-2 \alpha > 0$, $c(F^{\prime}) \leq 2 \alpha c(G^{*})+ 2(1-2 \alpha )c(G^{*})\leq 2 c(G^{*})$.
-In this case a factor 2 is provided, and by Lemma~\ref{lema} $F$ consists of an elementary cycle.
+\subsection{Resultados Obtenidos}
 
-\indent Otherwise, combining~\eqref{1}~and~\eqref{2} we have that:
-\begin{align*}
-  c(G^{*}) & \leq c(F) \leq 2 c(TNC) = 2 c(TEC) \leq 2 c(F^{\prime}) \\
-           & \leq 4 \alpha c(G^{*})+ 2(1-2 \alpha)c(B)\\
-           &\leq 4\alpha c(G^{*}).
-\end{align*}
-\end{proof}
 
-%TODO ANALISIS EXPERIMENTAL COMPLETO. HACER UNA VERSION PRELIMINAR LO ANTES POSIBLE
-% EL FOCO ES DETERMINAR SI EL ALGORITMO SE PEGA AL BORDE 8/(3ALPHA) O AL OPTIMO GLOBAL.
-% LUEGO SI DA EL TIEMPO, INTENTAR MEJORAR FACTOR EN LA DEMOSTRACION, DAR COMENTARIOS RESPECTO
-% A ALGORITMOS DISPONIBLES EN LA LITERATURA...
-\clearpage
-\section{Experimental Analysis}\label{Comparison}
-In order to highlight the effectiveness of our approximation algorithm, a sensibility
-analysis with respect to the ratio $\alpha$ is carried out. We consider a single
-instance from TSPLIB named berlin52.tsp. This is the case of a real-life network
-with Euclidean costs. In order to find the globally optimum solution, an
-induced subgraph with 22 nodes is considered (with 10  terminal-nodes and 12 Steiner nodes).
-The ILP has been executed in CPLEX 12.6.3 MIP solver using an Intel i7 processor, 2.30 GHz, 8GB RAM.
-Table~\ref{Table:resul1} illustrates the performance $c(F)/OPT$ as a function
-of $\alpha$. The cycle $\mathcal{C}$ obtained using Christofides algorithm is
-$c(\mathcal{C})=3164.8$, while the cheapest Hamiltonian tour $H$ spanning the terminal-set
-has a cost $c(H)=2826.5$. Naturally, since $F$ considers greedy augmentations of
-$\mathcal{C}$, we get that $c(F)\leq c(\mathcal{C})$ in all cases.
 
-\begin{table}[H]
-\caption{Sensibility Analysis as a function of $\alpha$ \label{Table:resul1}}
+\begin{figure}[H]
+\caption{Paraboloide Hiperb\'olico}
 \centering
-\begin{tabular}{l|r|r|r|r|r}
-\toprule
-& $\alpha$  & $OPT$ & $c(F)$ & $c(F)/OPT$\\
-\midrule
-&   10 & 485.78 & 3117.3  & 6.42  \\
-&   4 & 1110.48 & 3164.8  & 2.85  \\
-&   2 & 2115.02 & 3164.8  & 1.50   \\
-&   4/3 & 2611.45 & 3164.8  & 1.21 \\
-&   1 & 2786.80  & 3164.8  & 1.14   \\
-&   4/5 & 2811.63  & 3164.8  & 1.13 \\
-&   2/3 & 2822.88  & 3164.8   & 1.12 \\
-&   4/7 & 2825.60  & 3164.8  & 1.12  \\
-\bottomrule
-\end{tabular}
-\end{table}
+\includegraphics[width=0.9\textwidth]{ph.png}
+\end{figure}
 
-Our approximation algorithm outperforms Christofides only when $\alpha=10$.
-In this case Steiner nodes are included in the solution.
-The factor is far away from $4\alpha$ in all cases.
-Furthermore, when $\alpha =4/7$ the ratio 1.12 is the lowest. Curiously enough,
-the results suggest that the performance is consistently better when the ratio $\alpha$ is
-decreased.
 
-\clearpage 
-\section{Conclusions}\label{Conclusions}
-The Two-Node Connected Star Problem with Steiner Nodes (2NCSP-SN) is introduced.
-Its hardness promotes heuristics and approximation algorithms.
-Here, we introduce an approximation algorithm of factor $4\alpha$ for the problem,
-being $\alpha \geq 1/2$ the minimum ratio among internal/external costs.
-An exact ILP formulation is also proposed.
-The celebrated factor $2$ from Steiner networks is retrieved when $\alpha=1/2$.
-Furthermore, a proof of concept suggests that the performance of the algorithm is consistently
-better when $\alpha$ is close to $1/2$.
 
-Currently, we are working to develop a full GRASP methodology enriched with Variable Neighborhood Descent (VND) to find high-competitive solutions for the 2NCSP-SN.
+\begin{figure}[H]
+\caption{Paraboloide Hiperb\'olico}
+\centering
+\includegraphics[width=0.9\textwidth]{phmal.png}
+\end{figure}
 
-\section*{Acknowledgment}
-This work is partially supported by Project CSIC I+D 395 entitled \emph{Sistemas Binarios
-Estoc\'asticos Din\'amicos}.
+
+
+
+%-------------------------------------------------------------------------------
+%
+%-------------------------------------------------------------------------------
+\section{Conclusiones}\label{Conclusiones}
+
+\clearpage
+
+%-------------------------------------------------------------------------------
+%
+%-------------------------------------------------------------------------------
+
+%\section*{Acknowledgment}
+%This work is partially supported by Project CSIC I+D 395 entitled \emph{Sistemas Binarios
+%Estoc\'asticos Din\'amicos}.
 
 
 \bibliographystyle{plain}
 
 %\bibliographystyle{endm.bst}
 \bibliography{biblio}
-\end{document}\grid
+\section{Anexo}
+\subsection{Curvas geod\'esicas del plano y la esfera}
+En la secci\'on \ref{sec:disc} se discretiz\'o las ecuaciones diferenciales que caracterizan las geod\'esicas en el paraboloide hiperb\'olico utilizando el m\'etodo de "Euler hacia adelante". En esta secci\'on se mostrar\'a como quedan las mismas para un plano y para una esfera. Tambi\'en se mostrar\'an dos ejemplos 
+
+
+\end{document}
