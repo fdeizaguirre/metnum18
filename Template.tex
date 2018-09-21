@@ -98,10 +98,6 @@ Geod\'esicas, M\'etodos Num\'ericos, PVI, Euler hacia Adelante.
 \newpage
 
 %-------------------------------------------------------------------------------
-%Indice
-\tableofcontents
-\clearpage
-%-------------------------------------------------------------------------------
 %
 %-------------------------------------------------------------------------------
 \section{Introducci\'on}\label{intro}
@@ -122,9 +118,6 @@ Este documento, que busca resolver el problema como un Problema de Valores Inici
 \item La Secci\'on~\ref{Conclusiones}, finalmente, se presenta las principales conclusiones de este trabajo, los elementos aprendidos y posibles l\'ineas de trabajo futuro.
 \end{itemize}
 
-
-
-\clearpage
 %-------------------------------------------------------------------------------
 %
 %-------------------------------------------------------------------------------
@@ -133,11 +126,9 @@ Este documento, que busca resolver el problema como un Problema de Valores Inici
 \subsection{Ecuaciones diferenciales que rigen una geod\'esica}
 
 
-Como se coment\'o, conocer la curva de longitud m\'inima entre dos puntos en el caso de superficies curvas el an\'alisis pasa a ser y m\'as complejo. En este trabajo se realizr\'a, mediante la geometr\'ia de Riemann. Los espacios de Riemann son aquellos espacios medibles.\\
+El concepto de geod\'esica es la generalizaci\'on de las rectas en una geometr\'ia plana. Como se coment\'o, conocer la curva de longitud m\'inima entre dos puntos en el caso de superficies curvas, hace el an\'alisis m\'as complejo. En este trabajo se realizr\'a el mismo, mediante la geometr\'ia de Riemann. Los espacios de Riemann son aquellos espacios medibles.\\
 
-El concepto de geod\'esica es la generalizaci\'on de las rectas en una geometr\'ia plana.\\
-
-Aunque las variedades de Riemann son generalmente "curvas", no obstante, puede encontrarse que dados dos puntos diferentes y suficientemente cercanos existe una curva de longitud m\'inima (que no necesariamente es \'unica). Estas l\'ineas de m\'inima longitud, se llaman l\'ineas geod\'esicas y son una generalizaci\'on del concepto "l\'inea recta" o "l\'inea de m\'inima longitud". Son las curvas que localmente conectan sus puntos a lo largo de las trayectorias m\'as cortas.\\
+Las variedades de Riemann son generalmente "curvas". Puede encontrarse que dados dos puntos diferentes y suficientemente cercanos existe una curva de longitud m\'inima (que no necesariamente es \'unica). Estas l\'ineas de m\'inima longitud, se llaman l\'ineas geod\'esicas. Son curvas que localmente conectan sus puntos a lo largo de las trayectorias m\'as cortas.\\
 
 El an\'alisis se har\'a bajo superficies de Riemann y de las curvas, solamente se requiere que en cada uno de sus puntos, haya una m\'etrica eucl\'idea definida sobre el espacio tangente, que cambie suavemente de punto a punto. Cuando una curva, en una superficie, tenga la propiedad de minimizar la longitudes de las curvas que unen dos puntos determinados, se la llamar\'a geod\'esica minimizante.\\
 
@@ -419,9 +410,6 @@ Las ecuaciones de la geod\'esica para el paraboloide hiperb\'olico son \ref{eq:d
 \end{align}
 
 
-
-\clearpage
-
 %-------------------------------------------------------------------------------
 %
 %-------------------------------------------------------------------------------
@@ -550,13 +538,12 @@ El  siguiente pseudoc\'odigo \ref{pscod:euler} expresa una forma de introducir e
   \end{algorithmic}
 \end{algorithm}
 
-\clearpage
 
 %-------------------------------------------------------------------------------
 %
 %-------------------------------------------------------------------------------
 \section{Estudio Experimental}\label{Resultados}
-\subsection{Ambiente de trabajo}
+\subsection{Ambiente de trabajo}\label{ambiente}
 Durante el desarrollo de la experiencia se trabajo con:
 \begin{itemize}
     \item Lenguaje de programaci\'on: Octave.
@@ -571,6 +558,7 @@ Durante el desarrollo de la experiencia se trabajo con:
 
 
 \subsection{Resultados Obtenidos}
+Utilizando el ambiente de desarrollo descrito en la secci\'on \ref{ambiente} se corrieron los scripts realizados \cite{scripts} y se despliegan los resultados obtenidos en \ref{ph} y \ref{phmal}.
 
 
 
@@ -578,6 +566,7 @@ Durante el desarrollo de la experiencia se trabajo con:
 \caption{Paraboloide Hiperb\'olico}
 \centering
 \includegraphics[width=0.9\textwidth]{ph.png}
+\label{ph}
 \end{figure}
 
 
@@ -586,9 +575,8 @@ Durante el desarrollo de la experiencia se trabajo con:
 \caption{Paraboloide Hiperb\'olico}
 \centering
 \includegraphics[width=0.9\textwidth]{phmal.png}
+\label{phmal}
 \end{figure}
-
-
 
 
 %-------------------------------------------------------------------------------
@@ -596,7 +584,6 @@ Durante el desarrollo de la experiencia se trabajo con:
 %-------------------------------------------------------------------------------
 \section{Conclusiones}\label{Conclusiones}
 
-\clearpage
 
 %-------------------------------------------------------------------------------
 %
@@ -613,7 +600,17 @@ Durante el desarrollo de la experiencia se trabajo con:
 \bibliography{biblio}
 \section{Anexo}
 \subsection{Curvas geod\'esicas del plano y la esfera}
-En la secci\'on \ref{sec:disc} se discretiz\'o las ecuaciones diferenciales que caracterizan las geod\'esicas en el paraboloide hiperb\'olico utilizando el m\'etodo de "Euler hacia adelante". En esta secci\'on se mostrar\'a como quedan las mismas para un plano y para una esfera. Tambi\'en se mostrar\'an dos ejemplos 
+En la secci\'on \ref{sec:disc} se discretiz\'o las ecuaciones diferenciales que caracterizan las geod\'esicas en el paraboloide hiperb\'olico utilizando el m\'etodo de "Euler hacia adelante". En esta secci\'on se mostrar\'a como quedan las mismas para un plano y para una esfera. Tambi\'en se mostrar\'an dos ejemplos gr\'aficos para cada caso. En \'estos se comparar\'an dos m\'etodos num\'ericos, el anteriormente dicho y el implementado por octave en la funci\'on "lsode".
+
+\begin{figure}[H]
+\caption{Esfera}
+\centering
+\includegraphics[width=0.9\textwidth]{.png}
+\label{fig:esfera}
+\end{figure}
+
+
+
 
 
 \end{document}
