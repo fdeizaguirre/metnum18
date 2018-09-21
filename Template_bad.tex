@@ -1,0 +1,4193 @@
+%% ================================================================================
+%% This LaTeX file was created by AbiWord.                                         
+%% AbiWord is a free, Open Source word processor.                                  
+%% More information about AbiWord is available at http://www.abisource.com/        
+%% ================================================================================
+
+\documentclass[a4paper,portrait,12pt]{article}
+\usepackage[latin1]{inputenc}
+\usepackage{calc}
+\usepackage{setspace}
+\usepackage{fixltx2e}
+\usepackage{graphicx}
+\usepackage{multicol}
+\usepackage[normalem]{ulem}
+\usepackage{color}
+\usepackage{hyperref}
+ 
+\begin{document}
+
+
+\begin{flushleft}
+Estudio de Geodésicas a través de Análisis
+\end{flushleft}
+
+
+\begin{flushleft}
+Numérico
+\end{flushleft}
+
+
+\begin{flushleft}
+Francisco de Izaguirre (4.425.135-0),
+\end{flushleft}
+
+
+\begin{flushleft}
+Francisco Fernandez (4.596.080-9),
+\end{flushleft}
+
+
+\begin{flushleft}
+Gabriela Mullukian (5.121.434-9), Marco Rolón (4.916.721-9)
+\end{flushleft}
+
+
+\begin{flushleft}
+Instituto de Matemática y Estad\i{}́stica
+\end{flushleft}
+
+
+\begin{flushleft}
+Facultad de Ingenier\i{}́a. Universidad de la República
+\end{flushleft}
+
+
+\begin{flushleft}
+Montevideo, Uruguay
+\end{flushleft}
+
+
+
+
+
+\begin{flushleft}
+Abstract
+\end{flushleft}
+
+
+\begin{flushleft}
+El camino más corto entre dos puntos en un plano, es el segmento de recta que los une. Si
+\end{flushleft}
+
+
+\begin{flushleft}
+se quiere analizar qué pasa en superficies curvas el problema deja de ser trivial. Dada una
+\end{flushleft}
+
+
+\begin{flushleft}
+superficie y dos puntos cualesquiera contenidos en ella, se define la curva geodésica como
+\end{flushleft}
+
+
+\begin{flushleft}
+la curva de menor longitud, de dicha superficie, que une esos dos puntos.
+\end{flushleft}
+
+
+\begin{flushleft}
+En este trabajo se realiza una introducción al problema, una descripción matemática del
+\end{flushleft}
+
+
+\begin{flushleft}
+mismo. Se demuestra que puede ser modelado como un PVI. Luego se utiliza el Método
+\end{flushleft}
+
+
+\begin{flushleft}
+de Euler Hacia Adelante para su resolución. Posteriormente se presenta los resultados
+\end{flushleft}
+
+
+\begin{flushleft}
+obtenidos, se realiza un análisis de los errores cometidos.
+\end{flushleft}
+
+
+\begin{flushleft}
+CONCLUSION BREVE
+\end{flushleft}
+
+
+\begin{flushleft}
+Keywords: Geodésicas, Métodos Numéricos, Euler hacia Adelante.
+\end{flushleft}
+
+
+
+
+
+1
+
+
+
+
+
+\begin{flushleft}
+Emails:\{francisco.de.izaguirre,francisco.fernandez,
+\end{flushleft}
+
+
+\begin{flushleft}
+maria.mullukian,marco.rolon\}@fing.edu.uy
+\end{flushleft}
+
+
+
+
+
+\begin{flushleft}
+\newpage
+Contents
+\end{flushleft}
+
+
+\begin{flushleft}
+1 Introducción
+\end{flushleft}
+
+
+\begin{flushleft}
+2 Problema
+\end{flushleft}
+
+
+\begin{flushleft}
+2.1 Ecuaciones diferenciales que rigen una geodésica
+\end{flushleft}
+
+
+\begin{flushleft}
+2.2 Cálculo de las ecuaciones en superficie paramétrica
+\end{flushleft}
+
+
+\begin{flushleft}
+3 Metodolog\i{}́a
+\end{flushleft}
+
+
+\begin{flushleft}
+3.1 Problema de Valor Inicial (PVI)
+\end{flushleft}
+
+
+\begin{flushleft}
+3.2 Discretización del problema
+\end{flushleft}
+
+
+\begin{flushleft}
+4 Estudio Experimental
+\end{flushleft}
+
+
+\begin{flushleft}
+4.1 Ambiente de trabajo
+\end{flushleft}
+
+
+\begin{flushleft}
+4.2 Resultados Obtenidos
+\end{flushleft}
+
+
+\begin{flushleft}
+5 Conclusiones
+\end{flushleft}
+
+
+\begin{flushleft}
+References
+\end{flushleft}
+
+
+
+
+
+3
+
+
+5
+
+
+5
+
+
+10
+
+
+14
+
+
+14
+
+
+15
+
+
+17
+
+
+17
+
+
+17
+
+
+19
+
+
+20
+
+
+
+
+
+\newpage
+1
+
+
+
+
+
+\begin{flushleft}
+Introducción
+\end{flushleft}
+
+
+
+
+
+\begin{flushleft}
+Trasladarse desde un punto a otro sobre una superficie recorriendo el camino más
+\end{flushleft}
+
+
+\begin{flushleft}
+corto es un problema tan añejo como vigente. Por mencionar un par de ejemplos
+\end{flushleft}
+
+
+\begin{flushleft}
+reales presentes en la ingenieria actual están la construcción de carreteras, la
+\end{flushleft}
+
+
+\begin{flushleft}
+realización de un cableado subterráneo o el movimiento de un brazo robótico.
+\end{flushleft}
+
+
+\begin{flushleft}
+Este problema también aparece en la teor\i{}́a de la relatividad general: las partćulas
+\end{flushleft}
+
+
+\begin{flushleft}
+materiales se mueven a lo largo de geodésicas temporales del espacio-tiempo
+\end{flushleft}
+
+
+\begin{flushleft}
+curvo.
+\end{flushleft}
+
+
+\begin{flushleft}
+El primer registro matemático vinculado a este problema es de 1697 cuando
+\end{flushleft}
+
+
+\begin{flushleft}
+Johann Bernoulli resolvió el problema de la distancia más corta entre dos puntos
+\end{flushleft}
+
+
+\begin{flushleft}
+en una superficie convexa, y demostró que el plano osculador de la geodésica debe
+\end{flushleft}
+
+
+\begin{flushleft}
+ser perpendicular al plano tangente de la misma.
+\end{flushleft}
+
+
+\begin{flushleft}
+Más tarde Euler, en 1732, obtuvo las ecuaciones impl\i{}́citas de las geodésicas.
+\end{flushleft}
+
+
+\begin{flushleft}
+Posteriormente Gilbert Bliss obtuvo las l\i{}́neas geodésicas en el anillo de anclaje
+\end{flushleft}
+
+
+\begin{flushleft}
+con forma de toroide. Munchmeyer y Haw aplicaron las curvas geodésicas al
+\end{flushleft}
+
+
+\begin{flushleft}
+diseño de cascos de embarcaciones.Beck et al. resolvieron el problema de dos
+\end{flushleft}
+
+
+\begin{flushleft}
+valores iniciales de la curva geodésica, usando el método de cuarto orden de
+\end{flushleft}
+
+
+\begin{flushleft}
+Runge-Kutta en un spline bicúbico. Patrikalakis y Bardis calcularon los
+\end{flushleft}
+
+
+\begin{flushleft}
+desplazamientos geodésicos de curvas en superficies B-spline racionales
+\end{flushleft}
+
+
+\begin{flushleft}
+utilizando la integración de valores iniciales de geodésicas a una curva generatriz
+\end{flushleft}
+
+
+\begin{flushleft}
+en la superficie.
+\end{flushleft}
+
+
+\begin{flushleft}
+Sneyd y Peskin investigaron el cálculo de trayectos geodésicos en un cilindro
+\end{flushleft}
+
+
+\begin{flushleft}
+generalizado basado en un problema de valor inicial usando un método de
+\end{flushleft}
+
+
+\begin{flushleft}
+Runge-Kutta de segundo orden.Kimmel et al. presentó un método numérico para
+\end{flushleft}
+
+
+\begin{flushleft}
+encontrar el camino más corto en la superficie mediante el cálculo de la
+\end{flushleft}
+
+
+\begin{flushleft}
+propagación de un contorno de igual distancia geodésica desde un punto o una
+\end{flushleft}
+
+
+\begin{flushleft}
+región fuente en la superficie. El algoritmo funciona en una cuadricula rectangular
+\end{flushleft}
+
+
+\begin{flushleft}
+usando aproximaciones de diferencias finitas.
+\end{flushleft}
+
+
+\begin{flushleft}
+Maekawa y Robinson y Armstrong calcularon las geodésicas discretizando las
+\end{flushleft}
+
+
+\begin{flushleft}
+ecuaciones diferenciales que rigen la curva geodésca utilizando una aproximación
+\end{flushleft}
+
+
+\begin{flushleft}
+de diferencia finita en una malla de puntos, lo que reduce el problema a un
+\end{flushleft}
+
+
+\begin{flushleft}
+conjunto de ecuaciones no lineales. El conjunto de las ecuaciones no lineales se
+\end{flushleft}
+
+
+\begin{flushleft}
+pueden resolver mediante el método de Newton.
+\end{flushleft}
+
+
+
+
+
+\begin{flushleft}
+\newpage
+El documento está organizado de la siguiente manera:
+\end{flushleft}
+
+
+$\bullet$
+
+
+
+
+
+\begin{flushleft}
+La Sección 2 define formalmente el problema de estudio.
+\end{flushleft}
+
+
+
+
+
+$\bullet$
+
+
+
+
+
+\begin{flushleft}
+La Sección 3 presenta la metodolog\i{}́a empleada para su resolución.
+\end{flushleft}
+
+
+
+
+
+$\bullet$
+
+
+
+
+
+\begin{flushleft}
+La Sección 4 desarrolla un análisis del rendimiento del método de Euler hacia
+\end{flushleft}
+
+
+\begin{flushleft}
+adelante.
+\end{flushleft}
+
+
+
+
+
+$\bullet$
+
+
+
+
+
+\begin{flushleft}
+La Sección 5, finalmente, se presenta las principales conclusiones de este trabajo,
+\end{flushleft}
+
+
+\begin{flushleft}
+los elementos aprendidos y posibles l\i{}́neas de trabajo futuro.
+\end{flushleft}
+
+
+
+
+
+\newpage
+2
+
+
+
+
+
+2.1
+
+
+
+
+
+\begin{flushleft}
+Problema
+\end{flushleft}
+
+
+
+
+
+\begin{flushleft}
+Ecuaciones diferenciales que rigen una geodésica
+\end{flushleft}
+
+
+
+
+
+\begin{flushleft}
+En el caso de una superficie plana, hallar la m\i{}́nima distancia, es trivial: es una
+\end{flushleft}
+
+
+\begin{flushleft}
+l\i{}́nea recta desde el punto de partida en dirección al de llegada. En el caso de
+\end{flushleft}
+
+
+\begin{flushleft}
+superficies curvas el análisis pasa a ser y más complejo. En este trabajo se
+\end{flushleft}
+
+
+\begin{flushleft}
+realizrá, mediante la geometr\i{}́a de Riemann. Los espacios de Riemann son
+\end{flushleft}
+
+
+\begin{flushleft}
+aquellos espacios medibles.
+\end{flushleft}
+
+
+\begin{flushleft}
+El concepto de geodésica es la generalización de las rectas en una geometr\i{}́a
+\end{flushleft}
+
+
+\begin{flushleft}
+plana.
+\end{flushleft}
+
+
+\begin{flushleft}
+Aunque las variedades de Riemann son generalmente ''curvas'', no obstante,
+\end{flushleft}
+
+
+\begin{flushleft}
+puede encontrarse que dados dos puntos diferentes y suficientemente cercanos
+\end{flushleft}
+
+
+\begin{flushleft}
+existe una curva de longitud m\i{}́nima (que no necesariamente es única). Estas
+\end{flushleft}
+
+
+\begin{flushleft}
+l\i{}́neas de m\i{}́nima longitud, se llaman l\i{}́neas geodésicas y son una generalización
+\end{flushleft}
+
+
+\begin{flushleft}
+del concepto ''l\i{}́nea recta'' o ''l\i{}́nea de m\i{}́nima longitud''. Son las curvas que
+\end{flushleft}
+
+
+\begin{flushleft}
+localmente conectan sus puntos a lo largo de las trayectorias más cortas.
+\end{flushleft}
+
+
+\begin{flushleft}
+El análisis se hará bajo superficies de Riemann y de las curvas, solamente se
+\end{flushleft}
+
+
+\begin{flushleft}
+requiere que en cada uno de sus puntos, haya una métrica eucl\i{}́dea definida sobre
+\end{flushleft}
+
+
+\begin{flushleft}
+el espacio tangente, que cambie suavemente de punto a punto. Cuando una curva,
+\end{flushleft}
+
+
+\begin{flushleft}
+en una superficie, tenga la propiedad de minimizar la longitudes de las curvas que
+\end{flushleft}
+
+
+\begin{flushleft}
+unen dos puntos determinados, se la llamará geodésica minimizante.
+\end{flushleft}
+
+
+\begin{flushleft}
+Previo al estudio de las curvas geodésicas en particular, se definirán
+\end{flushleft}
+
+
+\begin{flushleft}
+propiedades de una superficie.
+\end{flushleft}
+
+
+\begin{flushleft}
+Cuando se quiere cuantificar la curvatura de una superficie S en cierto punto,
+\end{flushleft}
+
+
+\begin{flushleft}
+se considera una curva C de dicha superficie que contenga al punto P en cuestión.
+\end{flushleft}
+
+
+\begin{flushleft}
+Los vectores unitarios t (tangente) y n (normal) a la curva C en P, están
+\end{flushleft}
+
+
+\begin{flushleft}
+relacionados en la figura 1.
+\end{flushleft}
+
+
+
+
+
+\begin{flushleft}
+\newpage
+Fig. 1. Definición del Vector Normal a una Curva
+\end{flushleft}
+
+
+
+
+
+\begin{flushleft}
+MODIFICAR ESTO:
+\end{flushleft}
+
+
+\begin{flushleft}
+k=
+\end{flushleft}
+
+
+
+
+
+\begin{flushleft}
+dt
+\end{flushleft}
+
+
+\begin{flushleft}
+= $\kappa$n = kn + k1 ,
+\end{flushleft}
+
+
+\begin{flushleft}
+ds
+\end{flushleft}
+
+
+
+
+
+(1)
+
+
+
+
+
+\begin{flushleft}
+Donde kn es el vector normal de curvatura, y k1 es el vector de curvatura
+\end{flushleft}
+
+
+\begin{flushleft}
+geodesica. Este par de vectores, son las componentes del vector de curvatura k de
+\end{flushleft}
+
+
+\begin{flushleft}
+C. De esta forma, el vector normal de curvatura, puede expresarse como:
+\end{flushleft}
+
+
+\begin{flushleft}
+kn = $\kappa$n N
+\end{flushleft}
+
+
+
+
+
+(2)
+
+
+
+
+
+\begin{flushleft}
+siendo $\kappa$n el valor de la curvatura de la superficie en P en la dirección de t. En
+\end{flushleft}
+
+
+\begin{flushleft}
+otras palabras, $\kappa$n es la magnitud de la proyección de k en la superficie normal a P,
+\end{flushleft}
+
+
+\begin{flushleft}
+con el signo determinado por la orientación de la superficie normal a P.
+\end{flushleft}
+
+
+\begin{flushleft}
+Siguiendo la definicion del libro sugerido [1] en este trabajo se a definen a las
+\end{flushleft}
+
+
+\begin{flushleft}
+curvas geodesicas, como aquellas que su curvatura geodesica es 0.
+\end{flushleft}
+
+
+\begin{flushleft}
+Se observa que el plano osculador a una curva geodesica (aquel formado por
+\end{flushleft}
+
+
+\begin{flushleft}
+los vectores t y n) contiene la superficie normal. A partir de esto, puede verse con
+\end{flushleft}
+
+
+\begin{flushleft}
+facilidad que la geodesica entre dos puntos de una esfera, es siempre un gran
+\end{flushleft}
+
+
+\begin{flushleft}
+circulo. El probelma ahora pasa a ser que existen dos arcos entre esos puntos y
+\end{flushleft}
+
+
+\begin{flushleft}
+solo uno de ellos proviene de la curva con menor distancia (excepto si los dos
+\end{flushleft}
+
+
+\begin{flushleft}
+puntos están diametralmente opuestos en ese circulo).Este caso, indica que es
+\end{flushleft}
+
+
+\begin{flushleft}
+posible que existan más de una curva geodesica entre dos puntos en una suerficie.
+\end{flushleft}
+
+
+\begin{flushleft}
+Dada la parametrización de una superficie como r = r(u, v) y C un arco
+\end{flushleft}
+
+
+
+
+
+\begin{flushleft}
+\newpage
+parametrizado que pase por el punto P tal cual se muestra en la figura 1 y denotada
+\end{flushleft}
+
+
+\begin{flushleft}
+por:
+\end{flushleft}
+
+
+\begin{flushleft}
+r(s) = r(u(s), v(s))
+\end{flushleft}
+
+
+
+
+
+(3)
+
+
+
+
+
+\begin{flushleft}
+Entonces las primeras formas fundamentales se definen como:
+\end{flushleft}
+
+
+
+
+
+\begin{flushleft}
+I = ds2 = dr.dr = Edu2 + 2Fdudv + Gdv2
+\end{flushleft}
+
+
+
+
+
+\begin{flushleft}
+Donde los coeficientes de la primera f orma f undamental son:
+\end{flushleft}
+
+
+\begin{flushleft}
+E = ru .ru
+\end{flushleft}
+
+
+\begin{flushleft}
+F = ru .rv
+\end{flushleft}
+
+
+\begin{flushleft}
+G = rv .rv
+\end{flushleft}
+
+
+
+
+
+(4)
+
+
+(5)
+
+
+(6)
+
+
+
+
+
+\begin{flushleft}
+Siendo t el vector tangente a C en P, n el vector normal a C en P, N el vector
+\end{flushleft}
+
+
+\begin{flushleft}
+unitario normal a S en P y u el vector unitario perpendicular a t en el plano tangente
+\end{flushleft}
+
+
+\begin{flushleft}
+a la suferficie. Definido u = N x t.La compontente u en el vector de curvatura k de
+\end{flushleft}
+
+
+\begin{flushleft}
+r(s), es la curvatura geodesica k1 y está dada por la siguiente ecuación.
+\end{flushleft}
+
+
+\begin{flushleft}
+k1 = (k.u)u
+\end{flushleft}
+
+
+
+
+
+(7)
+
+
+
+
+
+\begin{flushleft}
+k1 = (k.u)
+\end{flushleft}
+
+
+
+
+
+(8)
+
+
+
+
+
+\begin{flushleft}
+La función escalar
+\end{flushleft}
+
+
+
+
+
+\begin{flushleft}
+es llamada curvatura geodésica de C en P. O, equivalentemente:
+\end{flushleft}
+
+
+
+
+
+\begin{flushleft}
+k1 =
+\end{flushleft}
+
+
+
+
+
+\begin{flushleft}
+dt
+\end{flushleft}
+
+
+\begin{flushleft}
+.(Nxt)
+\end{flushleft}
+
+
+\begin{flushleft}
+ds
+\end{flushleft}
+
+
+
+
+
+(9)
+
+
+
+
+
+\begin{flushleft}
+El vector tangente unitario, a la curva C puede obtenerse derivando la ecuacion
+\end{flushleft}
+
+
+\begin{flushleft}
+3 respecto al arco, usando la siguiente relacion:
+\end{flushleft}
+
+
+
+
+
+\begin{flushleft}
+\newpage
+t=
+\end{flushleft}
+
+
+
+
+
+\begin{flushleft}
+dr(u(s), v(d))
+\end{flushleft}
+
+
+\begin{flushleft}
+du
+\end{flushleft}
+
+
+\begin{flushleft}
+dv
+\end{flushleft}
+
+
+\begin{flushleft}
+= ru
+\end{flushleft}
+
+
+\begin{flushleft}
++ rv
+\end{flushleft}
+
+
+\begin{flushleft}
+ds
+\end{flushleft}
+
+
+\begin{flushleft}
+ds
+\end{flushleft}
+
+
+\begin{flushleft}
+ds
+\end{flushleft}
+
+
+
+
+
+(10)
+
+
+
+
+
+\begin{flushleft}
+Por lo que se obtiene:
+\end{flushleft}
+
+
+\begin{flushleft}
+dt
+\end{flushleft}
+
+
+\begin{flushleft}
+du
+\end{flushleft}
+
+
+\begin{flushleft}
+du dv
+\end{flushleft}
+
+
+\begin{flushleft}
+dv
+\end{flushleft}
+
+
+\begin{flushleft}
+d2 u
+\end{flushleft}
+
+
+\begin{flushleft}
+d2 v
+\end{flushleft}
+
+
+\begin{flushleft}
+= ruu ( )2 + 2ruv
+\end{flushleft}
+
+
+\begin{flushleft}
++ rvv ( )2 + ru 2 + rv 2
+\end{flushleft}
+
+
+\begin{flushleft}
+ds
+\end{flushleft}
+
+
+\begin{flushleft}
+ds
+\end{flushleft}
+
+
+\begin{flushleft}
+ds ds
+\end{flushleft}
+
+
+\begin{flushleft}
+ds
+\end{flushleft}
+
+
+\begin{flushleft}
+ds
+\end{flushleft}
+
+
+\begin{flushleft}
+ds
+\end{flushleft}
+
+
+
+
+
+(11)
+
+
+
+
+
+\begin{flushleft}
+en este sentido, sustituyendo en 9 los resultado de 10 y 11:
+\end{flushleft}
+
+
+\begin{flushleft}
+du 3
+\end{flushleft}
+
+
+\begin{flushleft}
+du dv
+\end{flushleft}
+
+
+\begin{flushleft}
+) + (2ru xruv + rv + ruu )( )2 +
+\end{flushleft}
+
+
+\begin{flushleft}
+ds
+\end{flushleft}
+
+
+\begin{flushleft}
+ds ds
+\end{flushleft}
+
+
+\begin{flushleft}
+du dv 2
+\end{flushleft}
+
+
+\begin{flushleft}
+du 3
+\end{flushleft}
+
+
+\begin{flushleft}
+(ru xrvv + 2rv + ruv ) ( ) + (rv xrvv )( ) ].N+
+\end{flushleft}
+
+
+\begin{flushleft}
+ds ds
+\end{flushleft}
+
+
+\begin{flushleft}
+ds
+\end{flushleft}
+
+
+\begin{flushleft}
+du d2 v d2 u dv
+\end{flushleft}
+
+
+\begin{flushleft}
+(ru xrv ).N(
+\end{flushleft}
+
+
+$-$
+
+
+)
+
+
+\begin{flushleft}
+ds ds2 ds2 ds
+\end{flushleft}
+
+
+
+
+
+\begin{flushleft}
+k1 = [(ru xruu )(
+\end{flushleft}
+
+
+
+
+
+(12)
+
+
+
+
+
+2
+
+
+
+
+
+\begin{flushleft}
+d v
+\end{flushleft}
+
+
+\begin{flushleft}
+Paraboloide Se observa que los coeficientes de ( du
+\end{flushleft}
+
+
+\begin{flushleft}
+)3 , ( du
+\end{flushleft}
+
+
+\begin{flushleft}
+)2 dv
+\end{flushleft}
+
+
+\begin{flushleft}
+, du ( dv )2 , ( dv
+\end{flushleft}
+
+
+\begin{flushleft}
+)3 , ( du
+\end{flushleft}
+
+
+$-$
+
+
+\begin{flushleft}
+ds
+\end{flushleft}
+
+
+\begin{flushleft}
+ds
+\end{flushleft}
+
+
+\begin{flushleft}
+ds ds ds
+\end{flushleft}
+
+
+\begin{flushleft}
+ds
+\end{flushleft}
+
+
+\begin{flushleft}
+ds ds2
+\end{flushleft}
+
+
+\begin{flushleft}
+d2 u dv
+\end{flushleft}
+
+
+\begin{flushleft}
+) son todos funciones de los coeficientes definidos en 4-6 y de sus derivadas
+\end{flushleft}
+
+
+\begin{flushleft}
+ds2 ds
+\end{flushleft}
+
+
+\begin{flushleft}
+redpecto a u y v. Es interesante notar que la curvatura geodesica depende solamente
+\end{flushleft}
+
+
+\begin{flushleft}
+de la primera forma fundamental.
+\end{flushleft}
+
+
+\begin{flushleft}
+Usando los s\i{}́mbolos de Christoffel $\Gamma$ijk (i, j, k = 1, 2) definidos de la siguiente
+\end{flushleft}
+
+
+\begin{flushleft}
+forma:
+\end{flushleft}
+
+
+
+
+
+\begin{flushleft}
+GEu $-$ 2FFu + FEv
+\end{flushleft}
+
+
+\begin{flushleft}
+2(EG $-$ F2 )
+\end{flushleft}
+
+
+\begin{flushleft}
+2EFu $-$ EEv + FEu
+\end{flushleft}
+
+
+\begin{flushleft}
+$\Gamma$211 =
+\end{flushleft}
+
+
+\begin{flushleft}
+2(EG $-$ F2 )
+\end{flushleft}
+
+
+\begin{flushleft}
+GEv $-$ FGu
+\end{flushleft}
+
+
+\begin{flushleft}
+$\Gamma$112 =
+\end{flushleft}
+
+
+\begin{flushleft}
+2(EG $-$ F2 )
+\end{flushleft}
+
+
+\begin{flushleft}
+EGu $-$ FEv
+\end{flushleft}
+
+
+\begin{flushleft}
+$\Gamma$212 =
+\end{flushleft}
+
+
+\begin{flushleft}
+2(EG $-$ F2 )
+\end{flushleft}
+
+
+\begin{flushleft}
+2GFv $-$ GGu + FGv
+\end{flushleft}
+
+
+\begin{flushleft}
+$\Gamma$122 =
+\end{flushleft}
+
+
+\begin{flushleft}
+2(EG $-$ F2 )
+\end{flushleft}
+
+
+\begin{flushleft}
+EGu $-$ FEv
+\end{flushleft}
+
+
+\begin{flushleft}
+$\Gamma$222 =
+\end{flushleft}
+
+
+\begin{flushleft}
+2(EG $-$ F2 )
+\end{flushleft}
+
+
+\begin{flushleft}
+$\Gamma$111 =
+\end{flushleft}
+
+
+
+
+
+(13)
+
+
+(14)
+
+
+(15)
+
+
+(16)
+
+
+(17)
+
+
+(18)
+
+
+
+
+
+\begin{flushleft}
+\newpage
+la curvatura geodésica se reduce a:
+\end{flushleft}
+
+
+\begin{flushleft}
+du 3
+\end{flushleft}
+
+
+\begin{flushleft}
+du dv
+\end{flushleft}
+
+
+\begin{flushleft}
+) + (2$\Gamma$212 $-$ $\Gamma$111 )( )2 +
+\end{flushleft}
+
+
+\begin{flushleft}
+ds
+\end{flushleft}
+
+
+\begin{flushleft}
+ds ds
+\end{flushleft}
+
+
+\begin{flushleft}
+dv
+\end{flushleft}
+
+
+\begin{flushleft}
+du
+\end{flushleft}
+
+
+\begin{flushleft}
+dv
+\end{flushleft}
+
+
+\begin{flushleft}
+($\Gamma$222 $-$ 2$\Gamma$112 ) ( )2 $-$ $\Gamma$122 ( )3 +
+\end{flushleft}
+
+
+\begin{flushleft}
+ds ds
+\end{flushleft}
+
+
+\begin{flushleft}
+ds
+\end{flushleft}
+
+
+\begin{flushleft}
+du d2 v d2 u dv p
+\end{flushleft}
+
+
+$-$
+
+
+\begin{flushleft}
+] (EG $-$ F2 )
+\end{flushleft}
+
+
+\begin{flushleft}
+ds ds2 ds2 ds
+\end{flushleft}
+
+
+
+
+
+\begin{flushleft}
+k1 = [$\Gamma$211 (
+\end{flushleft}
+
+
+
+
+
+(19)
+
+
+
+
+
+\begin{flushleft}
+Acorde a la definición, se puede determinar la ecuación diferencial de calquier
+\end{flushleft}
+
+
+\begin{flushleft}
+geodésica de cualquier superficie simplemente exigiendo que el valor k1 = 0. Al
+\end{flushleft}
+
+
+\begin{flushleft}
+imponer esto en la ecuación 20 se obtiene:
+\end{flushleft}
+
+
+\begin{flushleft}
+du 2 dv
+\end{flushleft}
+
+
+\begin{flushleft}
+du d2 v d2 u dv
+\end{flushleft}
+
+
+\begin{flushleft}
+2 du 3
+\end{flushleft}
+
+
+2
+
+
+1
+
+
+1
+
+
+\begin{flushleft}
+2 du dv 2
+\end{flushleft}
+
+
+\begin{flushleft}
+1 dv 3
+\end{flushleft}
+
+
+=
+
+
+\begin{flushleft}
+$-$$\Gamma$
+\end{flushleft}
+
+
+(
+
+
+)
+
+
+$-$
+
+
+\begin{flushleft}
+(2$\Gamma$
+\end{flushleft}
+
+
+$-$
+
+
+\begin{flushleft}
+$\Gamma$
+\end{flushleft}
+
+
+)(
+
+
+)
+
+
++
+
+
+\begin{flushleft}
+(2$\Gamma$
+\end{flushleft}
+
+
+$-$
+
+
+\begin{flushleft}
+$\Gamma$
+\end{flushleft}
+
+
+)
+
+
+(
+
+
+)
+
+
++
+
+
+\begin{flushleft}
+$\Gamma$
+\end{flushleft}
+
+
+)
+
+
+$-$
+
+
+22
+
+
+22 (
+
+
+11
+
+
+12
+
+
+11
+
+
+12
+
+
+\begin{flushleft}
+ds ds2 ds2 ds
+\end{flushleft}
+
+
+\begin{flushleft}
+ds
+\end{flushleft}
+
+
+\begin{flushleft}
+ds ds
+\end{flushleft}
+
+
+\begin{flushleft}
+ds ds
+\end{flushleft}
+
+
+\begin{flushleft}
+ds
+\end{flushleft}
+
+
+(20)
+
+
+\begin{flushleft}
+Alternativamente, se puede derivar la ecuacion diferencial de la geodesica
+\end{flushleft}
+
+
+\begin{flushleft}
+considerando que la superficie normal N tiene la direccion normal a la curva
+\end{flushleft}
+
+
+\begin{flushleft}
+geodesica + $-$ n.
+\end{flushleft}
+
+
+\begin{flushleft}
+nru = 0, nrv = 0
+\end{flushleft}
+
+
+
+
+
+(21)
+
+
+
+
+
+.
+
+
+\begin{flushleft}
+Mientras kn =
+\end{flushleft}
+
+
+
+
+
+\begin{flushleft}
+dt
+\end{flushleft}
+
+
+,
+
+
+\begin{flushleft}
+ds
+\end{flushleft}
+
+
+
+
+
+\begin{flushleft}
+la ecuacion 21 puede ser escrita de la forma:
+\end{flushleft}
+
+
+\begin{flushleft}
+dt
+\end{flushleft}
+
+
+\begin{flushleft}
+dt
+\end{flushleft}
+
+
+\begin{flushleft}
+ru = 0, rv
+\end{flushleft}
+
+
+\begin{flushleft}
+ds
+\end{flushleft}
+
+
+\begin{flushleft}
+ds
+\end{flushleft}
+
+
+
+
+
+=0
+
+
+
+
+
+(22)
+
+
+
+
+
+\begin{flushleft}
+Si se sustituye en la ecuacion 22 en la 11 se tiene:
+\end{flushleft}
+
+
+\begin{flushleft}
+du 2
+\end{flushleft}
+
+
+\begin{flushleft}
+d2 v
+\end{flushleft}
+
+
+\begin{flushleft}
+du dv
+\end{flushleft}
+
+
+\begin{flushleft}
+dv 2
+\end{flushleft}
+
+
+\begin{flushleft}
+d2 u
+\end{flushleft}
+
+
+\begin{flushleft}
+(ruu ru )( ) + 2(ruv ru )
+\end{flushleft}
+
+
+\begin{flushleft}
++ (rvv ru )( ) + E 2 + F 2 = 0
+\end{flushleft}
+
+
+\begin{flushleft}
+ds
+\end{flushleft}
+
+
+\begin{flushleft}
+ds ds
+\end{flushleft}
+
+
+\begin{flushleft}
+ds
+\end{flushleft}
+
+
+\begin{flushleft}
+ds
+\end{flushleft}
+
+
+\begin{flushleft}
+ds
+\end{flushleft}
+
+
+
+
+
+(23)
+
+
+
+
+
+\begin{flushleft}
+du 2
+\end{flushleft}
+
+
+\begin{flushleft}
+du dv
+\end{flushleft}
+
+
+\begin{flushleft}
+dv
+\end{flushleft}
+
+
+\begin{flushleft}
+d2 u
+\end{flushleft}
+
+
+\begin{flushleft}
+d2 v
+\end{flushleft}
+
+
+\begin{flushleft}
+) + 2(ruv rv )
+\end{flushleft}
+
+
+\begin{flushleft}
++ (rvv rv )( )2 + F 2 + G 2 = 0
+\end{flushleft}
+
+
+\begin{flushleft}
+ds
+\end{flushleft}
+
+
+\begin{flushleft}
+ds ds
+\end{flushleft}
+
+
+\begin{flushleft}
+ds
+\end{flushleft}
+
+
+\begin{flushleft}
+ds
+\end{flushleft}
+
+
+\begin{flushleft}
+ds
+\end{flushleft}
+
+
+
+
+
+(24)
+
+
+
+
+
+\begin{flushleft}
+(ruu rv )(
+\end{flushleft}
+
+
+
+
+
+\newpage
+2
+
+
+
+
+
+\begin{flushleft}
+Al eliminar el término ddsv2 de 2.1, usando 2.1, y eliminando en usando ,
+\end{flushleft}
+
+
+\begin{flushleft}
+empleando los s\i{}́mbolos de Christoffel, se obtiene:
+\end{flushleft}
+
+
+\begin{flushleft}
+du
+\end{flushleft}
+
+
+\begin{flushleft}
+= p,
+\end{flushleft}
+
+
+\begin{flushleft}
+ds
+\end{flushleft}
+
+
+\begin{flushleft}
+dv
+\end{flushleft}
+
+
+\begin{flushleft}
+= q,
+\end{flushleft}
+
+
+\begin{flushleft}
+ds
+\end{flushleft}
+
+
+
+
+
+(25)
+
+
+(26)
+
+
+
+
+
+\begin{flushleft}
+Las ecuaciones y estám relacionanadas por la primera forma fundamental, ds2 =
+\end{flushleft}
+
+
+\begin{flushleft}
+Eds2 + 2Fdudv + Gdv2 . Si se elimina el termino ds de ambas ecuaciones, estas
+\end{flushleft}
+
+
+\begin{flushleft}
+ecuaciones se reducen a la 20
+\end{flushleft}
+
+
+\begin{flushleft}
+du
+\end{flushleft}
+
+
+\begin{flushleft}
+ds
+\end{flushleft}
+
+
+\begin{flushleft}
+dv
+\end{flushleft}
+
+
+\begin{flushleft}
+ds
+\end{flushleft}
+
+
+\begin{flushleft}
+dp
+\end{flushleft}
+
+
+\begin{flushleft}
+ds
+\end{flushleft}
+
+
+\begin{flushleft}
+dp
+\end{flushleft}
+
+
+\begin{flushleft}
+ds
+\end{flushleft}
+
+
+
+
+
+2.2
+
+
+
+
+
+\begin{flushleft}
+= p,
+\end{flushleft}
+
+
+
+
+
+(27)
+
+
+
+
+
+\begin{flushleft}
+= q,
+\end{flushleft}
+
+
+
+
+
+(28)
+
+
+
+
+
+\begin{flushleft}
+= $-$$\Gamma$111 p2 $-$ 2$\Gamma$112 pq $-$ $\Gamma$122 q2 ,
+\end{flushleft}
+
+
+
+
+
+(29)
+
+
+
+
+
+\begin{flushleft}
+= $-$$\Gamma$211 p2 $-$ 2$\Gamma$212 pq $-$ $\Gamma$222 q2 .
+\end{flushleft}
+
+
+
+
+
+(30)
+
+
+
+
+
+\begin{flushleft}
+Cálculo de las ecuaciones en superficie paramétrica
+\end{flushleft}
+
+
+
+
+
+\begin{flushleft}
+En pos de reforzar el entendimiento del lector sobre el problema se presentan
+\end{flushleft}
+
+
+\begin{flushleft}
+algunos ejemplos de superficies y sus respectivos sistemas de ecuaciones
+\end{flushleft}
+
+
+\begin{flushleft}
+diferenciales que determinan las curvas geodésicas.
+\end{flushleft}
+
+
+
+
+
+\begin{flushleft}
+2.2.1 Plano por el origen
+\end{flushleft}
+
+
+\begin{flushleft}
+Sean V1 = (x1 , y1 , z1 ) y V2 = (x2 , y2 , z2 ) los vectores que generan el plano. La
+\end{flushleft}
+
+
+\begin{flushleft}
+ecuación paramétrica 31 representa dicho plano.
+\end{flushleft}
+
+
+\begin{flushleft}
+r(u, v) = (x1 u + x2 v, y1 u + y2 v, z1 u + z2 v)
+\end{flushleft}
+
+
+
+
+
+(31)
+
+
+
+
+
+\begin{flushleft}
+Utilizando las ecuaciones de la geodésica 27-30, las ecuaciones de la primera
+\end{flushleft}
+
+
+\begin{flushleft}
+forma fundamental 4-6 y la ecuación parametrica 31 del plano obtenemos E, F y G
+\end{flushleft}
+
+
+\begin{flushleft}
+en 32 y en 33-34 sus respectivas derivadas parciales.
+\end{flushleft}
+
+
+
+
+
+\begin{flushleft}
+\newpage
+E = x21 + y21 + z21 ,
+\end{flushleft}
+
+
+\begin{flushleft}
+Eu = 0,
+\end{flushleft}
+
+
+\begin{flushleft}
+Ev = 0,
+\end{flushleft}
+
+
+
+
+
+\begin{flushleft}
+F = x1 x2 + y1 y2 + z1 z2 ,
+\end{flushleft}
+
+
+\begin{flushleft}
+Fu = 0,
+\end{flushleft}
+
+
+\begin{flushleft}
+Fv = 0,
+\end{flushleft}
+
+
+
+
+
+\begin{flushleft}
+G = x22 + y22 + z22 ,
+\end{flushleft}
+
+
+\begin{flushleft}
+Gu = 0,
+\end{flushleft}
+
+
+\begin{flushleft}
+Gv = 0,
+\end{flushleft}
+
+
+
+
+
+(32)
+
+
+(33)
+
+
+(34)
+
+
+
+
+
+\begin{flushleft}
+Entonces, como todas las derivadas parciales son nulas, usando 13-18, los
+\end{flushleft}
+
+
+\begin{flushleft}
+s\i{}́mbolos de Christoffel valen cero.
+\end{flushleft}
+
+
+\begin{flushleft}
+Finalmente obtenemos las ecuaciones de la geodésica para el plano en 35-38.
+\end{flushleft}
+
+
+\begin{flushleft}
+du
+\end{flushleft}
+
+
+\begin{flushleft}
+ds
+\end{flushleft}
+
+
+\begin{flushleft}
+dv
+\end{flushleft}
+
+
+\begin{flushleft}
+ds
+\end{flushleft}
+
+
+\begin{flushleft}
+dp
+\end{flushleft}
+
+
+\begin{flushleft}
+ds
+\end{flushleft}
+
+
+\begin{flushleft}
+dq
+\end{flushleft}
+
+
+\begin{flushleft}
+ds
+\end{flushleft}
+
+
+
+
+
+\begin{flushleft}
+= p,
+\end{flushleft}
+
+
+
+
+
+(35)
+
+
+
+
+
+\begin{flushleft}
+= q,
+\end{flushleft}
+
+
+
+
+
+(36)
+
+
+
+
+
+= 0,
+
+
+
+
+
+(37)
+
+
+
+
+
+=0
+
+
+
+
+
+(38)
+
+
+
+
+
+\begin{flushleft}
+2.2.2 Esfera unitaria centrada en el origen
+\end{flushleft}
+
+
+\begin{flushleft}
+La ecuación paramétrica 39 representa una esfera unitaria centrada en el origen.
+\end{flushleft}
+
+
+\begin{flushleft}
+r(u, v) = (cos(u)sin(v), sin(u)sin(v), cos(v)), (u, v) $\in$ [o, 2$\pi$] × [0, $\pi$]
+\end{flushleft}
+
+
+
+
+
+(39)
+
+
+
+
+
+\begin{flushleft}
+De forma análoga que el caso anterior, utilizamos las ecuaciones de la geodésica
+\end{flushleft}
+
+
+\begin{flushleft}
+27-30, las ecuaciones de la primera forma fundamental 4-6 y la ecuación
+\end{flushleft}
+
+
+\begin{flushleft}
+parametrica 39 del plano obtenemos E, F y G en 40 las ecuaciones de la primera
+\end{flushleft}
+
+
+\begin{flushleft}
+forma fundamental y en 41-42 sus respectivas derivadas parciales.
+\end{flushleft}
+
+
+\begin{flushleft}
+E = sin2 (v),
+\end{flushleft}
+
+
+\begin{flushleft}
+Eu = 0,
+\end{flushleft}
+
+
+\begin{flushleft}
+Ev = 2sin(v)cos(v),
+\end{flushleft}
+
+
+
+
+
+\begin{flushleft}
+F=0
+\end{flushleft}
+
+
+\begin{flushleft}
+Fu = 0,
+\end{flushleft}
+
+
+\begin{flushleft}
+Fv = 0,
+\end{flushleft}
+
+
+
+
+
+\begin{flushleft}
+G = 1,
+\end{flushleft}
+
+
+\begin{flushleft}
+Gu = 0,
+\end{flushleft}
+
+
+\begin{flushleft}
+Gv = 0,
+\end{flushleft}
+
+
+
+
+
+(40)
+
+
+(41)
+
+
+(42)
+
+
+
+
+
+\begin{flushleft}
+De esta forma, usando 13-18, obtenemos los s\i{}́mbolos de Christoffel en 43-45
+\end{flushleft}
+
+
+
+
+
+\begin{flushleft}
+\newpage
+$\Gamma$212 = $\Gamma$111 = $\Gamma$122 = $\Gamma$222 = 0,
+\end{flushleft}
+
+
+\begin{flushleft}
+cos(v)
+\end{flushleft}
+
+
+,
+
+
+\begin{flushleft}
+$\Gamma$112 =
+\end{flushleft}
+
+
+\begin{flushleft}
+sen(v)
+\end{flushleft}
+
+
+\begin{flushleft}
+$\Gamma$211 = $-$sen(v)cos(v).
+\end{flushleft}
+
+
+
+
+
+(43)
+
+
+(44)
+
+
+(45)
+
+
+
+
+
+\begin{flushleft}
+Las ecuaciones de la geodésica para la esfera son 46-49.
+\end{flushleft}
+
+
+\begin{flushleft}
+du
+\end{flushleft}
+
+
+\begin{flushleft}
+ds
+\end{flushleft}
+
+
+\begin{flushleft}
+dv
+\end{flushleft}
+
+
+\begin{flushleft}
+ds
+\end{flushleft}
+
+
+\begin{flushleft}
+dp
+\end{flushleft}
+
+
+\begin{flushleft}
+ds
+\end{flushleft}
+
+
+\begin{flushleft}
+dq
+\end{flushleft}
+
+
+\begin{flushleft}
+ds
+\end{flushleft}
+
+
+
+
+
+\begin{flushleft}
+= p,
+\end{flushleft}
+
+
+
+
+
+(46)
+
+
+
+
+
+\begin{flushleft}
+= q,
+\end{flushleft}
+
+
+
+
+
+(47)
+
+
+
+
+
+\begin{flushleft}
+$-$2cos(v)
+\end{flushleft}
+
+
+\begin{flushleft}
+pq,
+\end{flushleft}
+
+
+\begin{flushleft}
+sen(v)
+\end{flushleft}
+
+
+
+
+
+(48)
+
+
+
+
+
+\begin{flushleft}
+= sen(v)cos(v)p2 .
+\end{flushleft}
+
+
+
+
+
+(49)
+
+
+
+
+
+=
+
+
+
+
+
+\begin{flushleft}
+2.2.3 Paraboloide hiperbólico
+\end{flushleft}
+
+
+\begin{flushleft}
+La ecuación paramétrica 50 representa el paraboloide hiperbólico.
+\end{flushleft}
+
+
+\begin{flushleft}
+r(u, v) = (u, v, uv)
+\end{flushleft}
+
+
+
+
+
+(50)
+
+
+
+
+
+\begin{flushleft}
+Nuevamente, a partir de las ecuaciones de la geodésica 27-30, las ecuaciones
+\end{flushleft}
+
+
+\begin{flushleft}
+de la primera forma fundamental 4-6 y la ecuación parametrica 50 del plano
+\end{flushleft}
+
+
+\begin{flushleft}
+obtenemos E, F y G en 51 las ecuaciones de la primera forma fundamental y en
+\end{flushleft}
+
+
+\begin{flushleft}
+52-53 sus respectivas derivadas parciales.
+\end{flushleft}
+
+
+\begin{flushleft}
+E = 1 + v2 ,
+\end{flushleft}
+
+
+\begin{flushleft}
+Eu = 0,
+\end{flushleft}
+
+
+\begin{flushleft}
+Ev = 2v,
+\end{flushleft}
+
+
+
+
+
+\begin{flushleft}
+F = uv
+\end{flushleft}
+
+
+\begin{flushleft}
+Fu = v,
+\end{flushleft}
+
+
+\begin{flushleft}
+Fv = u,
+\end{flushleft}
+
+
+
+
+
+\begin{flushleft}
+G = 1 + u2 ,
+\end{flushleft}
+
+
+\begin{flushleft}
+Gu = 2u,
+\end{flushleft}
+
+
+\begin{flushleft}
+Gv = 0,
+\end{flushleft}
+
+
+
+
+
+(51)
+
+
+(52)
+
+
+(53)
+
+
+
+
+
+\begin{flushleft}
+A partir de lo anterior se sustituye en 13-18 y se obtienen los s\i{}́mbolos de
+\end{flushleft}
+
+
+\begin{flushleft}
+Christoffel en 54-56.
+\end{flushleft}
+
+
+
+
+
+\begin{flushleft}
+\newpage
+$\Gamma$111 = $\Gamma$211 = $\Gamma$122 = $\Gamma$222 = 0,
+\end{flushleft}
+
+
+\begin{flushleft}
+v
+\end{flushleft}
+
+
+,
+
+
+\begin{flushleft}
+$\Gamma$112 = 2
+\end{flushleft}
+
+
+\begin{flushleft}
+u + v2 + 1
+\end{flushleft}
+
+
+\begin{flushleft}
+u
+\end{flushleft}
+
+
+\begin{flushleft}
+$\Gamma$212 = 2
+\end{flushleft}
+
+
+.
+
+
+\begin{flushleft}
+u + v2 + 1
+\end{flushleft}
+
+
+
+
+
+(54)
+
+
+(55)
+
+
+(56)
+
+
+
+
+
+\begin{flushleft}
+Las ecuaciones de la geodésica para el paraboloide hiperbólico son 57-60.
+\end{flushleft}
+
+
+\begin{flushleft}
+du
+\end{flushleft}
+
+
+\begin{flushleft}
+ds
+\end{flushleft}
+
+
+\begin{flushleft}
+dv
+\end{flushleft}
+
+
+\begin{flushleft}
+ds
+\end{flushleft}
+
+
+\begin{flushleft}
+dp
+\end{flushleft}
+
+
+\begin{flushleft}
+ds
+\end{flushleft}
+
+
+\begin{flushleft}
+dq
+\end{flushleft}
+
+
+\begin{flushleft}
+ds
+\end{flushleft}
+
+
+
+
+
+\begin{flushleft}
+= p,
+\end{flushleft}
+
+
+
+
+
+(57)
+
+
+
+
+
+\begin{flushleft}
+= q,
+\end{flushleft}
+
+
+
+
+
+(58)
+
+
+
+
+
+\begin{flushleft}
+$-$2v
+\end{flushleft}
+
+
+\begin{flushleft}
+pq,
+\end{flushleft}
+
+
+\begin{flushleft}
++ v2 + 1
+\end{flushleft}
+
+
+\begin{flushleft}
+$-$2u
+\end{flushleft}
+
+
+= 2
+
+
+\begin{flushleft}
+pq.
+\end{flushleft}
+
+
+\begin{flushleft}
+u + v2 + 1
+\end{flushleft}
+
+
+=
+
+
+
+
+
+\begin{flushleft}
+u2
+\end{flushleft}
+
+
+
+
+
+(59)
+
+
+(60)
+
+
+
+
+
+\newpage
+3
+
+
+
+
+
+\begin{flushleft}
+Metodolog\i{}́a
+\end{flushleft}
+
+
+
+
+
+\begin{flushleft}
+El sistema de ecuaciones diferenciales 27-30 puede resolverse modelándolo de las
+\end{flushleft}
+
+
+\begin{flushleft}
+siguientes dos formas:
+\end{flushleft}
+
+
+$\bullet$
+
+
+
+
+
+\begin{flushleft}
+Problema de Valor Inicial (PVI).
+\end{flushleft}
+
+
+
+
+
+$\bullet$
+
+
+
+
+
+\begin{flushleft}
+Problema con Condiciones de Borde (PCB).
+\end{flushleft}
+
+
+
+
+
+\begin{flushleft}
+La primera forma consiste en proporcionar el valor inicial para cada una de las
+\end{flushleft}
+
+
+\begin{flushleft}
+cuatro ecuaciones diferenciales del sistema. Como la solución de un PVI es única,
+\end{flushleft}
+
+
+\begin{flushleft}
+al indicar los valores iniciales queda determinada una sola curva.
+\end{flushleft}
+
+
+\begin{flushleft}
+En el caso del PCB se dan dos puntos del espacio como condiciones de borde por
+\end{flushleft}
+
+
+\begin{flushleft}
+lo que las ecuaciones diferenciales del sistema tienen muchas soluciones o incluso
+\end{flushleft}
+
+
+\begin{flushleft}
+ninguna.
+\end{flushleft}
+
+
+\begin{flushleft}
+Generalmente problema a resolver se asemeja más a un PCB que a un PVI, por
+\end{flushleft}
+
+
+\begin{flushleft}
+lo que la forma más natural de resolverlo ser\i{}́a a partir del segundo. Debido a que
+\end{flushleft}
+
+
+\begin{flushleft}
+la complejidad computacional que implica el PCB es considerablemente mayor
+\end{flushleft}
+
+
+\begin{flushleft}
+que el PVI se optó por el primer método para la resolución. En 3.1 se demuestra
+\end{flushleft}
+
+
+\begin{flushleft}
+que es posible modelar las geodésicas como un PVI.
+\end{flushleft}
+
+
+\begin{flushleft}
+Por otro lado el sistema presentado en 27-30 es un sistema anal\i{}́tico y no
+\end{flushleft}
+
+
+\begin{flushleft}
+puede resolverse computacionalmente por lo que es necesario utilizar un
+\end{flushleft}
+
+
+\begin{flushleft}
+algoritmo numérico para para modelar y aproximar el problema. El método
+\end{flushleft}
+
+
+\begin{flushleft}
+seleccionado para el estudio del fue el método de Euler hacia adelante, que fue
+\end{flushleft}
+
+
+\begin{flushleft}
+elegido debido a su simplicidad en comparación a otros métodos considerados
+\end{flushleft}
+
+
+\begin{flushleft}
+como el Método del Trapecio.
+\end{flushleft}
+
+
+3.1
+
+
+
+
+
+\begin{flushleft}
+Problema de Valor Inicial (PVI)
+\end{flushleft}
+
+
+
+
+
+\begin{flushleft}
+El Problema de Valor Inicial, también conocido como problema de Cauchy, es
+\end{flushleft}
+
+
+\begin{flushleft}
+básicamente un sistema de ecuaciones compuesto de una EDO y una condición
+\end{flushleft}
+
+
+\begin{flushleft}
+inicial de la misma.
+\end{flushleft}
+
+
+\begin{flushleft}
+A continuación se explica en más detalle y demuestra que las ecuaciones que
+\end{flushleft}
+
+
+\begin{flushleft}
+rigen las geodésicas se pueden considerar un PVI.
+\end{flushleft}
+
+
+\begin{flushleft}
+Previamente, las siguientes definiciones REFCURSO nos ayudaran en la
+\end{flushleft}
+
+
+\begin{flushleft}
+muestra:
+\end{flushleft}
+
+
+$\bullet$
+
+
+
+
+
+\begin{flushleft}
+Una ecuación diferencial es una ecuación que relaciona las derivadas de una o
+\end{flushleft}
+
+
+
+
+
+\begin{flushleft}
+\newpage
+más variables dependientes respecto a una o más variables independientes.
+\end{flushleft}
+
+
+$\bullet$
+
+
+
+
+
+\begin{flushleft}
+Una ecuación diferencial ordinaria (EDO) es una ecuación diferencial que
+\end{flushleft}
+
+
+\begin{flushleft}
+relaciona una función desconocida de una única variable independiente con sus
+\end{flushleft}
+
+
+\begin{flushleft}
+derivadas.
+\end{flushleft}
+
+
+
+
+
+$\bullet$
+
+
+
+
+
+\begin{flushleft}
+Dada una función f : R2 $\rightarrow$ R el Problema de Valores Iniciales consiste en hallar
+\end{flushleft}
+
+
+\begin{flushleft}
+la función y = y(x) tal que:
+\end{flushleft}
+
+
+\begin{flushleft}
+
+\end{flushleft}
+
+
+\begin{flushleft}
+
+\end{flushleft}
+
+
+0
+
+
+\begin{flushleft}
+
+\end{flushleft}
+
+
+\begin{flushleft}
+
+\end{flushleft}
+
+
+\begin{flushleft}
+ y (x) = f (x, y(x))
+\end{flushleft}
+
+
+\begin{flushleft}
+(PVI) : 
+\end{flushleft}
+
+
+\begin{flushleft}
+
+\end{flushleft}
+
+
+\begin{flushleft}
+
+\end{flushleft}
+
+
+\begin{flushleft}
+ y(x0 ) = y(y0 ) $\in$ R
+\end{flushleft}
+
+
+
+
+
+\begin{flushleft}
+Entonces utilizando las ecuaciones planteadas en 27 - 30 y considerando la
+\end{flushleft}
+
+
+\begin{flushleft}
+siguiente notación:
+\end{flushleft}
+
+
+\begin{flushleft}
+du
+\end{flushleft}
+
+
+\begin{flushleft}
+ds
+\end{flushleft}
+
+
+\begin{flushleft}
+dv
+\end{flushleft}
+
+
+\begin{flushleft}
+v0 (s) =
+\end{flushleft}
+
+
+\begin{flushleft}
+ds
+\end{flushleft}
+
+
+\begin{flushleft}
+dp
+\end{flushleft}
+
+
+\begin{flushleft}
+p0 (s) =
+\end{flushleft}
+
+
+\begin{flushleft}
+ds
+\end{flushleft}
+
+
+\begin{flushleft}
+dq
+\end{flushleft}
+
+
+\begin{flushleft}
+q0 (s) =
+\end{flushleft}
+
+
+\begin{flushleft}
+ds
+\end{flushleft}
+
+
+
+
+
+\begin{flushleft}
+u0 (s) =
+\end{flushleft}
+
+
+
+
+
+\begin{flushleft}
+=p
+\end{flushleft}
+
+
+
+
+
+\begin{flushleft}
+$\rightarrow$ u0 (s) = f1 (s, u(s)),
+\end{flushleft}
+
+
+
+
+
+(61)
+
+
+
+
+
+\begin{flushleft}
+=q
+\end{flushleft}
+
+
+
+
+
+\begin{flushleft}
+$\rightarrow$ v0 (s) = f2 (s, v(s)),
+\end{flushleft}
+
+
+
+
+
+(62)
+
+
+
+
+
+\begin{flushleft}
+= $-$$\Gamma$111 p2 $-$ 2$\Gamma$112 pq $-$ $\Gamma$122 q2
+\end{flushleft}
+
+
+
+
+
+\begin{flushleft}
+$\rightarrow$ p0 (s) = f3 (s, p(s)),
+\end{flushleft}
+
+
+
+
+
+(63)
+
+
+
+
+
+\begin{flushleft}
+= $-$$\Gamma$211 p2 $-$ 2$\Gamma$212 pq $-$ $\Gamma$222 q2 .
+\end{flushleft}
+
+
+
+
+
+\begin{flushleft}
+$\rightarrow$ q0 (s) = f4 (s, p(s)).
+\end{flushleft}
+
+
+
+
+
+(64)
+
+
+
+
+
+\begin{flushleft}
+se puede representar las ecuaciones diferenciales como un PVI de la siguiente
+\end{flushleft}
+
+
+\begin{flushleft}
+manera:
+\end{flushleft}
+
+
+\begin{flushleft}
+
+\end{flushleft}
+
+
+\begin{flushleft}
+
+\end{flushleft}
+
+
+\begin{flushleft}
+
+\end{flushleft}
+
+
+\begin{flushleft}
+
+\end{flushleft}
+
+
+\begin{flushleft}
+y0 (s) = f (s, u(s), v(s), p(s), q(s))
+\end{flushleft}
+
+
+\begin{flushleft}
+
+\end{flushleft}
+
+
+\begin{flushleft}
+(PVI) : 
+\end{flushleft}
+
+
+\begin{flushleft}
+
+\end{flushleft}
+
+
+\begin{flushleft}
+
+\end{flushleft}
+
+
+\begin{flushleft}
+ y(s ) = (u(s ), v(s ), p(s ), q(s )) $\in$ R4
+\end{flushleft}
+
+
+0
+
+
+
+
+
+0
+
+
+
+
+
+0
+
+
+
+
+
+0
+
+
+
+
+
+0
+
+
+
+
+
+\begin{flushleft}
+Como los ejemplos de la sección 2.2 son casos particulares de las ecuaciones 27-30
+\end{flushleft}
+
+
+\begin{flushleft}
+también son PVI, en particular el paraboloide hiperbólico.
+\end{flushleft}
+
+
+3.2
+
+
+
+
+
+\begin{flushleft}
+Discretización del problema
+\end{flushleft}
+
+
+
+
+
+\begin{flushleft}
+El método de Euler, denominado as\i{}́ en honor a su autor Leonhard Euler, es un
+\end{flushleft}
+
+
+\begin{flushleft}
+algoritmo matemático empleado para la resolución del Problema de Valor Inicial.
+\end{flushleft}
+
+
+\begin{flushleft}
+Por su simplicidad este método se utiliza como base para métodos ms complejos y
+\end{flushleft}
+
+
+\begin{flushleft}
+de mayor presición.
+\end{flushleft}
+
+
+\begin{flushleft}
+Es un mtodo de primer orden, lo cual implica que el error local es proporcional al
+\end{flushleft}
+
+
+\begin{flushleft}
+cuadrado del paso, y el error global es proporcional al paso. Tiene dos variantes:
+\end{flushleft}
+
+
+
+
+
+\begin{flushleft}
+\newpage
+Euler hacia Adelante y Euler hacia Atrás.
+\end{flushleft}
+
+
+\begin{flushleft}
+En este caso limitamos nuestro análisis al paraboloide hiperbólico, pero el
+\end{flushleft}
+
+
+\begin{flushleft}
+razonamiento es análogo en las otras superficies.
+\end{flushleft}
+
+
+\begin{flushleft}
+Partiendo de las ecuaciones (57-60) y utilizando Euler hacia Adelante, se calcula a
+\end{flushleft}
+
+
+\begin{flushleft}
+continuación las ecuaciones en su forma discreta.
+\end{flushleft}
+
+
+\begin{flushleft}
+Para u:
+\end{flushleft}
+
+
+\begin{flushleft}
+uk+1 $-$ uk
+\end{flushleft}
+
+
+\begin{flushleft}
+du
+\end{flushleft}
+
+
+\begin{flushleft}
+=p$\Rightarrow$
+\end{flushleft}
+
+
+\begin{flushleft}
+= pk $\Rightarrow$ uk+1 = uk + pk h
+\end{flushleft}
+
+
+\begin{flushleft}
+ds
+\end{flushleft}
+
+
+\begin{flushleft}
+h
+\end{flushleft}
+
+
+\begin{flushleft}
+Para v:
+\end{flushleft}
+
+
+\begin{flushleft}
+vk+1 $-$ vk
+\end{flushleft}
+
+
+\begin{flushleft}
+dv
+\end{flushleft}
+
+
+\begin{flushleft}
+=q$\Rightarrow$
+\end{flushleft}
+
+
+\begin{flushleft}
+= qk $\Rightarrow$ vk+1 = vk + qk h
+\end{flushleft}
+
+
+\begin{flushleft}
+ds
+\end{flushleft}
+
+
+\begin{flushleft}
+h
+\end{flushleft}
+
+
+\begin{flushleft}
+Para p:
+\end{flushleft}
+
+
+\begin{flushleft}
+dp
+\end{flushleft}
+
+
+\begin{flushleft}
+pk+1 $-$ pk
+\end{flushleft}
+
+
+\begin{flushleft}
+$-$2v
+\end{flushleft}
+
+
+\begin{flushleft}
+$-$2vk
+\end{flushleft}
+
+
+\begin{flushleft}
+$-$2vk
+\end{flushleft}
+
+
+= 2
+
+
+\begin{flushleft}
+pq $\Rightarrow$
+\end{flushleft}
+
+
+= 2
+
+
+\begin{flushleft}
+pk qk $\Rightarrow$ pk+1 = 2
+\end{flushleft}
+
+
+\begin{flushleft}
+pk qk h+pk
+\end{flushleft}
+
+
+2
+
+
+2
+
+
+\begin{flushleft}
+ds u + v + 1
+\end{flushleft}
+
+
+\begin{flushleft}
+h
+\end{flushleft}
+
+
+\begin{flushleft}
+uk + vk + 1
+\end{flushleft}
+
+
+\begin{flushleft}
+uk + v2k + 1
+\end{flushleft}
+
+
+\begin{flushleft}
+Finalmente, para q:
+\end{flushleft}
+
+
+\begin{flushleft}
+dq
+\end{flushleft}
+
+
+\begin{flushleft}
+qk+1 $-$ qk
+\end{flushleft}
+
+
+\begin{flushleft}
+$-$2uk
+\end{flushleft}
+
+
+\begin{flushleft}
+$-$2u
+\end{flushleft}
+
+
+\begin{flushleft}
+$-$2uk
+\end{flushleft}
+
+
+\begin{flushleft}
+p
+\end{flushleft}
+
+
+\begin{flushleft}
+q
+\end{flushleft}
+
+
+$\Rightarrow$
+
+
+\begin{flushleft}
+q
+\end{flushleft}
+
+
+=
+
+
+\begin{flushleft}
+pk qk h+qk
+\end{flushleft}
+
+
+= 2
+
+
+\begin{flushleft}
+pq
+\end{flushleft}
+
+
+$\Rightarrow$
+
+
+=
+
+
+\begin{flushleft}
+k
+\end{flushleft}
+
+
+\begin{flushleft}
+k
+\end{flushleft}
+
+
+\begin{flushleft}
+k+1
+\end{flushleft}
+
+
+\begin{flushleft}
+ds u + v2 + 1
+\end{flushleft}
+
+
+\begin{flushleft}
+h
+\end{flushleft}
+
+
+\begin{flushleft}
+u2k + v2k + 1
+\end{flushleft}
+
+
+\begin{flushleft}
+u2k + v2k + 1
+\end{flushleft}
+
+
+\begin{flushleft}
+En resumen:
+\end{flushleft}
+
+
+\begin{flushleft}
+uk+1 = uk + pk h
+\end{flushleft}
+
+
+\begin{flushleft}
+vk+1 = vk + qk h
+\end{flushleft}
+
+
+\begin{flushleft}
+$-$2vk
+\end{flushleft}
+
+
+\begin{flushleft}
+pk+1 = 2
+\end{flushleft}
+
+
+\begin{flushleft}
+pk q k h + pk
+\end{flushleft}
+
+
+\begin{flushleft}
+uk + v2k + 1
+\end{flushleft}
+
+
+\begin{flushleft}
+$-$2uk
+\end{flushleft}
+
+
+\begin{flushleft}
+pk qk h + qk
+\end{flushleft}
+
+
+\begin{flushleft}
+qk+1 = 2
+\end{flushleft}
+
+
+\begin{flushleft}
+uk + v2k + 1
+\end{flushleft}
+
+
+
+
+
+(65)
+
+
+(66)
+
+
+(67)
+
+
+(68)
+
+
+
+
+
+\begin{flushleft}
+El siguiente pseudocódigo 1 expresa una forma de introducir el problema en
+\end{flushleft}
+
+
+\begin{flushleft}
+softwares tales como ''Octave'', ''R'', ''Python'', etc.
+\end{flushleft}
+
+
+
+
+
+\begin{flushleft}
+\newpage
+Algorithm 1 Pseudocódigo para resolver el PVI mediante el método ''Euler hacia
+\end{flushleft}
+
+
+\begin{flushleft}
+adelante''
+\end{flushleft}
+
+
+\begin{flushleft}
+Require: y(0) = y0 ; x(0) = 0; i = 1; h; f
+\end{flushleft}
+
+
+\begin{flushleft}
+1: while x(i) $<$ x f do
+\end{flushleft}
+
+
+2:
+
+
+\begin{flushleft}
+y(i + 1) $\leftarrow$ y(i) + h ∗ f (x(i), y(i))
+\end{flushleft}
+
+
+3:
+
+
+\begin{flushleft}
+x(i + 1) $\leftarrow$ x(i) + h
+\end{flushleft}
+
+
+4:
+
+
+\begin{flushleft}
+i$\leftarrow$i+1
+\end{flushleft}
+
+
+\begin{flushleft}
+5: end while
+\end{flushleft}
+
+
+
+
+
+4
+
+
+
+
+
+\begin{flushleft}
+Estudio Experimental
+\end{flushleft}
+
+
+
+
+
+4.1
+
+
+
+
+
+\begin{flushleft}
+Ambiente de trabajo
+\end{flushleft}
+
+
+
+
+
+\begin{flushleft}
+Durante el desarrollo de la experiencia se trabajo con:
+\end{flushleft}
+
+
+$\bullet$
+
+
+
+
+
+\begin{flushleft}
+Lenguaje de programación: Octave.
+\end{flushleft}
+
+
+
+
+
+$\bullet$
+
+
+
+
+
+\begin{flushleft}
+Caracter\i{}́sticas de la computadora utilizada:
+\end{flushleft}
+
+
+\begin{flushleft}
+· HP Pavilion 15 Notebook
+\end{flushleft}
+
+
+\begin{flushleft}
+· Procesador:AMD A10-7300 Radeon R6, 10 Compute Cores 4C+6G
+\end{flushleft}
+
+
+\begin{flushleft}
+· Memoria RAM: 8 GB
+\end{flushleft}
+
+
+\begin{flushleft}
+· Sistema Operativo: Manjaro 17.1.12 x64 (Deepin desktop)
+\end{flushleft}
+
+
+\begin{flushleft}
+· Versión de Octave: 4.4.1
+\end{flushleft}
+
+
+
+
+
+4.2
+
+
+
+
+
+\begin{flushleft}
+Resultados Obtenidos
+\end{flushleft}
+
+
+
+
+
+\begin{flushleft}
+En las condiciones del ambiente de trabajo descrito en 4.1 se realizó la ejecución
+\end{flushleft}
+
+
+\begin{flushleft}
+de los scripts creados.
+\end{flushleft}
+
+
+\begin{flushleft}
+En las figuras 2 - 4 se puede apreciar el resultado obtenido
+\end{flushleft}
+
+
+\begin{flushleft}
+Fig. 2. Euler
+\end{flushleft}
+
+
+
+
+
+\begin{flushleft}
+\newpage
+Fig. 3. Euler
+\end{flushleft}
+
+
+
+
+
+\begin{flushleft}
+Fig. 4. Euler
+\end{flushleft}
+
+
+
+
+
+\newpage
+5
+
+
+
+
+
+\begin{flushleft}
+Conclusiones
+\end{flushleft}
+
+
+
+
+
+\begin{flushleft}
+\newpage
+References
+\end{flushleft}
+
+
+\begin{flushleft}
+[1] I. Horváth. {``}shape interrogation for computer aided design and manufacturing{``},
+\end{flushleft}
+
+
+\begin{flushleft}
+by nicholas m. patrikalakis and takashi maekawa, springer-verlag, berlin, heidelberg,
+\end{flushleft}
+
+
+\begin{flushleft}
+new york, 2002, isbn 3-540-42454-7, 408 pages. Structural and Multidisciplinary
+\end{flushleft}
+
+
+\begin{flushleft}
+Optimization, 24(6):467--468, Dec 2002.
+\end{flushleft}
+
+
+
+
+
+\begin{flushleft}
+Octave:Función Tic() https://octave.sourceforge.io/octave/function/tic.html
+\end{flushleft}
+
+
+
+
+
+\newpage
+
+
+
+\end{document}
