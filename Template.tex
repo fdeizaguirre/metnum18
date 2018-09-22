@@ -162,7 +162,7 @@ Las curvas geod\'esicas, son aquellas cuya curvatura geod\'esica es cero.
 De \'esta, se observa que no est\'a en juego la distancia entre dos puntos, y ese es el enfoque del presente trabajo. Al referirse a la curvatura geod\'esica, se refiere al valor del vector $\vec {k_g}$.
 
 
-Para conocer las ecuaciones diferenciales que rigen a esta curva, se toma en cuenta la parametrizaci\'on de la superficie como $r=r(u,v)$. Siendo en realidad, $u=u(s)$ y $v=v(s)$. La $primera$ $forma$ $fundamental$ está definida por:
+Para conocer las ecuaciones diferenciales que rigen a esta curva, se toma en cuenta la parametrizaci\'on de la superficie como $r=r(u,v)$. Siendo en realidad, $u=u(s)$ y $v=v(s)$. La $primera$ $forma$ $fundamental$ est\'a definida por:
 
 $$I = {ds}^2 = dr.dr = E{du}2 + 2Fdudv + G{dv}^2$$
 
@@ -307,7 +307,7 @@ E_u&=0,     & F_u&=0,   & G_u&=0, \label{fffuPlano}\\
 E_v&=0,    & F_v&=0,   & G_v&=0, \label{fffvPlano}
 \end{align}
 
-Entonces, como todas las derivadas parciales son nulas, sustituyendo en las ecuaciones de los s\'imbolos de Christoffel (ver Anexo \label{simbolosCr}) se puede ver que en este caso valen cero.
+Entonces, como todas las derivadas parciales son nulas, sustituyendo en las ecuaciones de los s\'imbolos de Christoffel (ver Anexo \ref{simbolosCr}) se puede ver que en este caso valen cero.
 
 Finalmente obtenemos las ecuaciones de la geod\'esica para el plano en \ref{eq:duPlano}-\ref{eq:dqPlano}.
 
@@ -323,7 +323,7 @@ Finalmente obtenemos las ecuaciones de la geod\'esica para el plano en \ref{eq:d
 De lo anterior se puede calcular de forma trivial que $p$, $q$ son constantes y $u$, $v$ de primer orden que es acorde a lo esperado a priori.
 
 % ESFERA
-\subsubsection{Esfera unitaria centrada en el origen}
+\subsubsection{Esfera unitaria centrada en el origen\cite{rubio&leon}}
 
 La ecuaci\'on param\'etrica \ref{esferaEq} representa una esfera unitaria centrada en el origen.
 \begin{equation} \label{esferaEq}
@@ -338,7 +338,7 @@ E_u&=0,     & F_u&=0,   & G_u&=0, \label{fffuEsfera}\\
 E_v&=2sin(v)cos(v),    & F_v&=0,   & G_v&=0, \label{fffvEsfera}
 \end{align}
 
-De esta forma, usando \ref{Gam_11_1}-\ref{Gam_22_2} (ver Anexo \label{simbolosCr}), obtenemos los s\'imbolos de Christoffel en \ref{CS1Esfera}-\ref{CS3Esfera}:
+De esta forma, usando \ref{Gam_11_1}-\ref{Gam_22_2} (ver Anexo \ref{simbolosCr}), obtenemos los s\'imbolos de Christoffel en \ref{CS1Esfera}-\ref{CS3Esfera}:
 
 {\small
 \begin{align}
@@ -380,7 +380,7 @@ E_v&=2v,    & F_v&=u,   & G_v&=0, \label{fffvHipEq}
 \end{align}
 }
 
-A partir de lo anterior se sustituye en \ref{Gam_11_1}-\ref{Gam_22_2} y se obtienen los s\'imbolos de Christoffel en \ref{CS1HipEq}-\ref{CS3HipEq}.
+A partir de lo anterior se sustituye en \ref{Gam_11_1}-\ref{Gam_22_2} (ver Anexo \ref{simbolosCr}) y se obtienen los s\'imbolos de Christoffel en \ref{CS1HipEq}-\ref{CS3HipEq}.
 
 {\small
 \begin{align}
@@ -493,11 +493,11 @@ $$(P V I):
 
 \tab Para la discretizacion del problema de valores iniciales se utiliza el metodo de Euler, denominado en honor a su autor Leonhard Euler. Este algoritmo es elegido por su simplicidad.
 
-%Como m\'etodo de primer orden el error local es proporcional al cuadrado del paso, y el error global es proporcional al paso.\\
+Como m\'etodo de primer orden el error local es proporcional al cuadrado del paso, y el error global es proporcional al paso.\\
 
 Este metodo tiene dos variantes: Euler hacia Adelante y Euler hacia Atras. Partiendo de las ecuaciones (\ref{eq:du}-\ref{eq:dq}) se aplica el M\'etodo de Euler hacia Adelante. A continuaci\'on se calculan las ecuaciones en su forma discreta.\\
 
-%En este trabajo se limitó al analisis de las geodesicas sobre paraboloide hiperbolico pero el razonamiento puede deducirse analogamente para otras superficies. 
+En este trabajo se limit\'o al an\'alisis de las geod\'esicas sobre paraboloide hiperb\'olico pero el razonamiento puede deducirse an\'alogamente para otras superficies. 
 
 
 Primero realizamos el c\'alculo para $u$:\\
@@ -551,29 +551,32 @@ El  siguiente pseudoc\'odigo \ref{pscod:euler} expresa una forma de introducir e
 %
 %-------------------------------------------------------------------------------
 \section{Estudio Experimental}\label{Resultados}
+En esta secci\'on se describen los resultados obtenidos y el entorno en el cual se realiz\'o el procesamiento de los datos.
 \subsection{Ambiente de trabajo}\label{ambiente}
 Durante el desarrollo de la experiencia se trabajo con:
 \begin{itemize}
     \item Lenguaje de programaci\'on: Octave.
-    \item Caracter\'isticas de la computadara utilizada:
+    \item Computadora utilizada:
     \begin{itemize}
-        \item HP Pavilion 15 Notebook
-        \item Procesador:AMD A10-7300 Radeon R6, 10 Compute Cores 4C+6G
-        \item Memoria RAM: 8 GB
-        \item Sistema Operativo: Manjaro 17.1.12 x64 (Deepin desktop)
-        \item Versión de Octave: 4.4.1
-        \item Epsilon de m\'aquina: $2.2204x10^{-16}$
+        \item HP Pavilion 15 Notebook.
+        \item Procesador:AMD A10-7300 Radeon R6, 10 Compute Cores 4C+6G.
+        \item Memoria RAM: 8 GB.
+        \item Sistema Operativo: Manjaro 17.1.12 x64 (Deepin desktop).
+        \item Versi\'on de Octave: 4.4.1.
+        \item Epsilon de m\'aquina: $2.2204x10^{-16}$.
     \end{itemize}
 \end{itemize}
 
 
 \subsection{Resultados Obtenidos}
-En la presente secci\'on se referir\'a como "error" a la norma 2 entr el punto i-esimo de la curva aproximada por el m\'etodo de Euler, y el punto i-esimo de la curva aproximada por la funci\'on "lsode" de octave, \'esta \'ultima ser\'a considerada cual si fuese la soluci\'on anal\'itica, es decir, ser\'a considerada como referencia.
 
 Utilizando el ambiente de desarrollo descrito en la secci\'on \ref{ambiente}, fueron ejecutados los scripts realizados \cite{scripts}.
+
+Se referir\'a como "error" a la norma 2 entr el punto i-\'esimo de la curva aproximada por el m\'etodo de Euler, y el punto i-\'esimo de la curva aproximada por la funci\'on $lsode$ de Octave, \'esta \'ultima ser\'a considerada como referencia, de forma que se asume que el resultado de dicha funci\'on es id\'entico la soluci\'on anal\'itica.
+
 En la Fig. \ref{ph} se despliega la curva geod\'esica bajo las siguiente condiciones:
 \begin{itemize}
-    \item superfice: Paraboloide Hiperb\'olico
+    \item Superficie: Paraboloide Hiperb\'olico.
     \item Valores iniciales: $u=4$, $v=1$, $p=1$ y $q=1$.
     \item Paso: $h=0.1$.
     \item N\'umero m\'aximo de iteraciones $max\_it=101$.
@@ -610,7 +613,10 @@ En \'este trabajo no se realiz\'o control del error local producido por el trunc
 \section{Conclusiones}\label{Conclusiones}
 
 
-En este trabajo se analiz\'o de manera pr\'actica la generaci\'on de curvas geod\'esicas definidas sobre diferentes superficies. \'Estas curvas fueron parametrizadas por longitud de arco mediante el m\'etodo num\'erico de Euler\cite{notasMN}. Este an\'alisis fue realizado desde un punto de vista experimental enfocado en entender el funcionamiento y comportamiento de la estimaci\'on de ecuaciones diferenciales mediante m\'etodos num\'ericos, los hallazgos identificados son 
+En este trabajo se analiz\'o de manera pr\'actica la generaci\'on de curvas geod\'esicas definidas sobre diferentes superficies. \'Estas curvas fueron parametrizadas por longitud de arco mediante el m\'etodo num\'erico de Euler. \'Este an\'alisis fue realizado desde un punto de vista experimental enfocado en entender el funcionamiento y comportamiento de la estimaci\'on de ecuaciones diferenciales mediante m\'etodos num\'ericos. \\
+
+El balance global de la experiencia fue positivo. Se cumplieron los objetivos de lograr comprender y resolver una versi\'on simplificada del mismo logrando un acercamiento a los conceptos fundamentales del problema para el caso del paraboloide hiperb\'olico.\\
+Como aspecto a mejorar es que el estudio del error generado en el an\'alisis num\'erico no fue en profundidad.\\
 
 Al considerar las geod\'esicas como un Problema de Valor Inicial se simplifica el modelo y se reduce la dificultad del algoritmo num\'erico que lo resuelve. Si bien el trabajo realizado cumple con el objetivo, encontrar una aproximaci\'on a la curva geod\'esica que pasa por un punto inicial est\'a lejos de resolver el problema real que es encontrar la distancia minima entre dos puntos de una superficie.  Por lo que como trabajo a futuro se recomienda abordar el problema de las geod\'esicas como un Problema de Condiciones de Borde.
 
@@ -631,8 +637,8 @@ Al considerar las geod\'esicas como un Problema de Valor Inicial se simplifica e
 \section*{Anexos}
 \subsection*{S\'mbolos de Christoffel} \label{simbolosCr}
 
-Los s\'imbolos de Christoffel est\'an definidos:
-
+Los s\'imbolos de Christoffel est\'an definidos de la siguiente forma:
+{\small
 \begin{align} 
 \Gamma_{11}^1 = \frac{GE_u - 2 FF_u + FE_v}{2(EG - F^2)} \label{Gam_11_1}\\
 \Gamma_{11}^2 = \frac{2EF_u - EE_v + FE_u}{2(EG - F^2)}\label{Gam_11_2}\\
@@ -641,15 +647,14 @@ Los s\'imbolos de Christoffel est\'an definidos:
 \Gamma_{22}^1 = \frac{2GF_v - GG_u + FG_v}{2(EG - F^2)} \label{Gam_22_1}\\
 \Gamma_{22}^2 = \frac{EG_u - FE_v}{2(EG - F^2)}\label{Gam_22_2}
 \end{align}
-
-
+}
 
 \subsection*{Errores}\label{subsec:errores}
 
 \subsection*{Curvas geod\'esicas del plano y la esfera}
-En la secci\'on \ref{sec:disc} se discretiz\'o las ecuaciones diferenciales que caracterizan las geod\'esicas en el paraboloide hiperb\'olico utilizando el m\'etodo de "Euler hacia adelante". En esta secci\'on se mostrar\'a como quedan las mismas para un plano y para una esfera. Tambi\'en se mostrar\'an dos ejemplos gr\'aficos para cada caso. En \'estos se comparar\'an dos m\'etodos num\'ericos, el anteriormente dicho y el implementado por octave en la funci\'on "lsode".
+En la secci\'on \ref{sec:disc} se discretiz\'o las ecuaciones diferenciales que caracterizan las geod\'esicas en el paraboloide hiperb\'olico utilizando el m\'etodo de "Euler hacia adelante". En esta secci\'on se mostrar\'a como quedan las mismas para un plano y para una esfera. Tambi\'en se mostrar\'an dos ejemplos gr\'aficos para cada caso. En \'estos se comparar\'an dos m\'etodos num\'ericos, el anteriormente dicho y el implementado por octave en la funci\'on "lsode"\cite{bib:lsode} \cite{bib:lsodeimp}.
 
-El caso del plano, la curva geod\'esica es un segmento de recta. Entre los dos puntos correspondientes a un paso, la distancia para el método de Euler es el valor del paso por el vector dirreci\'on. \'Esta simpleza produce que la diferencia entre ambos m\'etodos sea nula al tabajar con 10 pasos (Fig. \ref{fig:plano}), o cuasi nula trabajando con 100 pasos (Fig. \ref{fig:planoh100} y Fig.\ref{fig:planoh100q03})ya que es 14 ordenes inferior al valor del paso (el m\'aximo error obtenido en \'esta curva fue inferior a $4x10^{-12}$ con un paso de 100).
+El caso del plano, la curva geod\'esica es un segmento de recta. Entre los dos puntos correspondientes a un paso, la distancia para el m\'etodo de Euler es el valor del paso por el vector dirreci\'on. \'Esta simpleza produce que la diferencia entre ambos m\'etodos sea nula al tabajar con 10 pasos (Fig. \ref{fig:plano}), o cuasi nula trabajando con 100 pasos (Fig. \ref{fig:planoh100} y Fig.\ref{fig:planoh100q03})ya que es 14 ordenes inferior al valor del paso (el m\'aximo error obtenido en \'esta curva fue inferior a $4x10^{-12}$ con un paso de 100).
 
 \begin{figure}[H]
 \caption{Plano: h=1}
@@ -675,7 +680,7 @@ El caso del plano, la curva geod\'esica es un segmento de recta. Entre los dos p
 
 El ejemplo de la esfera permite una mejor valoraci\'on del efecto que puede producir peque\~nos cambios en el tama\~no del paso. 
 
-En la Fig.\ref{fig:esfera} se observan las geod\'esicas obtenidas para una esfera, en este caso coinciden con un meridiano de la misma. En la gráfica del error se aprecia que en las primeras 250 iteraciones no hay un error significativo, y a partir de la iteraci\'on 300 se produce un crecimiento del error, el cual se ve fuertemente acentuado a partir de la iteraci\'on 600. Sin embargo dicho crecimiento no es perceptible en la ploteo de las curvas.
+En la Fig.\ref{fig:esfera} se observan las geod\'esicas obtenidas para una esfera, en este caso coinciden con un meridiano\cite{bib:vascos} de la misma. En la gr\'afica del error se aprecia que en las primeras 250 iteraciones no hay un error significativo, y a partir de la iteraci\'on 300 se produce un crecimiento del error, el cual se ve fuertemente acentuado a partir de la iteraci\'on 600. Sin embargo dicho crecimiento no es perceptible en la ploteo de las curvas.
 \begin{figure}[H]
 \caption{Esfera: h=0.01}
 \centering
@@ -689,7 +694,7 @@ Sin embargo cuando se agranda el paso a $h=0.03$,el comportamiento es el esperad
 \caption{Esfera: h=0.03 }
 \centering
 \includegraphics[width=0.7\textwidth]{esferarara.png}
-\label{fig:esferamal}
+\label{fig:esferarara}
 \end{figure}
 
 
