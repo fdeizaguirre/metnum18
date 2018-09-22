@@ -35,21 +35,13 @@
 \usepackage{mathtools}
 \usepackage{booktabs}
 \usepackage{hyperref}
-%% Configuration for algorithmicx
 
-%\setmainfont{Hoefler Text}
-%\newcommand*\DNA{\textsc{dna}}
-%\newcommand*\Let[2]{\State #1 $\gets$ #2}
-%\algrenewcommand\alglinenumber[1]{
-%    {\sf\footnotesize\addfontfeatures{Colour=888888,Numbers=Monospaced}#1}}
-%\algrenewcommand\algorithmicrequire{\textbf{Precondition:}}
-%\algrenewcommand\algorithmicensure{\textbf{Postcondition:}}
-%\usepackage[noend]{algpseudocode}
 %-------------------------------------------------------------------------------
 \tolerance=1
 \emergencystretch=\maxdimen
 \hyphenpenalty=10000
 \hbadness=10000
+\newtheorem{abreviacion}{ambiente}
 
 
 \floatname{algorithm}{Algorithm}
@@ -71,27 +63,22 @@
 \author{Francisco Fernandez (4.596.080-9),}
 \author{Gabriela Mullukian (5.121.434-9),}
 \author{Marco Rol\'on (4.916.721-9)}
-
 \address{Instituto de Matem\'atica y Estad\'istica\\ Facultad de Ingenier\'ia. Universidad de la Rep\'ublica\\ Montevideo, Uruguay}
 
 \thanks[mails]{Emails:\href{} {\texttt{\normalshape
-   \{francisco.de.izaguirre,francisco.fernandez,gabriela.mullukian,marco.rolon\}@fing.edu.uy}}}
-
+   \{francisco.de.izaguirre,francisco.fernandez,\\ gabriela.mullukian,marco.rolon\}@fing.edu.uy}}}
 %-------------------------------------------------------------------------------
 \begin{abstract}
-%\setlength{\parindent}{12pt}
-\tab El camino m\'as corto entre dos puntos en un plano, es el segmento de recta que los une. Si se quiere analizar qu\'e pasa en superficies curvas, el problema deja de ser trivial. Dada una superficie y dos puntos cualesquiera contenidos en ella, se define la curva \textbf{geod\'esica} como la curva de menor longitud, de dicha superficie, que une esos dos puntos.
+\tab {\itshape El camino m\'as corto entre dos puntos en un plano, es el segmento de recta que los une. Si se quiere analizar qu\'e pasa en superficies curvas, el problema deja de ser trivial. Dada una superficie y dos puntos cualesquiera contenidos en ella, se define la curva \textbf{geod\'esica} como la curva de menor longitud, de dicha superficie, que une esos dos puntos.
     
-En este trabajo se realiza una introducci\'on al problema y una descripci\'on matem\'atica del mismo. Se demuestra que puede ser modelado como un Problema de Valores Iniciales (PVI). Luego se utiliza el M\'etodo de Euler Hacia Adelante para su resoluci\'on.
+En este trabajo se realiza una introducci\'on al problema y una descripci\'on matem\'atica del mismo. Se muestra que puede ser modelado como un Problema de Valores Iniciales (PVI). Luego se utiliza el M\'etodo de Euler Hacia Adelante para su resoluci\'on, implementando un algoritmo en Octave. 
 
-
-Posteriormente se presenta los resultados obtenidos al utilizar , se realiza un an\'alisis de los errores cometidos. \\ CONCLUSION BREVE
-     
-%\end{}
+Se generaron curvas de curvatura geod\'esica nula. Se obtuvieron resultados satisfactorios contrastando con con funciones de Octave.}
 \end{abstract}
+
 %-------------------------------------------------------------------------------
 \begin{keyword}
-Geod\'esicas, M\'etodos Num\'ericos, PVI, Euler hacia Adelante.
+Geod\'esicas, M\'etodos Num\'ericos, Problema de Valor Indice, Euler hacia Adelante.
 \end{keyword}
 
 \end{frontmatter}
@@ -126,70 +113,73 @@ Este documento, que busca resolver el problema como un Problema de Valores Inici
 \subsection{Ecuaciones diferenciales que rigen una geod\'esica}
 
 
-El concepto de geod\'esica es la generalizaci\'on de las rectas en una geometr\'ia plana. Como se coment\'o, conocer la curva de longitud m\'inima entre dos puntos en el caso de superficies curvas, hace el an\'alisis m\'as complejo. En este trabajo se realizr\'a el mismo, mediante la geometr\'ia de Riemann. Los espacios de Riemann son aquellos espacios medibles.\\
-
-Las variedades de Riemann son generalmente "curvas". Puede encontrarse que dados dos puntos diferentes y suficientemente cercanos existe una curva de longitud m\'inima (que no necesariamente es \'unica). Estas l\'ineas de m\'inima longitud, se llaman l\'ineas geod\'esicas. Son curvas que localmente conectan sus puntos a lo largo de las trayectorias m\'as cortas.\\
-
-El an\'alisis se har\'a bajo superficies de Riemann y de las curvas, solamente se requiere que en cada uno de sus puntos, haya una m\'etrica eucl\'idea definida sobre el espacio tangente, que cambie suavemente de punto a punto. Cuando una curva, en una superficie, tenga la propiedad de minimizar la longitudes de las curvas que unen dos puntos determinados, se la llamar\'a geod\'esica minimizante.\\
-
-Previo al estudio de las curvas geod\'esicas en particular, se definir\'an propiedades de una superficie.\\
-
-Cuando se quiere cuantificar la curvatura de una superficie S en cierto punto, se considera una curva C de dicha superficie que contenga al punto P en cuesti\'on.\\
-
-Los vectores unitarios t (tangente) y n (normal) a la curva C en P, est\'an relacionados de la siguiente manera:\\
-
-INSERTAR IMAGEN Fig 3.6 del libro de referencia del curso.\\
+\tab El concepto de geod\'esica es la generalizaci\'on de las rectas en una geometr\'ia plana. Como se coment\'o, conocer la curva de longitud m\'inima entre dos puntos en el caso de superficies curvas, hace el an\'alisis m\'as complejo. En este trabajo se realizr\'a el mismo sobre espacios de Riemann.
 
 
-MODIFICAR ESTO:
+
+Las variedades de Riemann son generalmente $curvas$. En ellas, dados dos puntos diferentes y suficientemente cercanos, existe una curva de longitud m\'inima que no necesariamente es \'unica. Estas, son curvas que localmente conectan estos puntos y se llaman l\'ineas geod\'esicas.
+El an\'alisis se har\'a bajo superficies de Riemann. De las curvas, solamente se requiere que en cada uno de sus puntos, haya una m\'etrica eucl\'idea definida sobre el espacio tangente, que cambie suavemente de punto a punto.
+
+
+Previo al estudio de las curvas geod\'esicas en particular, se definen propiedades de una superficie.
+Al cuantificar la curvatura de una superficie $S$ en cierto punto, se considera una curva $C$ de dicha superficie que contenga al punto P en cuesti\'on. Los vectores unitarios $\hat{t}$ (tangente) y $\hat{n}$ (normal) a la curva $C$ en $P$, est\'an relacionados segun la Fig. \ref{fig:vectores}.\\
+
+\begin{figure}[H]
+\caption{Definicion del Vector Normal a la Curva}
+\centering
+\includegraphics[width=0.6\textwidth]{Vector_Normal.jpg}
+\label{fig:vectores}
+\end{figure}
+
+
+$\vec{k_n}$ es el vector normal de curvatura, y $\vec{k_g}$ es el vector de curvatura geodesica. Este par de vectores, son las componentes del vector de curvatura $\vec{k}$ de C. 
 \begin{align} 
- k = \frac{dt}{ds} = k n = k_n + k_g, \label{eq1tangente}
+ \vec{k} = \frac{dt}{ds} = k \cdot \hat{n} = \vec{k_n} + \vec{k_g}, \label{eq1tangente}
 \end{align}
 
-Donde $k_n$ es el vector normal de curvatura, y $k_g$ es el vector de curvatura geodesica. Este par de vectores, son las componentes del vector de curvatura $k$ de C. De esta forma, el vector normal de curvatura, puede expresarse como:
+M\'as all\'a del problema intuitivo, se toma la definici\'on formal de curva geod\'esica como la del texto sugerido en el curso.
+
+\begin{defn}
+Las curvas geod\'esicas, son aquellas que su curvatura geod\'esica es 0.
+\end{defn}
+
+De ella, se observa que no est\'a en juego la distancia entre dos puntos, y ese es el enfoque del presente trabajo. Al referirse a la curvatura geod\'esica, se refiere al valor del vector $\vec{k_g}$.
+
+
+Para conocer las ecuaciones diferenciales que rigen a esta curva, se toma en cuenta la parametrizaci\'on de la superficie como $r=r(u,v)$. Siendo en realidad, $u=u(t)$ y $v=v(t)$. La $primera$ $forma$ $fundamental$ está definida por:
+
+$$I = {ds}^2 = dr.dr = E{du}2 + 2Fdudv + G{dv}^2$$
+
+
+
+Donde sus coeficientes son:
 
 \begin{align} 
- k_n = kn N \label{eq2tangente}
+E = r_u . r_u \\ 
+F = r_u . r_v \\ 
+G = r_v . r_v 
+\label{eq_coeficientes}
 \end{align}
 
-siendo kn el valor de la curvatura de la superficie en P en la direcci\'on de t.En otras palabras, kn es la magnitud de la proyecci\'on de k en la siperficie normal a P, con el signo determinado por la orientaci\'on de la superficie normal.\\
 
-Definicion: Las curvas geodesicas, son aquellas que su curvatura geodesica es 0.\\
+Quedando definidos $\hat{N}$ el vector unitario normal a $S$ en $P$, y $\hat{u}$ el vector unitario perpendicular a $\hat{t}$ en el plano tangente a la suferficie. Queda determiando  $\hat{u} = \hat{N} x \hat{t} $.
 
-Se observa que el plano osculador a una curva geodesica (aquel formado por los vectores t y n) , contiene la superficie normal. A partir de esto, puede verse con facilidad que la geodesica entre dos puntos de una esfera, es siempre un gran circulo. El probelma ahora pasa a ser que existen dos arcos entre esos puntos y solo uno de ellos proviene de la curva con menor distancia (excepto si los dos puntos est\'an diametralmente opuestos en ese circulo).\\
 
-Este caso, indica que es posible que exista m\'as de una curva geodesica, entre dos puntos, en una suerficie.
-Dada la parametrizaci\'on de una curva de la forma $u=u(t)$, $v=v(t)$ que vive en la superficie $r=r(u,v)$, se definen los coeficientes de la $primera$ $forma$ $fundamental$ como:
+    La compontente $\hat{u}$ en el vector de curvatura $\hat{k}$ de 
+    $r(t)$, es la curvatura geodesica $k_g$ y est\'a dada por la siguiente ecuaci\'on.
 
 \begin{align} 
-E = r_u . r_u  \label{eqE}\\ 
-F = r_u . r_v  \label{eqF} \\ 
-G = r_v . r_v  \label{eqG}
-\end{align}
-    
-
-Dada la parametrizaci\'on de una superficie como $r=r(u,v)$ y  C un arco parametrizado que pase por el punto P tal cual se muestra en la Fig. 3.6 y denotada por
-\begin{align} 
-r(s) = r(u(s), v(s))
- \label{eqparametrizada}
-\end{align}
-
-Se definen las formas fundamentales\\
-
-Siendo t el vector tangente a C en P, n el vector normal a C en P, N el vector unitario normal a S en P y u el vector unitario perpendicular a t en el plano tangente a la suferficie. Definido u = N x t.La compontente u en el vector de curvatura k de r(s), es la curvatura geodesica $k_g$ y est\'a dada por la siguiente ecuaci\'on.
-
-\begin{align} 
-k_g = (k.u)u
+k_g = (k.\hat{u})\hat{u}
  \label{eqcurvatura_k_g}
 \end{align}
 
 La funci\'on escalar
 
 \begin{align} 
-k_g = (k.u)
+k_g = (k.\hat{u})
  \label{eqcurvatura_kg}
 \end{align}
-es llamada curvatura geod\'esica de C en P.
+es llamada curvatura geod\'esica de $C$ en $P$.
 O, equivalentemente:
 
 \begin{align} 
@@ -197,7 +187,7 @@ k_g = \frac{dt}{ds} . (N x t)
  \label{eqcurvatura_kg_vectores}
 \end{align}
 
-El vector tangente unitario, a la curva C puede obtenerse derivando la ecuacion \ref{eqparametrizada} respecto al arco, usando la siguiente relacion:
+El vector tangente unitario, a la curva C puede obtenerse derivando la ecuacion param\'etrica respecto al arco, usando la siguiente relacion:
 
 \begin{align} 
 t = \frac{d r(u(s), v(d))}{ds}&=r_u \frac{d u}{ds} + r_v \frac{d v}{ds}
@@ -419,7 +409,6 @@ El sistema de ecuaciones diferenciales \ref{eq1Geodesica}-\ref{eq4Geodesica} pue
     \item Problema de Valor Inicial (PVI).
     \item Problema con Condiciones de Borde (PCB).
 \end{itemize}
-\\
 La primera forma consiste en proporcionar el valor inicial para cada una de las cuatro ecuaciones diferenciales del sistema.
 Como la soluci\'on de un PVI es \'unica, al indicar los valores iniciales queda determinada una sola curva. \\
 En el caso del PCB se dan dos puntos del espacio como condiciones de borde por lo que las ecuaciones diferenciales del sistema tienen muchas soluciones o incluso ninguna. \\
@@ -451,7 +440,7 @@ $$(P V I):
           $y'(x) = f(x,y(x))$ \\
           $y(x_0) = y(y_0) \in R$\\
           \end{tabular}
-        \right$$
+        \right.$$
     % No es necesario
     %Por ejemplo, si $y' = x^2y+2y \rightarrow f(x,y(x)) = x^2y+2y $
     
@@ -483,7 +472,7 @@ $$(P V I):
             $y'(s)= \vec{f}(s,u(s),v(s),p(s),q(s))$\\
             $y(s_0) = (u(s_0),v(s_0),p(s_0),q(s_0)) \in R^4$\\
           \end{tabular}
-        \right$$
+        \right.$$
 
 
 
@@ -495,9 +484,15 @@ $$(P V I):
 
 
 \subsection{Discretizaci\'on del problema}\label{sec:disc}
-EXPLICAR BREVEMENTE EULER\\ \\
 
-Partiendo de las ecuaciones (\ref{eq:du}-\ref{eq:dq}) y utilizando el M\'etodo de Euler hacia Adelante, se calcula a continuaci\'on las ecuaciones en su forma discreta.
+Para la discretizacion del problema de valores iniciales se utiliza el metodo de Euler, denominado en honor a su autor Leonhard Euler. Este algoritmo es elegido por su simplicidad.
+
+%Como m\'etodo de primer orden el error local es proporcional al cuadrado del paso, y el error global es proporcional al paso.\\
+
+Este metodo tiene dos variantes Euler hacia Adelante y Euler hacia Atras partiendo de las ecuaciones (\ref{eq:du}-\ref{eq:dq}) se aplica el M\'etodo de Euler hacia Adelante. A continuaci\'on se calculan las ecuaciones en su forma discreta.\\
+
+%En este trabajo se limitó al analisis de las geodesicas sobre paraboloide hiperbolico pero el razonamiento puede deducirse analogamente para otras superficies. 
+
 
 Primero realizamos el c\'alculo para $u$:\\
 $$\frac{du}{ds}=p \Rightarrow \frac{u_{k+1}-u_k}{h}=p_k \Rightarrow u_{k+1}=u_k+p_k h $$\\
@@ -521,20 +516,15 @@ El  siguiente pseudoc\'odigo \ref{pscod:euler} expresa una forma de introducir e
 
 \begin{algorithm}
   \caption{Pseudoc\'odigo para resolver y graficar el PVI mediante el m\'etodo "Euler hacia adelante"}
-    \label{pscod:euler}}
+    \label{pscod:euler}
   \begin{algorithmic}[1]
-    \Require{$x$ and $y$ are packed  strings of equal length $n$}
-    \Statex
-    \Function{Distance}{$x, y$}
-      \Let{$z$}{$x \oplus y$} \Comment{$\oplus$: bitwise exclusive-or}
-      \Let{$\delta$}{$0$}
-      \For{$i \gets 1 \textrm{ to } n$}
-        \If{$z_i \neq 0$}
-          \Let{$\delta$}{$\delta + 1$}
-        \EndIf
-      \EndFor
-      \State \Return{$\delta$}
-    \EndFunction
+  \Require{ $y(0) = y0 ; x(0) = 0; i = 1; h; f$}
+%  \Statex
+  \While {$x(i) < x(f) $}
+  \State $\textit{y(i+1)} \gets \text{length of }\textit{y(i) + h ∗ f (x(i), y(i))}$
+  \State $\textit{x(i + 1)} \gets x(i) + h$ 
+  \State$i\gets\i+1$
+   \EndWhile
   \end{algorithmic}
 \end{algorithm}
 
@@ -549,18 +539,25 @@ Durante el desarrollo de la experiencia se trabajo con:
     \item Lenguaje de programaci\'on: Octave.
     \item Caracter\'isticas de la computadara utilizada:
     \begin{itemize}
-        \item HP algo
-        \item Procesador:
-        \item Memoria RAM:
-        \item Epsilon de m\'aquina: 2.2204e-16
+        \item HP Pavilion 15 Notebook
+        \item Procesador:AMD A10-7300 Radeon R6, 10 Compute Cores 4C+6G
+        \item Memoria RAM: 8 GB
+        \item Sistema Operativo: Manjaro 17.1.12 x64 (Deepin desktop)
+        \item Versión de Octave: 4.4.1
+        \item Epsilon de m\'aquina: $2.2204x10^{-16}$
     \end{itemize}
 \end{itemize}
 
 
 \subsection{Resultados Obtenidos}
-Utilizando el ambiente de desarrollo descrito en la secci\'on \ref{ambiente} se corrieron los scripts realizados \cite{scripts} y se despliegan los resultados obtenidos en \ref{ph} y \ref{phmal}.
-
-
+Utilizando el ambiente de desarrollo descrito en la secci\'on \ref{ambiente}, fueron ejecutados los scripts realizados \cite{scripts}.
+En la Fig. \ref{ph} se despliega la curva geod\'esica bajo las siguiente condiciones:
+\begin{itemize}
+    \item Valores iniciales: $u=4$, $v=1$, $p=1$ y $q=1$.
+    \item Paso: $h=0.1$.
+    \item N\'umero m\'aximo de iteraciones $max\_it=101$.
+\end{itemize}
+Se puede observar que en este caso, ambas curvas van sobre la superfice del paraboloide. Así como tabi\'en 
 
 \begin{figure}[H]
 \caption{Paraboloide Hiperb\'olico}
@@ -570,6 +567,13 @@ Utilizando el ambiente de desarrollo descrito en la secci\'on \ref{ambiente} se 
 \end{figure}
 
 
+Por otro lado, en la Fig.\ref{phmal} se utilizaron las siguientes caracter\'isticas:
+\begin{itemize}
+    \item Valores iniciales: $u=4$, $v=1$, $p=1$ y $q=1$.
+    \item Paso: $h=1$.
+    \item N\'umero m\'aximo de iteraciones $m=101$.
+\end{itemize}
+
 
 \begin{figure}[H]
 \caption{Paraboloide Hiperb\'olico}
@@ -578,15 +582,17 @@ Utilizando el ambiente de desarrollo descrito en la secci\'on \ref{ambiente} se 
 \label{phmal}
 \end{figure}
 
-
 %-------------------------------------------------------------------------------
 %
 %-------------------------------------------------------------------------------
 \section{Conclusiones}\label{Conclusiones}
 
 
-%-------------------------------------------------------------------------------
-%
+En este trabajo se intentó analizar de manera practica la generacion de curvas geodesicas definidas sobre diferentes superficies parametrizadas por longitud de arco mediante el metodo numerico de Euler tal como lo define el Instituto de Matematica y Estadistica Rafael Laguardia en las notas del curso de Metodos Numericos (insert cita). Este analisis fue realizado desde un punto de vista experimental enfocado en entender el funcionamiento y comportamiento de la estimacion de ecuaciones diferenciales mediante metodos numericos, los hallazgos identificados son 
+
+Al considerar las geod\'esicas como un Problema de Valor Inicial se simplifica el modelo y se reduce la dificultad del algoritmo num\'erico que lo resuelve. Si bien el trabajo realizado cumple con el objetivo, encontrar una aproximaci\'on a la curva geod\'esica que pasa por un punto inicial est\'a lejos de resolver el problema real que es encontrar la distancia minima entre dos puntos de una superficie.  Por lo que como trabajo a futuro se recomienda abordar el problema de las geod\'esicas como un Problema de Condiciones de Borde.
+
+
 %-------------------------------------------------------------------------------
 
 %\section*{Acknowledgment}
@@ -595,22 +601,56 @@ Utilizando el ambiente de desarrollo descrito en la secci\'on \ref{ambiente} se 
 
 
 \bibliographystyle{plain}
-
 %\bibliographystyle{endm.bst}
 \bibliography{biblio}
-\section{Anexo}
-\subsection{Curvas geod\'esicas del plano y la esfera}
+
+\newpage
+
+\section*{Anexos}
+
+\subsection*{Curvas geod\'esicas del plano y la esfera}
 En la secci\'on \ref{sec:disc} se discretiz\'o las ecuaciones diferenciales que caracterizan las geod\'esicas en el paraboloide hiperb\'olico utilizando el m\'etodo de "Euler hacia adelante". En esta secci\'on se mostrar\'a como quedan las mismas para un plano y para una esfera. Tambi\'en se mostrar\'an dos ejemplos gr\'aficos para cada caso. En \'estos se comparar\'an dos m\'etodos num\'ericos, el anteriormente dicho y el implementado por octave en la funci\'on "lsode".
 
+El caso del plano, la curva geod\'esica es un segmento de recta. Entre los dos puntos correspondientes a un paso, la distancia para el método de Euler es el valor del paso por el vector dirreci\'on. \'Esta simpleza produce que la diferencia entre ambos m\'etodos sea nula al tabajar con 10 pasos (Fig. \ref{fig:plano}), o cuasi nula trabajando con 100 pasos (Fig. \ref{fig:planoh100} y Fig.\ref{fig:planoh100q03})ya que es 14 ordenes inferior al valor del paso (el m\'aximo error obtenido en \'esta curva fue inferior a $4x10^{-12}$ con un paso de 100).
 \begin{figure}[H]
-\caption{Esfera}
+\caption{Plano: Sin diferencia apreciable entre ambos m\'etodos}
 \centering
-\includegraphics[width=0.9\textwidth]{.png}
-\label{fig:esfera}
+\includegraphics[width=0.5\textwidth]{plano.jpg}
+\label{fig:plano}
+\end{figure}
+
+\begin{figure}[H]
+\caption{Plano: Diferencia apreciable entre ambos m\'etodos }
+\centering
+\includegraphics[width=0.5\textwidth]{planoh100.jpg}
+\label{fig:planoh100}
+\end{figure}
+
+\begin{figure}[H]
+\caption{Plano: Diferencia apreciable entre ambos m\'etodos }
+\centering
+\includegraphics[width=0.5\textwidth]{planoh100.jpg}
+\label{fig:planoh100q03}
 \end{figure}
 
 
 
+\begin{figure}[H]
+\caption{Esfera: Sin diferencia apreciable entre ambos m\'etodos}
+\centering
+\includegraphics[width=0.5\textwidth]{esfera.jpg}
+\label{fig:esfera}
+\end{figure}
+
+\begin{figure}[H]
+\caption{Esfera: Diferencia apreciable entre ambos m\'etodos }
+\centering
+\includegraphics[width=0.5\textwidth]{esferarara.png}
+\label{fig:esferamal}
+\end{figure}
+
+
+\tableofcontents
 
 
 \end{document}
